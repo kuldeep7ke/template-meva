@@ -25,7 +25,6 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const CATALOG = path.join(ROOT, 'src', 'data', 'templates.ts');
-const PRODUCTS = path.join(ROOT, 'docs', 'products.json');
 const SITEMAP = path.join(ROOT, 'public', 'sitemap.xml');
 const DOMAIN = 'https://templatemeva.com';
 
