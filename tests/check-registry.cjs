@@ -44,6 +44,7 @@ const PRODUCTS = path.join(ROOT, 'docs', 'products.json');
 const CATALOG = path.join(ROOT, 'src', 'data', 'templates.ts');
 const REGISTRY_MD = path.join(ROOT, 'docs', 'REGISTRY.md');
 const SITEMAP = path.join(ROOT, 'public', 'sitemap.xml');
+const INDEX_HTML = path.join(ROOT, 'index.html');
 const SRC = path.join(ROOT, 'src');
 
 const VALID_PRODUCT_STATUS = new Set(['draft', 'published', 'withdrawn']);
@@ -202,7 +203,28 @@ if (fs.existsSync(SITEMAP)) {
   }
 }
 
-// --- 8. credential invariant ----------------------------------------------------
+// --- 8. every referenced image exists -----------------------------------------
+// Not hypothetical: `generate-assets.js` was rewritten to read the registry and
+// stopped emitting `spotlight-hero.svg`, which `index.html` names as its
+// `og:image` and `twitter:image`. Nothing caught it, so every social share of the
+// store would have rendered with no preview image, and `npm run build` stayed
+// green. Asset paths are data, and data that points at nothing is a broken page.
+const imgRefs = new Set();
+for (const m of catalogSrc.matchAll(/'(\/images\/[^']+)'/g)) imgRefs.add(m[1]);
+if (fs.existsSync(INDEX_HTML)) {
+  for (const m of fs.readFileSync(INDEX_HTML, 'utf8').matchAll(/(\/images\/[A-Za-z0-9._-]+\.svg)/g)) {
+    imgRefs.add(m[1]);
+  }
+}
+for (const ref of imgRefs) {
+  const target = path.join(ROOT, 'public', ref.replace(/^\//, ''));
+  if (!fs.existsSync(target)) {
+    fail(`image ${ref} is referenced but public/${ref.replace(/^\//, '')} does not exist -- run: npm run assets`);
+  }
+}
+if (imgRefs.size === 0) note('no image references found to check');
+
+// --- 9. credential invariant ----------------------------------------------------
 // A buyer's email and serial must never reach the served page, the template XML,
 // or the URL of a validation request. If any of these strings appears in src/,
 // the guarantee the licensing model is sold on has been broken.

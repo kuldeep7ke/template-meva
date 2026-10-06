@@ -7,6 +7,7 @@
 | Document | What it answers |
 |----------|-----------------|
 | [MEMORY_CAPSULE.md](MEMORY_CAPSULE.md) | The short brief: what this is, and the three facts most likely to be forgotten |
+| [ADDING-A-TEMPLATE.md](ADDING-A-TEMPLATE.md) | **How to add a template**, and the prompt to give the agent |
 | [TASKS.md](TASKS.md) | What is open right now, and who owns each next step |
 | [CHANGES.md](CHANGES.md) | The `WEBSTR001-C###` ledger -- what happened, in order |
 | [RELATIONSHIPS.md](RELATIONSHIPS.md) | How this store connects to `the-machine` and to every template project |
@@ -33,6 +34,7 @@
 
 | File | Produced by |
 |------|-------------|
-| `public/images/*.svg` | `npm run assets` (`generate-assets.js`) |
+| `public/images/*.svg` | `npm run assets` (`generate-assets.js`) -- reads `docs/products.json`, one `-thumb` and one `-hero` per product |
 | `docs/REGISTRY.md` | `npm run registry:sync` (reads `docs/products.json`) |
 | catalog rows in `src/data/templates.ts` | `npm run registry:add` (`tools/register-product.cjs`) |
+| `public/sitemap.xml` | **currently hand-maintained** -- see `TASKS.md` -> *Scaling past 10 templates* |

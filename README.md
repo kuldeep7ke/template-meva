@@ -86,15 +86,19 @@ npm run dev       # start dev server at http://localhost:5173
 | `npm run preview` | Serve the production build locally |
 | `npm run lint` | oxlint over source and scripts |
 | `npm run typecheck` | TypeScript project check only |
-| `npm run registry` | The registry gate: catalog, registry and sitemap must agree |
+| `npm run registry` | The registry gate: catalog, registry, sitemap and images must agree |
 | `npm run registry:sync` | Regenerate `docs/REGISTRY.md` from `docs/products.json` |
 | `npm run registry:add` | Register a new project as a draft product |
 | `npm run test` | `typecheck` + `lint` + `registry` |
-| `npm run assets` | Regenerate the SVG template mockups in `public/images/` |
+| `npm run assets` | Generate preview + share images for every product, from the registry |
 
 A production build completes in roughly 400ms and emits ~110 kB of gzipped JavaScript.
 
 ### Registering a template project
+
+**The full procedure — and the prompt to hand the agent — is in
+[`docs/ADDING-A-TEMPLATE.md`](docs/ADDING-A-TEMPLATE.md).** That is the canonical
+answer; this is the short version.
 
 Normally `the-machine` does this for you. By hand:
 
@@ -103,6 +107,7 @@ npm run registry:add -- --project-id BLG-GEL-002 \
   --name "My Template" \
   --repo https://github.com/kuldeep7ke/my-template \
   --version v1.0.0
+npm run assets        # generates its preview + share images
 ```
 
 It writes a **draft** to `docs/products.json` plus a draft catalog row, with
@@ -110,8 +115,11 @@ It writes a **draft** to `docs/products.json` plus a draft catalog row, with
 to see exactly what it would write without touching anything.
 
 To publish one, fill in the price, `buyUrl`, trial archive and demo URL, set
-`status: "published"` and `resale: "allowed"`, then `npm run registry:sync` and
-`npm run registry`.
+`status: "published"` and `resale: "allowed"`, add it to `public/sitemap.xml`,
+then `npm run registry:sync && npm run registry`.
+
+**Never invent a price, a sales count or a rating.** All nine current fixtures
+have fabricated numbers, which is exactly why they are invisible in production.
 
 ---
 
@@ -206,6 +214,7 @@ template-meva/
 
 - [docs/INDEX.md](docs/INDEX.md) — the router: what every document is for.
 - [docs/MEMORY_CAPSULE.md](docs/MEMORY_CAPSULE.md) — the short brief for a fresh session.
+- [docs/ADDING-A-TEMPLATE.md](docs/ADDING-A-TEMPLATE.md) — **how to add a template**, and the prompt to give the agent.
 - [docs/TASKS.md](docs/TASKS.md) — the open build queue.
 - [docs/CHANGES.md](docs/CHANGES.md) — the `WEBSTR001-C###` change ledger.
 - [docs/RELATIONSHIPS.md](docs/RELATIONSHIPS.md) — how this store connects to `the-machine` and every template project.

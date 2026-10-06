@@ -80,11 +80,17 @@ adopted-to, not the reverse.
 
 ### Blocked — needs a decision from the operator
 
-- [ ] **Which domain is the product?** The shipped template hardcodes
-  `https://mevatemplates.com/unlicensed`; the storefront is
-  `https://templatemeva.com`. An unlicensed blog currently redirects visitors off
-  this store entirely.
-  - disposition: UNANSWERED (fixing it means editing `AUTHOR_URL` in the shipped XML, which belongs to blogger-llianmeva-template and needs its own change ID there)
+- [x] **DECIDED 2026-10-06 — the product domain is `templatemeva.com`.** It is not
+  live yet, which is fine: nothing depends on the domain resolving until a template
+  is actually sold. The storefront already uses it in `siteConfig` and `index.html`.
+  Only the shipped template disagrees.
+  - decision: `templatemeva.com` is the product domain.
+- [ ] **`AUTHOR_URL` in the shipped template still points at `mevatemplates.com`.**
+  `blogger-llianmeva-template/template/product/…v1.1.0.xml` line 2734 hardcodes it,
+  so every unlicensed trial blog redirects its visitors off this store to a domain
+  that is not the store. This is the highest-impact open bug: it is the exact path
+  a frustrated buyer takes.
+  - disposition: UNANSWERED (it is an edit to blogger-llianmeva-template's product XML, which needs its own BLG-C### change ID and backup-and-validate cycle. Not made from this repository — say the word and I will do it there properly.)
 - [ ] **The guard sends no context to the notice page.** Either the guard appends
   `?domain=&template=&reason=`, or the server's `policy` redirect URL carries them.
   Until one happens, the notice page cannot name the blog or template.
@@ -98,6 +104,34 @@ adopted-to, not the reverse.
   it would work — but only once the guard supplies a domain. Not attempted until
   the previous item is settled.
   - disposition: DEFERRED (blocked by the guard-context decision)
+
+## Scaling past 10 templates
+
+- [ ] **Move the catalog out of the JS bundle.** The whole catalog is compiled into
+  the bundle today: ~1.3 MB at 100 templates, ~1.6 MB total, ~400 kB gzipped, and
+  up to 100 `<TemplateCard>`s with 100 image requests on first paint. Moving to
+  static JSON keeps the bundle flat regardless of catalog size:
+  `public/data/index.json` for the grid, `public/data/templates/<slug>.json` for
+  detail, fetched on demand. No backend needed on Cloudflare Pages.
+  - disposition: UNANSWERED (do it BEFORE template #20. It is far cheaper before 20 products are added by hand than after, and every product added now is one more thing to move. See "What to do before template #20" below.)
+- [ ] **Generate `sitemap.xml` from the registry.** It is hand-maintained. At 100
+  products that is 100 hand-written entries that can silently drift, and the gate
+  only catches a published product missing from it, not a stale entry ordering.
+  `npm run assets` already generates the images; the sitemap belongs in the same
+  step.
+  - disposition: UNANSWERED (same answer as the bundle change)
+- [ ] **Decide the homepage for a large catalog.** Recommendation, not decided:
+  a curated featured row of 4-6 (`badge: 'FEATURED'`), then the full catalog
+  paginated at ~24/page, **default sort Newest**. NOT random rotation -- a
+  returning buyer cannot tell whether the store has 9 or 900 products, and cannot
+  bookmark one. NOT "Most Popular" until it is real: that sort reads `salesCount`,
+  which is currently invented on all nine fixtures, and there are no download
+  counts because the trial zips are placeholders and there is no analytics.
+  - disposition: UNANSWERED (a product decision)
+- [ ] **If "most downloaded" should ever be real**, it needs download events:
+  Cloudflare Pages Functions or the existing Worker's KV. `salesCount` is currently
+  a number in a source file, which is the same as no metric at all.
+  - disposition: DEFERRED (a real project; only worth it once there is traffic)
 
 ## Pre-launch
 
