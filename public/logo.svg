@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 50" fill="none">
+  <defs>
+    <linearGradient id="logoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F46E5" />
+      <stop offset="1" stop-color="#06B6D4" />
+    </linearGradient>
+  </defs>
+  <!-- Icon Mark -->
+  <g transform="translate(4, 4)">
+    <rect width="42" height="42" rx="10" fill="url(#logoGrad)" />
+    <path d="M12 14C12 12.8954 12.8954 12 14 12H28C29.1046 12 30 12.8954 30 14V19C30 20.1046 29.1046 21 28 21H14C12.8954 21 12 20.1046 12 19V14Z" fill="white" />
+    <path d="M12 23C12 21.8954 12.8954 21 14 21H23C24.1046 21 25 21.8954 25 23V28C25 29.1046 24.1046 30 23 30H14C12.8954 30 12 29.1046 12 28V23Z" fill="white" fill-opacity="0.85" />
+    <circle cx="28" cy="25.5" r="2.5" fill="#FBBF24" />
+  </g>
+  <!-- Text Brand -->
+  <text x="56" y="27" font-family="system-ui, -apple-system, sans-serif" font-size="21" font-weight="800" fill="#0F172A" letter-spacing="-0.5">TEMPLATE<tspan fill="#4F46E5">MEVA</tspan></text>
+  <text x="57" y="40" font-family="system-ui, -apple-system, sans-serif" font-size="9.5" font-weight="600" fill="#64748B" letter-spacing="1.2">PREMIUM BLOGGER STORE</text>
+</svg>
