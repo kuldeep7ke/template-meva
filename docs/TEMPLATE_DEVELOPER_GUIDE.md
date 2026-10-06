@@ -1,145 +1,232 @@
 # TemplateMeva — Blogger XML Developer Integration Guide
 
-For theme developers integrating a Google Blogger (Blogspot) XML template with the TemplateMeva store, the licensing check, and the `/unlicensed` notice flow.
+For theme developers integrating a Google Blogger (Blogspot) XML template with the
+TemplateMeva store and its licensing server.
+
+> **Read this before writing any code.** An earlier version of this guide
+> documented a **client-side** anti-piracy script: a `MEVA-` prefix check and a
+> footer-element inspector that redirected to `/unlicensed`. **That script is not
+> in the shipped product** — `meva-license-key`, `meva-credit`, `meva-link`,
+> `meva-footer` and `indexOf('MEVA-')` all return zero occurrences in
+> `blogger-llianmeva-template/template/product/`. It is gone, and for good
+> reason: a prefix check is bypassed by pasting any string that begins with the
+> right four characters. Do not re-add it. Everything below is the real,
+> server-side design.
 
 ---
 
-## 1. How the trial and its enforcement work
+## 1. How licensing actually works
 
-Trial users may use the template freely as long as the footer attribution stays intact:
-
-```html
-<!-- Inside the Blogger XML footer area -->
-<div id='meva-footer'>
-  <p>Copyright &#169; <span id='current-year'>2026</span> <data:blog.title/>. All Rights Reserved.</p>
-  <p id='meva-credit'>
-    Distributed by <a href='https://templatemeva.com/' id='meva-link' rel='dofollow' target='_blank'>TemplateMeva</a>
-  </p>
-</div>
-```
-
-If that attribution is deleted, hidden, or its `href` is changed, the verification script redirects visitors to the store's notice page:
+The serial is not checked on the buyer's page. It is **bound to the buyer's
+domain on the server**, once, and from then on the page only proves *which domain
+it is on*.
 
 ```
-https://templatemeva.com/unlicensed?domain=<blog-host>&reason=<code>&template=<slug>
+  1.  Buyer purchases.  The server issues a serial:  AB12C-34DEF-56789-0ABCD-EF012
+                        (25 hex characters, five groups of five, no prefix)
+
+  2.  Buyer pastes one line into the Licence Activation gadget on their blog:
+                          you@example.com AB12C-34DEF-56789-0ABCD-EF012
+
+  3.  On the next page load the guard reads that paste and makes EXACTLY ONE
+      server call:   POST /?action=redeem     body: { serial, email, domain, templateId }
+      The serial travels in a JSON body, never in a URL. It happens once per
+      serial, guarded by sessionStorage.
+
+  4.  From then on, every page load makes:
+      GET  /?action=validate&templateId=<id>&domain=<hostname>[&footer=<fp>]
+      templateId + domain. Nothing else. No serial. No email.
+
+  5.  The server escalates gradually rather than cutting off at once:
+          first site  -> allow
+          then        -> warn1 (day 0) -> warn2 -> warn3 -> block
+      `valid` stays true even while blocked: the site works, the notice grows.
 ```
 
-The notice page reads three query parameters:
+**The trial also runs on the server clock.** A brand-new blog seen for the first
+time is given a 7-day trial created server-side. Clearing `localStorage` cannot
+move `trialEndsAt` — which is the entire reason the trial is not a local
+timestamp.
 
-| Param | Example | Purpose |
-| :--- | :--- | :--- |
-| `domain` | `usersblog.blogspot.com` | Displayed as the flagged blog |
-| `reason` | `trial_expired`, `invalid_key`, `element_deleted`, `element_hidden`, `href_tampered` | Selects the headline and explanation |
-| `template` | `spotlight` | Template slug shown in the notice |
+### Why the domain is the credential
 
-The `element_*` codes and `href_tampered` all resolve to the attribution-removed message. An unrecognized or missing `reason` falls back to the generic trial-expired copy, so a malformed call still lands on a sensible page rather than a broken one.
+Because the thing being sold is a *site*, not a key. A key can be copied to a
+million blogs. A domain cannot. Binding the licence to the domain — and deriving
+the blog id from Blogger's own public feed rather than from anything the page
+says — is what makes a serial worth buying.
 
 ---
 
-## 2. Anti-tamper and license script
+## 2. The contract for your template
 
-Add this before `</body>` in your trial XML. It is deliberately dependency-free and readable.
+Four constants, at the top of your guard script:
+
+```js
+var API_URL     = 'https://meva-licence-api.kuldeep7ke.workers.dev';
+var AUTHOR_URL  = '<your store>/unlicensed';        // see §5 — domain undecided
+var TEMPLATE_ID = 'your-repo-name';                 // MUST equal your repo name
+var COUNTDOWN   = 60;
+```
+
+`TEMPLATE_ID` **must equal your repository name.** The server's template registry
+keys on it. A template id it does not recognise validates as nothing.
+
+### 2.1 The serial carrier
+
+A hidden-by-CSS gadget in the off-canvas. Its **HTML Content** box is the carrier:
 
 ```xml
-<script type='text/javascript'>
-//<![CDATA[
-(function() {
-  window.addEventListener('DOMContentLoaded', function() {
-    // 1. A valid key disables all enforcement
-    var licenseWidget = document.getElementById('meva-license-key');
-    var licenseKey = licenseWidget ? licenseWidget.innerText.trim() : '';
-
-    if (licenseKey && licenseKey.toUpperCase().indexOf('MEVA-') === 0) {
-      return; // Licensed copy: full white-label freedom
-    }
-
-    // 2. Trial attribution check
-    function verifyAttribution() {
-      var creditContainer = document.getElementById('meva-credit');
-      var creditLink = document.getElementById('meva-link');
-      var storeUrl = 'https://templatemeva.com/unlicensed';
-
-      if (!creditContainer || !creditLink) {
-        redirectToNotice(storeUrl, 'element_deleted');
-        return;
-      }
-
-      var style = window.getComputedStyle(creditContainer);
-      if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0' || parseInt(style.height) === 0) {
-        redirectToNotice(storeUrl, 'element_hidden');
-        return;
-      }
-
-      var href = creditLink.getAttribute('href') || '';
-      if (href.indexOf('templatemeva.com') === -1) {
-        redirectToNotice(storeUrl, 'href_tampered');
-        return;
-      }
-    }
-
-    function redirectToNotice(base, reason) {
-      var currentHost = window.location.hostname;
-
-      // Never redirect inside the Blogger dashboard preview
-      if (currentHost.indexOf('blogger.com') !== -1) return;
-
-      // Replace 'spotlight' with this template's store slug
-      var target = base
-        + '?domain=' + encodeURIComponent(currentHost)
-        + '&reason=' + reason
-        + '&template=' + encodeURIComponent('spotlight');
-
-      window.location.replace(target);
-    }
-
-    verifyAttribution();
-    setInterval(verifyAttribution, 8000);
-  });
-})();
-//]]>
-</script>
+<b:section id='Licence Activation' maxwidgets='1' showaddelement='no'>
+  <b:widget id='HTML22' locked='false' title='Licence Activation' type='HTML'>
+    <b:includable id='main'>
+      <div class='lic-hint'>Paste your licence here: you@example.com AB12C-34DEF-56789-0ABCD-EF012</div>
+    </b:includable>
+  </b:widget>
+</b:section>
 ```
 
-### Before shipping, check these
+```css
+#HTML22 { display: none; }
+body#layout #HTML22 { display: block; }   /* visible only in Blogger's Layout editor */
+```
 
-- **Escape the href safely.** `getAttribute('href')` returns `null` on a malformed attribute; the version above falls back to an empty string so the comparison cannot throw.
-- **Do not run enforcement on the store's own domain.** If you mirror a demo under your own domain that links back to the store, the check will pass on `href` but still fire on other rules. Guard with a hostname allowlist if you host mirrors.
-- **The 8-second interval is not tamper-proof.** A determined user can disable timers or strip the script. Treat this as a deterrent that recovers revenue from casual removals, not as DRM.
-- **Disclose the behavior.** Attribution requirements belong in the product page and trial terms, not just in code.
+Two rules that are easy to get wrong and both fail silently:
+
+- **Do not put Blogger's `hidden` attribute on the widget.** The guard reads the
+  paste from the *rendered* page; a hidden widget never renders, so activation
+  never fires and nothing tells you why.
+- **Do not rename `#HTML22`.** The reader selects `#HTML22 .widget-content`.
+
+### 2.2 Reading the paste
+
+```js
+function readPastedLicence() {
+  var el = document.querySelector('#HTML22 .widget-content');
+  if (!el) { return null; }
+  var t = el.textContent || '';
+  // email is OPTIONAL; the serial alone on the line works
+  var m = t.match(/([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})?[ \t]*([0-9A-Fa-f]{5}(-[0-9A-Fa-f]{5}){4})/);
+  if (!m) { return null; }
+  return { email: (m[1] || '').trim(), serial: (m[2] || '').toUpperCase() };
+}
+```
+
+The regex is deliberately forgiving about the email and strict about the serial.
+Serial groups are `[0-9A-Fa-f]` only — `G` through `Z` never appear.
+
+### 2.3 Redeem, once
+
+```js
+fetch(API_URL + '?action=redeem', {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({
+    serial: pasted.serial,
+    email:  pasted.email,
+    domain: location.hostname,
+    templateId: TEMPLATE_ID
+  })
+});
+```
+
+Guard it so it fires once per serial, or a page refresh re-posts it:
+
+```js
+var key = 'meva_redeemed_' + TEMPLATE_ID + '_' + pasted.serial;
+try { if (sessionStorage.getItem(key) === '1') { return; } } catch (e) {}
+// ... on a successful response:
+try { sessionStorage.setItem(key, '1'); } catch (e) {}
+```
+
+### 2.4 Validate, by domain only
+
+```js
+var url = API_URL + '?action=validate'
+        + '&templateId=' + encodeURIComponent(TEMPLATE_ID)
+        + '&domain='     + encodeURIComponent(location.hostname)
+        + '&footer='     + encodeURIComponent(copyrightFingerprint());
+```
+
+`footer` is a bounded (512-char) fingerprint of your rendered copyright line, and
+`credit=missing` reports that your trial tag is gone. Both help the server tell
+"trial running" from "trial stripped", and both are non-identifying.
+
+### 2.5 Escalation
+
+Read the server's verdict and let the server own the outcome:
+
+| Server says | Do |
+|-------------|-----|
+| `redirectUrl` present | `window.location.replace(data.redirectUrl)` |
+| blocked, no redirect | show your own full-screen notice, then `AUTHOR_URL` after `COUNTDOWN` seconds |
+| warn / trial | render the non-blocking notice, keep the site usable |
+
+**Fail open on silence.** Block only on an explicit refusal. A network timeout
+must not take a paying customer's site down — that failure mode is what
+`blogger-license-system`'s fail-open policy exists to prevent.
 
 ---
 
-## 3. Premium license verification
+## 3. Credential rules — not negotiable
 
-1. Ship a license widget in the Blogger Layout:
+The licensing model is sold on this, and the store's own gate
+(`npm run registry` in `template-meva`) fails the build if any of these appear:
 
-   ```xml
-   <b:section id='meva-license-section' maxwidgets='1' showaddelement='no'>
-     <b:widget id='HTML999' locked='false' title='Theme License Key' type='HTML'>
-       <b:includable id='main'>
-         <div id='meva-license-key' style='display:none;'><data:content/></div>
-       </b:includable>
-     </b:widget>
-   </b:section>
-   ```
-
-2. When the customer pastes their key (`MEVA-8941-K92X-2026`) into that widget:
-   - the anti-tamper check detects the `MEVA-` prefix and exits early,
-   - all trial limitations are bypassed,
-   - footer text becomes fully editable with zero redirects.
-
-This client-side prefix check is intentionally simple. For real enforcement, have the script verify the key against your licensing endpoint and only treat it as valid on a confirmed response — a prefix match alone can be forged.
-
-The store's `/unlicensed` page has a matching key box that validates the `MEVA-XXXX-XXXX-XXXX` shape client-side. It is a UX affordance only; wire it to your licensing backend before launch.
+- The buyer's **email and serial must never** appear in the served page markup,
+  the template XML, the URL of any request, or a `data-` attribute.
+- `action=validate` carries **templateId, domain and the footer fingerprint
+  only**. Never a serial, never an email.
+- The only call that carries a serial is `action=redeem`, in a POST body — never
+  in a URL, because URLs end up in logs and referrers.
+- Do not introduce `BUYER_EMAIL_HERE`, `BUYER_SERIAL_HERE`, `data-email` or
+  `data-serial`. They are rejected by review, not merely discouraged.
+- Activation is **server-side**: the operator registers the domain against the
+  licence. Never trust a client-side check.
 
 ---
 
-## 4. Preparing demo blogs for the responsive preview
+## 4. Before you ship
 
-The store embeds demo blogs in an iframe at `/preview/:slug`, so the demo must be framable and must not serve a separate mobile theme.
+- [ ] `TEMPLATE_ID` equals your repository name, exactly.
+- [ ] Serial regex is `[0-9A-Fa-f]{5}(-[0-9A-Fa-f]{5}){4}`.
+- [ ] `redeem` posts a JSON body and is guarded to once per serial.
+- [ ] `validate` sends `templateId` + `domain` + `footer` and nothing sensitive.
+- [ ] The gadget is hidden by CSS, **not** by the Blogger `hidden` attribute.
+- [ ] A network failure leaves the site working.
+- [ ] Escalation is gradual, and the server's `redirectUrl` wins over yours.
+- [ ] `AUTHOR_URL` points at the domain you actually serve from (§5).
+- [ ] `X-Frame-Options` is not `DENY` on the demo blog, or `/preview/:slug` cannot frame it.
 
-1. **Enable HTTPS.** Blogger Dashboard > Settings > HTTPS: turn on both **HTTPS Availability** and **HTTPS Redirect**. Mixed content is blocked in framed previews.
-2. **Force desktop rendering on mobile viewports.** Theme > Customize dropdown > **Mobile settings** > **Desktop** > Save. Blogger's legacy mobile template otherwise serves a fixed-width page that makes the 375px preview misleading.
-3. **Add sample content.** Publish 4–6 posts tagged across a few labels (`Technology`, `Fashion`, `Editorial`, `Viral`) so sliders, mega menus, and in-feed ad slots populate during buyer demos.
-4. **Verify framing.** Load the demo directly and confirm nothing sets `X-Frame-Options: DENY`. If the demo cannot be framed, the store shows a fallback overlay with a direct-open link — verify that path looks right for your brand.
-5. **Point the store at it.** Set `liveDemoUrl` on the template, and add each concept's URL to that template's `demos[].demoUrl`.
+---
+
+## 5. Open: which domain?
+
+The shipped template has `AUTHOR_URL = 'https://mevatemplates.com/unlicensed'`
+baked in. The storefront is configured as `https://templatemeva.com`. **These are
+different domains and one of them is wrong.** Until that is settled, an unlicensed
+blog redirects visitors somewhere that is not this store.
+
+Fixing it means changing `AUTHOR_URL` in the shipped XML, which is a change to
+`blogger-llianmeva-template` and needs its own change ID there — not an edit to
+this repository.
+
+---
+
+## 6. Preparing demo blogs for the responsive preview
+
+The store embeds demo blogs in an iframe at `/preview/:slug`, so a demo must be
+framable and must not serve a separate mobile theme.
+
+1. **Enable HTTPS.** Blogger Dashboard > Settings > HTTPS: turn on both **HTTPS
+   Availability** and **HTTPS Redirect**. Mixed content is blocked in a framed
+   preview.
+2. **Force desktop rendering on mobile viewports.** Theme > Customize dropdown >
+   **Mobile settings** > **Desktop** > Save. Blogger's legacy mobile template
+   otherwise serves a fixed-width page that makes the 375px preview misleading.
+3. **Add sample content.** Publish 4–6 posts tagged across a few labels so
+   sliders, mega menus, and in-feed ad slots populate during buyer demos.
+4. **Verify framing.** Load the demo directly and confirm nothing sets
+   `X-Frame-Options: DENY`. If it cannot be framed, the store shows a fallback
+   overlay with a direct-open link.
+5. **Point the store at it.** Set `liveDemoUrl` on the template, and add each
+   concept's URL to that template's `demos[].demoUrl`.

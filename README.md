@@ -38,10 +38,15 @@ owner consents to resale, so it never publishes anything, and
    with `resale: 'not-for-resale'`, because that project's own README states it
    was built for one specific blog. The gate exists so that fact cannot be
    quietly overridden.
-3. **The licensing model is split.** See [`docs/TASKS.md`](docs/TASKS.md) ->
-   *Licensing*. The storefront validates a `MEVA-XXXX-XXXX-XXXX` shape
-   client-side and calls nothing; `blogger-license-system` is the authority and
-   uses a different serial format against a real endpoint.
+3. **Licensing is owned by `blogger-license-system`, not by this store.** As of
+   `WEBSTR001-C002` the Worker is the single source of truth. The storefront's
+   old key box — which accepted any invented key and rejected every real one — is
+   deleted. Serials look like `AB12C-34DEF-56789-0ABCD-EF012`, they are bound to
+   your domain server-side, and the 7-day trial runs on the server clock. Two
+   things remain unresolved: the shipped template redirects to
+   `mevatemplates.com/unlicensed` while this store is `templatemeva.com`, and the
+   guard sends the notice page no context. See [`docs/TASKS.md`](docs/TASKS.md)
+   -> *Licensing*.
 
 ---
 

@@ -1,7 +1,7 @@
 import { useState, type FC } from 'react';
 import {
   ShieldAlert, Lock, Clock, Key, ShoppingBag, HelpCircle,
-  RefreshCcw, ExternalLink, CheckCircle2, AlertTriangle, Mail
+  RefreshCcw, ExternalLink, CheckCircle2, AlertTriangle, Mail, ShieldCheck
 } from 'lucide-react';
 
 interface UnlicensedNoticeProps {
@@ -36,12 +36,15 @@ const getQueryParam = (name: string): string => {
 
 export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
   const [showActivateBox, setShowActivateBox] = useState(false);
-  const [licenseKey, setLicenseKey] = useState('');
-  const [validating, setValidating] = useState(false);
-  const [validationResult, setValidationResult] = useState<'idle' | 'success' | 'error'>('idle');
 
-  // Anti-piracy redirect params sent by trial templates:
+  // Params the anti-piracy redirect MAY send:
   // /unlicensed?domain=<blog domain>&reason=<trial_expired|attribution_removed|invalid_key|element_deleted|element_hidden|href_tampered>&template=<slug>
+  //
+  // IMPORTANT: the shipped guard does NOT send these today. It redirects to the
+  // server's `redirectUrl`, falling back to a bare AUTHOR_URL with no query at
+  // all. So the common case is an EMPTY query, and the page must be honest about
+  // that rather than confidently asserting a cause it cannot possibly know.
+  // Read if present; do not assume.
   const flaggedDomain = getQueryParam('domain');
   const rawReason = getQueryParam('reason');
   const normalizedReason: NoticeReason = TAMPER_REASONS.includes(rawReason)
@@ -53,19 +56,8 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
   const templateSlug = getQueryParam('template');
   const copy = REASON_COPY[reason as Exclude<NoticeReason, 'unknown'>] ?? REASON_COPY.trial_expired;
 
-  const handleValidate = () => {
-    if (!licenseKey.trim()) return;
-    setValidating(true);
-    setValidationResult('idle');
-
-    // Simulate key validation (placeholder — real impl hooks into backend)
-    setTimeout(() => {
-      setValidating(false);
-      // For demo: accept any MEVA-XXXX-XXXX-XXXX format key
-      const keyPattern = /^MEVA-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/i;
-      setValidationResult(keyPattern.test(licenseKey.trim()) ? 'success' : 'error');
-    }, 1500);
-  };
+  // The guard tells us nothing, so the page cannot name the blog or the template.
+  const hasContext = Boolean(flaggedDomain || templateSlug || rawReason);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col items-center justify-center p-4 sm:p-6">
@@ -110,11 +102,28 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
             <Clock className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <div className="text-sm flex-1">
               <p className="font-bold text-amber-900">What caused this notice?</p>
-              <ul className="mt-1 text-amber-800 space-y-1 list-inside list-disc text-xs">
-                <li>The 7-day trial period has ended and no license key was entered</li>
-                <li>The template attribution code was removed before purchasing a license</li>
-                <li>The license key was entered but has expired or belongs to a different domain</li>
-              </ul>
+              {hasContext ? (
+                <ul className="mt-1 text-amber-800 space-y-1 list-inside list-disc text-xs">
+                  <li>The 7-day trial period has ended and no license key was entered</li>
+                  <li>The template attribution code was removed before purchasing a license</li>
+                  <li>The license key was entered but has expired or belongs to a different domain</li>
+                </ul>
+              ) : (
+                /* No query parameters arrived, which is the normal case: the guard
+                   redirects to a bare URL and tells this page nothing. Listing the
+                   three causes as though they applied would be inventing an answer,
+                   so name the bound instead — every one of them is fixed by the same
+                   activation, and that is the actionable fact. */
+                <p className="mt-1 text-amber-800 text-xs leading-relaxed">
+                  This page is not told which blog or which template sent you here, so
+                  it cannot say what went wrong. The usual causes are an expired
+                  7-day trial, a licence that was activated for a different domain,
+                  or the trial's attribution code being removed before a licence was
+                  bought. All three are fixed the same way — activate the licence
+                  below. If you have already done that, contact support and quote
+                  your blog address.
+                </p>
+              )}
               {(flaggedDomain || templateSlug) && (
                 <div className="mt-3 pt-3 border-t border-amber-200/70 space-y-1">
                   {flaggedDomain && (
@@ -171,7 +180,7 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
                   className="w-full py-2.5 bg-white hover:bg-indigo-50 text-indigo-700 font-bold text-xs rounded-xl border border-indigo-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Key className="w-3.5 h-3.5" />
-                  <span>Already have a license key? Enter it here</span>
+                  <span>Already bought a licence? Activate it</span>
                 </button>
               </div>
             </div>
@@ -217,50 +226,60 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
             </div>
           </div>
 
-          {/* Inline Activation Box */}
+          {/* Activation instructions — replaces the old key box.
+              The box was worse than useless: it ran a client-side regex against a
+              made-up `MEVA-XXXX-XXXX-XXXX` shape, so it ACCEPTED any invented key
+              and REJECTED every real serial (which is 5 groups of 5 hex digits,
+              e.g. AB12C-34DEF-56789-0ABCD-EF012). It could not validate anything,
+              because a key pasted into a web page has nowhere to go — activation
+              is bound server-side by the domain, not by a string in a browser.
+
+              There is deliberately no input field here. Collecting a buyer's email
+              and serial on a public page is exactly what the licensing model
+              forbids, and it would suggest a check that does not exist. */}
           {showActivateBox && (
             <div className="mb-6 p-5 rounded-2xl bg-slate-900 border border-slate-700">
-              <h4 className="font-black text-white text-sm mb-2 flex items-center gap-1.5">
+              <h4 className="font-black text-white text-sm mb-3 flex items-center gap-1.5">
                 <Key className="w-4 h-4 text-indigo-400" />
-                Enter License Key
+                Activate your licence
               </h4>
-              <p className="text-slate-400 text-xs mb-4">
-                Format: <code className="bg-slate-800 px-1.5 py-0.5 rounded text-indigo-300 font-mono">MEVA-XXXX-XXXX-XXXX</code> — case-insensitive
-              </p>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={licenseKey}
-                  onChange={(e) => setLicenseKey(e.target.value.toUpperCase())}
-                  placeholder="MEVA-XXXX-XXXX-XXXX"
-                  className="flex-1 bg-slate-800 border border-slate-600 rounded-xl px-4 py-2.5 text-sm font-mono text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
-                />
-                <button
-                  onClick={handleValidate}
-                  disabled={validating || !licenseKey.trim()}
-                  className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
-                >
-                  {validating ? 'Verifying…' : 'Activate'}
-                </button>
+
+              <ol className="text-xs text-slate-300 space-y-3 list-decimal list-inside marker:text-indigo-400">
+                <li>
+                  Open your Blogger dashboard and go to <strong className="text-white">Layout</strong>.
+                </li>
+                <li>
+                  Find the <strong className="text-white">Licence Activation</strong> gadget
+                  (it sits in the off-canvas area) and click its pencil, then
+                  <strong className="text-white"> Edit HTML</strong>.
+                </li>
+                <li>
+                  Paste the line from your purchase email on a single line —
+                  your email first, then the serial:
+                  <div className="mt-2 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 font-mono text-[11px] text-emerald-400 break-all">
+                    you@example.com AB12C-34DEF-56789-0ABCD-EF012
+                  </div>
+                  <p className="mt-1 text-[11px] text-slate-400">
+                    The email is optional — the serial alone on the line works too.
+                  </p>
+                </li>
+                <li>Click <strong className="text-white">Save</strong>.</li>
+                <li>
+                  Reload your blog. The template verifies the serial with our
+                  licensing server against your domain and unlocks. There is no
+                  re-upload and nothing to reinstall.
+                </li>
+              </ol>
+
+              <div className="mt-4 p-3 bg-slate-800/70 border border-slate-700 rounded-xl text-[11px] text-slate-300 flex items-start gap-2">
+                <ShieldCheck className="w-4 h-4 shrink-0 text-emerald-400 mt-0.5" />
+                <span>
+                  Your serial is read from the gadget on your own blog and is
+                  <strong> never</strong> collected on this page, never stored here,
+                  and never sent anywhere except the licensing server that checks it.
+                  One licence is tied to one domain.
+                </span>
               </div>
-
-              {validationResult === 'success' && (
-                <div className="mt-3 p-3 bg-emerald-900/40 border border-emerald-600 rounded-xl text-xs text-emerald-300 flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>
-                    <strong>License key accepted!</strong> Paste this key into your Blogger Layout's "License Key" gadget to remove the notice from your blog. The key is valid and your activation is confirmed.
-                  </span>
-                </div>
-              )}
-
-              {validationResult === 'error' && (
-                <div className="mt-3 p-3 bg-rose-900/40 border border-rose-600 rounded-xl text-xs text-rose-300 flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 shrink-0" />
-                  <span>
-                    <strong>Invalid license key.</strong> Make sure you've entered the full key in MEVA-XXXX-XXXX-XXXX format from your purchase confirmation email. If the problem persists, contact support.
-                  </span>
-                </div>
-              )}
             </div>
           )}
 

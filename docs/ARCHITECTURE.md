@@ -181,28 +181,53 @@ Vite emits content-hashed filenames into `assets/`, so the year-long immutable c
 ## 9. Licensing boundary
 
 This store is a **visitor-facing storefront**. It is not the licensing system.
-`../blogger-license-system` is, and its serial format is the authority:
+`../blogger-license-system` is, and since WEBSTR001-C002 it is the single source of
+truth. What the real system does:
 
-| | Store (current) | `blogger-license-system` (authority) |
+| Step | Call | Carries |
+|------|------|---------|
+| Bind the licence (once per serial) | `POST /?action=redeem` | `{ serial, email, domain, templateId }` in a **JSON body** |
+| Check the licence (every load) | `GET /?action=validate` | `templateId`, `domain`, `footer` fingerprint — **nothing else** |
+
+The serial is 25 hex characters in five groups of five (`AB12C-34DEF-56789-0ABCD-EF012`).
+It is **bound to the buyer's domain**, and the domain is what is checked from then
+on. The 7-day trial also runs on the server clock, so clearing `localStorage`
+cannot extend it. `validate` and `redeem` deliberately allow any CORS origin
+(BLG-C408) because they run on buyers' own sites; every other action is
+dashboard-only.
+
+### What changed here, and what did not
+
+| | Before | After |
 | :--- | :--- | :--- |
-| Serial | `MEVA-XXXX-XXXX-XXXX` | `XXXXX-XXXXX-XXXXX-XXXXX-XXXXX` (5 groups of 5 hex, no prefix) |
-| Validation | client-side regex, no network call | `GET /?action=validate` with `templateId` + `domain` |
-| Binding | none | `POST /?action=redeem` binds serial to a domain |
-| Notice redirect | `templatemeva.com/unlicensed` | `mevatemplates.com/unlicensed` |
+| Key box on `/unlicensed` | client-side regex on a fictional `MEVA-XXXX-XXXX-XXXX` | **removed** |
+| Accepted a fake key | yes | n/a |
+| Rejected a real key | yes | n/a |
+| Cause shown | three causes asserted regardless of what was known | says plainly when it was told nothing |
+| Activation guide | fictional key + a `MEVA_LICENSE_CONFIG` snippet | real gadget, real serial format |
+| Developer guide | legacy client-side `MEVA-` prefix check, not in the product | verified server-side contract |
 
-These disagree. See `docs/TASKS.md` -> *Licensing* for the open decisions. Nothing
-in the storefront should be treated as the licensing mechanism until they are
-reconciled.
+The old box was worse than unfinished: it was inverted. It accepted any invented
+key and rejected every genuine serial, so it told the truth about exactly the
+wrong cases.
 
-One invariant applies regardless of which wins, and `npm run registry` check 8
-enforces it across `src/`:
+### Still divergent
 
-> A buyer's email and serial must never appear in the served markup, the template
-> XML, or the URL of a validation request. The validation call carries the
-> template id, the site's domain and non-identifying diagnostics — never the
-> serial, never the email. Activation is server-side, and the guard fails closed
-> when the domain cannot be identified.
+The shipped template hardcodes `AUTHOR_URL = 'https://mevatemplates.com/unlicensed'`
+while this store is `templatemeva.com`, and the guard redirects to a bare URL
+with no query parameters — so this page cannot name the blog or template it was
+served to. Both are recorded in `docs/TASKS.md` and neither is fixed here: the
+first means editing the shipped XML in `blogger-llianmeva-template`, which needs
+its own change ID.
 
-A generator, sync script or edit that introduces `BUYER_EMAIL_HERE`,
-`BUYER_SERIAL_HERE`, `data-email`, `data-serial`, or an email/serial-bearing
-`action=validate` URL fails the gate.
+### The invariant, enforced
+
+A buyer's email and serial must never appear in the served markup, the template
+XML, or the URL of a validation request. The validation call carries the template
+id, the site's domain and a non-identifying footer fingerprint. Activation is
+server-side, and the guard must fail **open** on silence — blocking only on an
+explicit refusal.
+
+`npm run registry` check 8 enforces this across `src/`, failing on
+`BUYER_EMAIL_HERE`, `BUYER_SERIAL_HERE`, `data-email`, `data-serial`, or an
+email/serial-bearing `action=validate` URL.

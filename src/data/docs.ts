@@ -39,43 +39,43 @@ export const DOCS_ARTICLES: DocArticle[] = [
   {
     id: 'activation-guide',
     slug: 'activation',
-    title: 'Template Activation & License Key Verification',
+    title: 'Template Activation & Licence Verification',
     category: 'Activation',
-    excerpt: 'Learn how to activate your premium license key, verify your custom domain, and remove trial restrictions and footer credit locks.',
+    excerpt: 'Activate your lifetime licence in about thirty seconds: paste your serial into the Licence Activation gadget on your blog. Verification runs server-side against your domain.',
     readingTime: '3 min read',
-    updatedAt: '2026-09-22',
+    updatedAt: '2026-10-06',
     steps: [
       {
         stepNumber: 1,
-        title: 'Locate Your License Key',
-        content: 'When you purchase a Premium template from our store or Gumroad, your unique License Key is sent to your purchase email and displayed on your order confirmation page. It looks like: `MEVA-XXXX-XXXX-XXXX`.',
-        tip: 'Check your spam or promotions folder if you do not see the receipt email within 5 minutes.'
+        title: 'Find your serial',
+        content: 'When you purchase a template, the serial is sent to your purchase email. It is twenty-five hexadecimal characters in five groups of five, with no prefix and no letters outside A-F.',
+        codeSnippet: 'AB12C-34DEF-56789-0ABCD-EF012',
+        tip: 'Serials are not case-sensitive. They look similar to an order reference, so paste the whole thing rather than the nearest-looking string.'
       },
       {
         stepNumber: 2,
-        title: 'Open Blogger Layout & License Widget',
-        content: 'Navigate to your Blogger Dashboard > click "Layout" on the left menu. Look at the top or bottom for the widget named "⚙️ Theme Activation / License". Click "Edit".',
-        tip: 'In some templates, the license key is inserted via Theme > Edit HTML inside the <script id="meva-license"> tag.'
+        title: 'Open the Licence Activation gadget',
+        content: 'In your Blogger dashboard, click "Layout" in the left menu. Scroll to the Licence Activation gadget — it sits in the off-canvas area, and it is hidden on the published site by design, so you will only ever see it here. Click its pencil, then choose "Edit HTML".',
+        tip: 'If you cannot find the gadget, it may be collapsed. Widen the Layout page or use the search in the dashboard rather than Theme > Edit HTML — pasting the serial into the theme source does nothing.'
       },
       {
         stepNumber: 3,
-        title: 'Paste License Key & Save',
-        content: 'Paste your License Key into the input box and click "Save". Your template will instantly connect to our Cloudflare edge licensing server to validate your domain and unlock full features.',
-        codeSnippet: `// Or inside Theme -> Edit HTML:
-<script type="text/javascript">
-  /*<![CDATA[*/
-  const MEVA_LICENSE_CONFIG = {
-    licenseKey: "MEVA-YOUR-PURCHASED-KEY",
-    autoUpdate: true
-  };
-  /*]]>*/
-</script>`
+        title: 'Paste your email and serial on one line',
+        content: 'In the HTML Content box, paste a single line: your email address first, then the serial. Your email is optional — the serial alone on the line also works. Save.',
+        codeSnippet: 'you@example.com AB12C-34DEF-56789-0ABCD-EF012',
+        warning: 'Do not add the widget\'s Blogger "hidden" attribute. The template reads your paste from the rendered page, and a hidden widget never renders — activation would silently never fire.'
       },
       {
         stepNumber: 4,
-        title: 'Remove or Customize Footer Credits',
-        content: 'Once activated, trial watermark protections are automatically disabled. You can now edit the copyright text and links in the "Footer Copyright" widget in your Layout panel without triggering redirects.',
-        tip: 'If you are using the Free Trial version, footer credits must remain untouched, otherwise the anti-piracy script redirects visitors to the /unlicensed notice page.'
+        title: 'Reload your blog',
+        content: 'Reload your site. The template sends the serial to our licensing server once, which binds the licence to your domain. From then on it verifies by domain alone on each page load. There is nothing to re-upload and nothing to reinstall.',
+        tip: 'The first visit after saving can take a couple of seconds: the template is talking to the server rather than checking a string locally.'
+      },
+      {
+        stepNumber: 5,
+        title: 'Remove or customise the footer credits',
+        content: 'Once the licence is active, the trial restrictions and the footer credit check are both disabled. You can edit the copyright line and links freely without triggering a redirect.',
+        warning: 'A licence is bound to ONE domain. Activating on a second blog needs its own licence — the same serial will not unlock it.'
       }
     ]
   },
