@@ -27,10 +27,18 @@
   entry is `published`.
 - [x] `the-machine/machine/new-project.ps1` calls the auto-register step after it
   writes its own registry row.
-- [ ] Prove the round trip end to end: generate a throwaway project with
+- [~] Prove the round trip end to end: generate a throwaway project with
   `-WhatIf`, then for real, and confirm the draft lands in the storefront and the
   registry row lands in `the-machine/projects.md`.
-  - disposition: UNANSWERED (needs a base theme XML to point `-SourceXml` at, which no throwaway has)
+  - 2026-10-06 (WEBSTR001-C005 session): the `-WhatIf` half is proven.
+    `new-project.ps1 -WhatIf` with `-SourceXml` pointed at the real
+    `blogger-llianmeva-template` product XML allocates `BLG-GEL-002`,
+    measures the base theme, and prints the full plan including the storefront
+    draft step. The for-real half is DEFERRED, by decision: it would register
+    a `BLG-GEL-002` row in `the-machine/projects.md` and a draft product in
+    `docs/products.json` that we would then have to retract.
+  - disposition: DEFERRED (owner chose "WhatIf only"; the SourceXml blocker is
+    solved, so the real run only needs a decision to execute it)
 
 ## Catalog honesty
 
@@ -114,12 +122,11 @@ adopted-to, not the reverse.
   `public/data/index.json` for the grid, `public/data/templates/<slug>.json` for
   detail, fetched on demand. No backend needed on Cloudflare Pages.
   - disposition: UNANSWERED (do it BEFORE template #20. It is far cheaper before 20 products are added by hand than after, and every product added now is one more thing to move. See "What to do before template #20" below.)
-- [ ] **Generate `sitemap.xml` from the registry.** It is hand-maintained. At 100
-  products that is 100 hand-written entries that can silently drift, and the gate
-  only catches a published product missing from it, not a stale entry ordering.
-  `npm run assets` already generates the images; the sitemap belongs in the same
-  step.
-  - disposition: UNANSWERED (same answer as the bundle change)
+- [x] **Generate `sitemap.xml` from the registry.** Done in WEBSTR001-C005:
+  `npm run sitemap` regenerates it, and `npm run sitemap:check` (wired into
+  `npm test`) fails the suite when the file is stale. Product URLs are
+  derived from `src/data/templates.ts`; the 9 core pages are the only
+  human-owned part.
 - [ ] **Decide the homepage for a large catalog.** Recommendation, not decided:
   a curated featured row of 4-6 (`badge: 'FEATURED'`), then the full catalog
   paginated at ~24/page, **default sort Newest**. NOT random rotation -- a

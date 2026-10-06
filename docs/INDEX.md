@@ -37,4 +37,4 @@
 | `public/images/*.svg` | `npm run assets` (`generate-assets.js`) -- reads `docs/products.json`, one `-thumb` and one `-hero` per product |
 | `docs/REGISTRY.md` | `npm run registry:sync` (reads `docs/products.json`) |
 | catalog rows in `src/data/templates.ts` | `npm run registry:add` (`tools/register-product.cjs`) |
-| `public/sitemap.xml` | **currently hand-maintained** -- see `TASKS.md` -> *Scaling past 10 templates* |
+| `public/sitemap.xml` | **generated** -- `npm run sitemap` (`tools/generate-sitemap.cjs`); `npm test` runs `--check` |
