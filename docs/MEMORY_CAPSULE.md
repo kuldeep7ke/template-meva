@@ -85,3 +85,12 @@ Open-task dispositions updated: the for-real `new-project.ps1` round trip is
 DEFERRED by owner decision ("WhatIf only" — the dry run proves everything up
 to the write); the old blocker (no base theme XML) is solved, the real
 `blogger-llianmeva-template` product XML works as `-SourceXml`.
+
+### 2026-10-06 -- WEBSTR001-C007
+
+Catalog card redesigned (this machine). `src/components/TemplateCard.tsx` is
+now a full-bleed portrait preview card (Option 4 of 7 showcase): floating
+price chip with discount, badge/category/trial chips, bottom gradient with
+rating, sales, version, PageSpeed/Dark/AdSense pills, always-visible Preview
++ Details buttons. Other machines: pull `main`, run `npm.cmd run dev` — no
+migration, no registry change, placeholders untouched.
