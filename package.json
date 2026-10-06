@@ -11,6 +11,7 @@
     "assets": "node generate-assets.js",
     "preview": "vite preview",
     "registry": "node tests/check-registry.cjs",
+    "id:next": "node tools/next-id.cjs",
     "registry:sync": "node tools/register-product.cjs --sync",
     "registry:add": "node tools/register-product.cjs",
     "test": "npm run typecheck && npm run lint && npm run registry"
