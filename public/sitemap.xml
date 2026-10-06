@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Product URLs are added here only when a product's status in
-  src/data/templates.ts is 'published'. tests/check-registry.cjs fails when this
-  file lists a slug that is not published, and when a published slug is missing
-  from it, so this file cannot drift from the catalog.
-
-  As of WEB-C001 it lists no product URLs at all: all nine catalog entries are
-  invented fixtures (`status: 'placeholder'`) and the one real Machine project,
-  BLG-GEL-001, is `draft` and recorded `not-for-resale`. They were previously
-  listed here, which is how nine fictional products ended up in a search index.
--->
+<!-- GENERATED FILE -- do not edit by hand.
+     Source: tools/generate-sitemap.cjs (core pages listed there,
+     product URLs derived from src/data/templates.ts + docs/products.json).
+     Regenerate with: npm run sitemap
+     tests/check-registry.cjs rule 7 still gates slug/status parity,
+     and `npm test` runs --check so this file cannot go stale. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <!-- Core Pages -->
