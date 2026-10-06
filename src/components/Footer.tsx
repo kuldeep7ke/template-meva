@@ -5,6 +5,7 @@ import {
   Sparkles, LayoutGrid, LifeBuoy
 } from 'lucide-react';
 import { SITE_CONFIG, CATEGORIES } from '../data/siteConfig';
+import { MULTI_DEMO_TEMPLATES } from '../data/templates';
 
 // Resolved once at module load so rendering stays pure and re-renders are stable.
 const COPYRIGHT_YEAR = new Date().getFullYear();
@@ -189,14 +190,16 @@ export const Footer: FC<FooterProps> = ({ navigate }) => {
                 Troubleshooting & Errors
               </button>
             </li>
-            <li>
-              <button
-                onClick={() => navigate('/showcase/smartmag')}
-                className="text-emerald-400 hover:text-emerald-300 transition-colors text-left font-medium"
-              >
-                Multi-Demo Concepts
-              </button>
-            </li>
+            {MULTI_DEMO_TEMPLATES[0] && (
+              <li>
+                <button
+                  onClick={() => navigate(`/showcase/${MULTI_DEMO_TEMPLATES[0].slug}`)}
+                  className="text-emerald-400 hover:text-emerald-300 transition-colors text-left font-medium"
+                >
+                  Multi-Demo Concepts
+                </button>
+              </li>
+              )}
           </ul>
         </div>
 

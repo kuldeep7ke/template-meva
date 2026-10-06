@@ -4,6 +4,7 @@ import {
   Layers, Mail, AlertTriangle, ShieldCheck
 } from 'lucide-react';
 import { CATEGORIES } from '../data/siteConfig';
+import { MULTI_DEMO_TEMPLATES, FEATURED_TEMPLATES } from '../data/templates';
 
 interface NavbarProps {
   currentPath: string;
@@ -123,9 +124,12 @@ export const Navbar: FC<NavbarProps> = ({
                 )}
               </div>
 
-              {/* Featured Showcase Hub (SmartMag Multi-demo style) */}
+              {/* Featured Showcase Hub -- points at whichever listed product actually
+                  ships multiple demos, rather than a hardcoded slug the catalog
+                  gate can withdraw. */}
+              {MULTI_DEMO_TEMPLATES[0] && (
               <button
-                onClick={() => handleNav('/showcase/smartmag')}
+                onClick={() => handleNav(`/showcase/${MULTI_DEMO_TEMPLATES[0].slug}`)}
                 className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                   currentPath.includes('/showcase')
                     ? 'text-indigo-600 bg-indigo-50'
@@ -136,6 +140,7 @@ export const Navbar: FC<NavbarProps> = ({
                 <span>Multi-Demo Hub</span>
                 <span className="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full">New</span>
               </button>
+              )}
 
               {/* Help Docs Dropdown (Installation & Activation common guide) */}
               <div 
@@ -223,15 +228,18 @@ export const Navbar: FC<NavbarProps> = ({
             </nav>
           </div>
 
-          {/* Right Actions */}
+          {/* Right Actions. The flagship CTA resolves through the catalog too, so it
+              cannot advertise a product the store has withdrawn. */}
           <div className="hidden md:flex items-center gap-3 shrink-0 lg:ml-4 lg:pl-5 lg:border-l lg:border-slate-200">
+            {FEATURED_TEMPLATES[0] && (
             <button
-              onClick={() => handleNav('/templates/spotlight')}
+              onClick={() => handleNav(`/templates/${FEATURED_TEMPLATES[0].slug}`)}
               className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow-sm hover:shadow transition-all flex items-center gap-2 cursor-pointer"
             >
               <ShieldCheck className="w-4 h-4" />
-              <span>Get Spotlight</span>
+              <span>Get {FEATURED_TEMPLATES[0].title.replace(/ Blogger Template$/, '')}</span>
             </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -256,13 +264,15 @@ export const Navbar: FC<NavbarProps> = ({
           >
             Store Gallery
           </button>
+          {MULTI_DEMO_TEMPLATES[0] && (
           <button
-            onClick={() => handleNav('/showcase/smartmag')}
+            onClick={() => handleNav(`/showcase/${MULTI_DEMO_TEMPLATES[0].slug}`)}
             className="w-full text-left px-3 py-2.5 rounded-lg text-base font-semibold text-slate-800 hover:bg-indigo-50 hover:text-indigo-600 flex items-center justify-between"
           >
             <span>Multi-Demo Showcase</span>
             <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">New</span>
           </button>
+          )}
 
           {/* Inset divider — a full-bleed rule reads as a stray horizontal line
               across the drawer, so it is kept inside the content gutter. */}

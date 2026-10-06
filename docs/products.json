@@ -1,0 +1,87 @@
+{
+  "$comment": [
+    "Registry of Machine-registered products. This file is the source of truth",
+    "for WHICH projects this storefront is allowed to represent. It is written by",
+    "tools/register-product.cjs and read by tests/check-registry.cjs.",
+    "",
+    "`resale` is the field that stops a real project being published as a",
+    "sellable product without a decision. BLG-GEL-001 is finished but its own",
+    "README says it was built for one specific blog and is not for resale, so it",
+    "is recorded as not-for-resale. The gate refuses to publish anything whose",
+    "resale is not 'allowed'.",
+    "",
+    "`status` is the storefront's own lifecycle, not the template project's:",
+    "  draft      - registered, deliberately not published, needs pricing + owner sign-off",
+    "  published  - live in the storefront catalog and in sitemap.xml",
+    "  withdrawn  - was published, must not be any more"
+  ],
+  "projectId": "WEB-STR-001",
+  "schema": 1,
+  "products": [
+    {
+      "projectId": "BLG-GEL-001",
+      "slug": "bloggermeva-city-politics",
+      "productName": "BloggerMeva -- City Politics Blogger Template",
+      "repo": "https://github.com/kuldeep7ke/blogger-llianmeva-template",
+      "version": "v1.1.0",
+      "status": "draft",
+      "resale": "not-for-resale",
+      "category": "Magazine",
+      "columns": "2 Columns",
+      "darkModeSupported": true,
+      "rtlSupported": false,
+      "adsenseOptimized": false,
+      "liveUrl": null,
+      "trialArtifact": null,
+      "registeredAt": "2026-10-06",
+      "notes": "Real, finished, the most advanced project in the workspace. NOT listed for sale: its README states it was built for one specific blog and is not for distribution. AdSense slots exist but no AdSense code is integrated, so adsenseOptimized is false rather than assumed. No hosted docs site and no packaged trial build exist yet."
+    }
+  ],
+  "fixtures": [
+    {
+      "slug": "spotlight",
+      "productName": "Spotlight Blogger Template",
+      "invented": true
+    },
+    {
+      "slug": "smartmag",
+      "productName": "SmartMag Blogger Template",
+      "invented": true
+    },
+    {
+      "slug": "techpulse",
+      "productName": "TechPulse Blogger Template",
+      "invented": true
+    },
+    {
+      "slug": "foodiebite",
+      "productName": "FoodieBite Blogger Template",
+      "invented": true
+    },
+    {
+      "slug": "minimalgrid",
+      "productName": "MinimalGrid Blogger Template",
+      "invented": true
+    },
+    {
+      "slug": "chrononews",
+      "productName": "ChronoNews Blogger Template",
+      "invented": true
+    },
+    {
+      "slug": "novastore",
+      "productName": "NovaStore Blogger Template",
+      "invented": true
+    },
+    {
+      "slug": "lumenlife",
+      "productName": "LumenLife Blogger Template",
+      "invented": true
+    },
+    {
+      "slug": "traveltrove",
+      "productName": "TravelTrove Blogger Template",
+      "invented": true
+    }
+  ]
+}

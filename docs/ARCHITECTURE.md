@@ -35,9 +35,52 @@ src/
   pages/           One component per route
   types/           Shared TypeScript models
   utils/router.ts  Routing hook and route parser
+tests/
+  check-registry.cjs   Catalog / registry / sitemap parity gate
+tools/
+  register-product.cjs Auto-register a Machine project as a draft product
 ```
 
 Data is static TypeScript, not fetched at runtime. Every page imports from `src/data/`, so content changes ship as a rebuild. That keeps the deployment a pure static bundle with no API dependency.
+
+## 2a. Product visibility (the one gate everything else respects)
+
+`src/data/templates.ts` carries every catalog row, and each row carries a
+`status`:
+
+| status | In the gallery | Reachable at `/templates/:slug` | In `sitemap.xml` |
+|--------|----------------|---------------------------------|------------------|
+| `published` | yes | yes | yes |
+| `draft` | no | no | no |
+| `placeholder` | dev builds only | dev builds only | no |
+
+`LISTED_TEMPLATES`, `isListed()` and `findListed()` are the only places that
+decide this. Pages do not re-implement the test: `TemplateDetail`,
+`DemoShowcaseHub` and `LivePreviewFrame` each resolve their slug through
+`findListed()` and render a "not published" panel when it returns nothing,
+rather than falling back to the first row of the catalog. A fallback there is
+how a draft or placeholder URL ends up serving another product's price and
+reviews.
+
+`Navbar`, `Footer` and the gallery callout resolve their product links through
+`MULTI_DEMO_TEMPLATES` / `FEATURED_TEMPLATES` for the same reason. They used to
+hardcode `/showcase/smartmag` and `/templates/spotlight`.
+
+`npm run registry` enforces the same rule statically, so the invariant cannot be
+lost by a page that forgets to ask:
+
+1. `docs/products.json` parses; ProjectIDs are unique and well-formed.
+2. Every registered product appears in `docs/REGISTRY.md`.
+3. Every `placeholder` catalog slug is declared as a fixture.
+4. Every catalog row carrying a `projectId` is registered.
+5. `published` requires `resale: 'allowed'`.
+6. A published row contains no `TODO(operator)` marker, and has a price and a `buyUrl`.
+7. `sitemap.xml` and the catalog agree in **both** directions.
+8. No buyer's email or serial can reach the served page (see §9).
+
+**As of WEBSTR001-C001 a production build lists nothing.** All nine rows are fixtures
+and `BLG-GEL-001` is a draft. That is the true state of the catalog. `npm run dev`
+shows the fixtures so a fresh clone renders something.
 
 ---
 
@@ -85,8 +128,9 @@ A `Template` carries everything its pages render: pricing (`price`, `originalPri
 
 - `index.html` carries a `WebSite` + `SearchAction` JSON-LD block, canonical link, and full OpenGraph/Twitter card tags with absolute image URLs.
 - `App.tsx` rewrites `document.title` on every route change.
-- `public/sitemap.xml` lists the store root, showcase, contact, unlicensed notice, all five doc guides plus `/docs`, and all seven template pages. Keep it in sync when adding a template.
+- `public/sitemap.xml` lists the store root, contact, unlicensed notice, `/docs` and the five doc guides. It lists **no product URLs**, because no product is `published` — see §2a. Add `/templates/<slug>` only when that product is published; `npm run registry` fails in both directions if the two disagree.
 - `public/robots.txt` allows crawling and points at the sitemap.
+- The `SearchAction` in `index.html` targets `/?search=`, which **no route reads**. Search state is not in the URL in this build (the hero input owns it in `App.tsx`). Either implement `?search=` or drop the `SearchAction`, or the structured data advertises a feature that does not exist.
 
 The store is a client-rendered SPA, so crawlers index the shell plus the sitemap. If organic search on individual template pages becomes a priority, add server-side prerendering for `/templates/:slug` — that is the single highest-impact SEO change available here.
 
@@ -133,3 +177,32 @@ Vite emits content-hashed filenames into `assets/`, so the year-long immutable c
 - The navbar collapses to a drawer below `md`, and desktop nav links appear at `lg`.
 - `LivePreviewFrame` constrains the iframe to 375px or 768px for device modes and shows a simulated address bar for those viewports.
 - The footer drops credit and payment badges below `sm`.
+
+## 9. Licensing boundary
+
+This store is a **visitor-facing storefront**. It is not the licensing system.
+`../blogger-license-system` is, and its serial format is the authority:
+
+| | Store (current) | `blogger-license-system` (authority) |
+| :--- | :--- | :--- |
+| Serial | `MEVA-XXXX-XXXX-XXXX` | `XXXXX-XXXXX-XXXXX-XXXXX-XXXXX` (5 groups of 5 hex, no prefix) |
+| Validation | client-side regex, no network call | `GET /?action=validate` with `templateId` + `domain` |
+| Binding | none | `POST /?action=redeem` binds serial to a domain |
+| Notice redirect | `templatemeva.com/unlicensed` | `mevatemplates.com/unlicensed` |
+
+These disagree. See `docs/TASKS.md` -> *Licensing* for the open decisions. Nothing
+in the storefront should be treated as the licensing mechanism until they are
+reconciled.
+
+One invariant applies regardless of which wins, and `npm run registry` check 8
+enforces it across `src/`:
+
+> A buyer's email and serial must never appear in the served markup, the template
+> XML, or the URL of a validation request. The validation call carries the
+> template id, the site's domain and non-identifying diagnostics — never the
+> serial, never the email. Activation is server-side, and the guard fails closed
+> when the domain cannot be identified.
+
+A generator, sync script or edit that introduces `BUYER_EMAIL_HERE`,
+`BUYER_SERIAL_HERE`, `data-email`, `data-serial`, or an email/serial-bearing
+`action=validate` URL fails the gate.

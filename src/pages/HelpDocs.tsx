@@ -228,13 +228,13 @@ export const HelpDocs: FC<HelpDocsProps> = ({ initialSlug = 'installation', navi
                 <span />
               )}
 
-              <button
-                onClick={() => navigate('/templates/spotlight')}
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
-              >
-                <span>Browse All Templates</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+<button
+                  onClick={() => navigate('/')}
+                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  <span>Browse All Templates</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
             </div>
 
           </div>

@@ -39,6 +39,24 @@ export interface TemplateReview {
   verifiedPurchase: boolean;
 }
 
+/**
+ * Storefront lifecycle of a catalog entry.
+ *
+ * - `placeholder` an invented demo product. Excluded from the sitemap. Never ship one.
+ * - `draft`      a real Machine-registered project, deliberately not published.
+ * - `published`  live in the catalog and in the sitemap.
+ */
+export type ProductStatus = 'placeholder' | 'draft' | 'published';
+
+/**
+ * Resale consent for a registered product.
+ *
+ * `docs/products.json` records this per project, and `tests/check-registry.cjs`
+ * refuses to let anything other than `allowed` reach `published`. A finished
+ * template is not automatically a sellable one.
+ */
+export type ResaleStatus = 'allowed' | 'not-for-resale' | 'undecided';
+
 export interface Template {
   id: string;
   slug: string;
@@ -46,6 +64,9 @@ export interface Template {
   tagline: string;
   description: string;
   fullOverview: string;
+  status: ProductStatus; // Storefront lifecycle -- see ProductStatus
+  /** The Machine ProjectID this product was generated from, e.g. `BLG-GEL-002`. */
+  projectId?: string; // Absent on invented placeholders
   price: number; // Full activation price
   originalPrice: number;
   hasTrial: boolean; // Has 7-day free trial

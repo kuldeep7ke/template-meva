@@ -4,6 +4,7 @@ export const TEMPLATES: Template[] = [
   {
     id: 'spotlight',
     slug: 'spotlight',
+    status: 'placeholder',
     title: 'Spotlight Blogger Template',
     tagline: 'Modern, High-Speed Magazine & Newspaper Blogger Template',
     description: 'Spotlight is a fast, responsive, and SEO-optimized Blogger template crafted for news sites, tech blogs, personal portfolios, and editorial magazines. Test it with our 7 Days Free Trial and activate with your license key for full permanent lifetime access.',
@@ -195,6 +196,7 @@ You can test Spotlight risk-free on your blog with our 7 Days Free Trial. Once a
   {
     id: 'smartmag',
     slug: 'smartmag',
+    status: 'placeholder',
     title: 'SmartMag Multi-Concept Blogger Template',
     tagline: 'Ultimate Multi-Concept Magazine with 6+ Distinct Demo Layouts',
     description: 'SmartMag is a powerhouse template modeled after high-end magazine designs. Comes with 6 purpose-built demos for Tech, Viral, Crypto, Travel, and Fashion. Try with 7 Days Free Trial, activate for permanent use.',
@@ -341,6 +343,7 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
   {
     id: 'techpulse',
     slug: 'techpulse',
+    status: 'placeholder',
     title: 'TechPulse Gadget & Software Blogger Template',
     tagline: 'Ultra-Fast Technology, AI, and Gadgets Review Theme',
     description: 'Designed specifically for tech blogs and tutorial creators with integrated review stars, pros/cons boxes, and code highlighting. Available with a 7 Days Free Trial.',
@@ -415,6 +418,7 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
   {
     id: 'foodiebite',
     slug: 'foodiebite',
+    status: 'placeholder',
     title: 'FoodieBite Culinary & Recipe Blogger Template',
     tagline: 'Clean, Mouth-Watering Recipe Cards with Rich Cooking Schema',
     description: 'Crafted for foodies, chefs, and cooking creators. Includes print-ready recipe cards, prep/cook time counters, and ingredient checkboxes. 7 Days Free Trial included.',
@@ -480,6 +484,7 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
   {
     id: 'minimalgrid',
     slug: 'minimalgrid',
+    status: 'placeholder',
     title: 'MinimalGrid Clean Portfolio Blogger Template',
     tagline: 'Ultra-Minimalist Masonry & Grid Layout for Photographers and Writers',
     description: 'A distraction-free, black-and-white minimalist grid template focusing purely on typography, photography, and narrative storytelling. Try with 7 Days Free Trial.',
@@ -544,6 +549,7 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
   {
     id: 'chrononews',
     slug: 'chrononews',
+    status: 'placeholder',
     title: 'ChronoNews Editorial Newspaper Blogger Template',
     tagline: 'High-Density Editorial Layout for Political, Financial & World News',
     description: 'ChronoNews brings the prestige of the New York Times and The Guardian to Blogger. Designed for high volume daily publications. Includes 7 Days Free Trial.',
@@ -608,6 +614,7 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
   {
     id: 'novastore',
     slug: 'novastore',
+    status: 'placeholder',
     title: 'NovaStore Blogger E-Commerce Template',
     tagline: 'Sell Products Directly on Blogger with WhatsApp & PayPal Checkout',
     description: 'Transform your free Blogger website into a professional online store with shopping cart, currency switcher, WhatsApp direct ordering, and PayPal checkout. Try with 7 Days Free Trial.',
@@ -673,6 +680,7 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
   {
     id: 'lumenlife',
     slug: 'lumenlife',
+    status: 'placeholder',
     title: 'LumenLife Personal Blog & Journal Blogger Template',
     tagline: 'A Calm, Typography-First Template for Daily Journals & Life Logs',
     description: 'LumenLife is a warm, readable personal blog theme built around beautiful typography and generous whitespace. Ideal for journals, daily logs, and lifestyle writing. Try with 7 Days Free Trial.',
@@ -763,6 +771,7 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
   {
     id: 'traveltrove',
     slug: 'traveltrove',
+    status: 'placeholder',
     title: 'TravelTrove Adventure Blogger Template',
     tagline: 'Photo-Led Travel Blog Template with Route Maps & Photo Lightbox',
     description: 'TravelTrove is built for visual storytelling. Full-width photo galleries, a drag-and-drop route map, offline-friendly itinerary posts, and an integrated travel journal. Try with 7 Days Free Trial.',
@@ -862,3 +871,63 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
     ]
   }
 ];
+
+/**
+ * Whether the invented fixtures are visible.
+ *
+ * `placeholder` products exist so a fresh clone renders something. They are shown
+ * in `npm run dev` and hidden in a production build, because a production build is
+ * the thing that gets deployed and a fixture in it is a lie with a URL on it.
+ *
+ * This means a production build of the store currently lists NOTHING: all nine
+ * products are fixtures and `BLG-GEL-001` is `draft`. That is the true state of
+ * the catalog, not a bug. See docs/TASKS.md -> "Catalog honesty".
+ */
+const INCLUDE_PLACEHOLDERS = import.meta.env.DEV;
+
+/**
+ * The catalog a buyer may actually see.
+ *
+ * Only `published` products are listed. `placeholder` entries are invented demo
+ * products with no corresponding project, and `draft` entries are real
+ * Machine-registered projects that nobody has priced or cleared for resale yet.
+ *
+ * Both were reachable through the catalog and the sitemap before `status` existed,
+ * which is how nine fictional products ended up looking like nine real ones. The
+ * filter lives here, once, rather than being repeated at each call site where one
+ * forgotten check puts an unpublished product back on the site.
+ */
+export const LISTED_TEMPLATES: Template[] = TEMPLATES.filter(
+  (t) => t.status === 'published' || (INCLUDE_PLACEHOLDERS && t.status === 'placeholder')
+);
+
+/** True when this slug is a product the storefront is allowed to show. */
+export function isListed(slug: string): boolean {
+  return LISTED_TEMPLATES.some((t) => t.slug === slug);
+}
+
+/** The listed product for a slug, or undefined when it must not be shown. */
+export function findListed(slug: string): Template | undefined {
+  return LISTED_TEMPLATES.find((t) => t.slug === slug);
+}
+
+/**
+ * Listed products that ship more than one concept demo.
+ *
+ * The navbar, the footer and the gallery callout all used to hardcode
+ * `/showcase/smartmag`. That is a link to a slug the catalog gate can withdraw,
+ * so those links now resolve through this list and disappear when there is
+ * nothing multi-demo to show.
+ */
+export const MULTI_DEMO_TEMPLATES: Template[] = LISTED_TEMPLATES.filter((t) => t.demos.length > 1);
+
+/**
+ * Listed products eligible for the flagship CTA in the header.
+ *
+ * Order is the catalog order, so a product carrying `badge: 'BESTSELLER'` is
+ * preferred when one exists. Never returns an unpublished product, so the
+ * header cannot advertise something the store will not sell.
+ */
+export const FEATURED_TEMPLATES: Template[] = LISTED_TEMPLATES.filter(
+  (t) => t.badge === 'BESTSELLER' || t.badge === 'FEATURED'
+);

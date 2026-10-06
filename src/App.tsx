@@ -11,10 +11,7 @@ import { HelpDocs } from './pages/HelpDocs';
 import { UnlicensedNotice } from './pages/UnlicensedNotice';
 import { ContactPage } from './pages/ContactPage';
 
-const DEFAULT_SEARCH = 'spotlight';
-
-export function App() {
-  const { location, currentPath, navigate } = useRouter();
+export function App() {  const { location, currentPath, navigate } = useRouter();
   // Owned here so the hero search survives re-renders, but there is only ever
   // one search input in the UI.
   const [searchQuery, setSearchQuery] = useState('');
@@ -40,7 +37,7 @@ export function App() {
   if (route.name === 'live-preview') {
     return (
       <LivePreviewFrame
-        slug={route.params.slug || DEFAULT_SEARCH}
+        slug={route.params.slug || ''}
         navigate={navigate}
       />
     );
@@ -67,14 +64,14 @@ export function App() {
 
         {route.name === 'template-detail' && (
           <TemplateDetail
-            slug={route.params.slug || DEFAULT_SEARCH}
+            slug={route.params.slug || ''}
             navigate={navigate}
           />
         )}
 
         {route.name === 'demo-showcase' && (
           <DemoShowcaseHub
-            slug={route.params.slug || 'smartmag'}
+            slug={route.params.slug || ''}
             navigate={navigate}
           />
         )}

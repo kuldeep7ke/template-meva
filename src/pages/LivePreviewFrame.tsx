@@ -1,9 +1,9 @@
 import { useState, type FC } from 'react';
 import { 
-  Monitor, Tablet, Smartphone, X, ExternalLink, 
+  Monitor, Tablet, Smartphone, X, ExternalLink, PackageX,
   ShoppingBag, ArrowLeft, RotateCw
 } from 'lucide-react';
-import { TEMPLATES } from '../data/templates';
+import { findListed } from '../data/templates';
 
 interface LivePreviewFrameProps {
   slug: string;
@@ -16,7 +16,29 @@ export const LivePreviewFrame: FC<LivePreviewFrameProps> = ({ slug, navigate }) 
   // Bumped on reload so the iframe actually re-fetches instead of being a no-op self-assign.
   const [reloadKey, setReloadKey] = useState(0);
 
-  const template = TEMPLATES.find((t) => t.slug === slug) || TEMPLATES[0];
+  // Same rule as the other product pages: no fallback to an arbitrary template,
+  // or a preview URL for one product would frame another product's demo.
+  const template = findListed(slug);
+
+  if (!template) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950 px-4">
+        <div className="max-w-md text-center bg-slate-900 rounded-2xl border border-slate-800 p-10">
+          <PackageX className="w-10 h-10 text-slate-600 mx-auto mb-4" />
+          <h1 className="text-lg font-black text-white mb-2">No preview available</h1>
+          <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+            <span className="font-mono">{slug}</span> is not published, or has no demo URL yet.
+          </p>
+          <button
+            onClick={() => navigate('/')}
+            className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl cursor-pointer"
+          >
+            Back to the store
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const getFrameWidth = () => {
     switch (deviceMode) {

@@ -1,11 +1,11 @@
 import { useState, type FC } from 'react';
 import {
-  Star, Eye, Download, ShoppingBag, CheckCircle2,
+  Star, Eye, Download, ShoppingBag, CheckCircle2, PackageX,
   ExternalLink, Layers, ArrowLeft,
   Share2, Check, Smartphone, Moon, DollarSign, Search,
   Sliders, MessageSquare, Zap, BookOpen, Clock, Key
 } from 'lucide-react';
-import { TEMPLATES } from '../data/templates';
+import { findListed, LISTED_TEMPLATES } from '../data/templates';
 import { TrialVsActiveTable } from '../components/TrialVsActiveTable';
 import { TemplateCard } from '../components/TemplateCard';
 
@@ -18,8 +18,33 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
   const [copiedLink, setCopiedLink] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'comparison' | 'specs' | 'reviews'>('overview');
 
-  const template = TEMPLATES.find((t) => t.slug === slug) || TEMPLATES[0];
-  const relatedTemplates = TEMPLATES.filter((t) => t.id !== template.id).slice(0, 3);
+  // An unpublished slug must not fall back to some other product: that is how a
+  // draft or placeholder page ends up showing a real product's price and reviews
+  // under the wrong URL.
+  const template = findListed(slug);
+
+  if (!template) {
+    return (
+      <div className="min-h-screen bg-slate-50/50 flex items-center justify-center px-4">
+        <div className="max-w-md text-center bg-white rounded-2xl border border-slate-200 p-10 shadow-xs">
+          <PackageX className="w-10 h-10 text-slate-300 mx-auto mb-4" />
+          <h1 className="text-xl font-black text-slate-900 mb-2">This template is not published</h1>
+          <p className="text-sm text-slate-500 mb-6 leading-relaxed">
+            <span className="font-mono text-xs">{slug}</span> is registered but not on sale, or does not
+            exist. Products appear here once they are published.
+          </p>
+          <button
+            onClick={() => navigate('/')}
+            className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl cursor-pointer"
+          >
+            Back to the store
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const relatedTemplates = LISTED_TEMPLATES.filter((t) => t.id !== template.id).slice(0, 3);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);

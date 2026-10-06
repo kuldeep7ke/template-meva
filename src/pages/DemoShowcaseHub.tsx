@@ -1,9 +1,9 @@
 import { useState, type FC } from 'react';
 import { 
   ArrowLeft, ExternalLink, ShoppingBag, Eye,
-  Sliders, Star, Sparkles, BookOpen
+  Sliders, Star, Sparkles, BookOpen, PackageX
 } from 'lucide-react';
-import { TEMPLATES } from '../data/templates';
+import { findListed } from '../data/templates';
 
 interface DemoShowcaseHubProps {
   slug: string;
@@ -13,16 +13,39 @@ interface DemoShowcaseHubProps {
 export const DemoShowcaseHub: FC<DemoShowcaseHubProps> = ({ slug, navigate }) => {
   const [selectedDemoCategory, setSelectedDemoCategory] = useState<string>('All');
 
-  // Match template, defaulting to SmartMag or Spotlight
-  const template = TEMPLATES.find((t) => t.slug === slug) || 
-                   TEMPLATES.find((t) => t.slug === 'smartmag') || 
-                   TEMPLATES[0];
+  // Same rule as the detail page: an unpublished slug must not resolve to some
+  // other product's demo hub.
+  const template = findListed(slug);
+
+  if (!template) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
+        <div className="max-w-md text-center bg-slate-900 rounded-2xl border border-slate-800 p-10">
+          <PackageX className="w-10 h-10 text-slate-600 mx-auto mb-4" />
+          <h1 className="text-xl font-black text-white mb-2">No showcase for this template</h1>
+          <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+            <span className="font-mono text-xs">{slug}</span> is not published, or does not exist.
+          </p>
+          <button
+            onClick={() => navigate('/')}
+            className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-xl cursor-pointer"
+          >
+            Back to the store
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const demoCategories = ['All', ...Array.from(new Set(template.demos.map(d => d.category)))];
 
   const filteredDemos = selectedDemoCategory === 'All' 
     ? template.demos 
     : template.demos.filter(d => d.category === selectedDemoCategory);
+
+  // A published product with no demos should not render an empty grid under a
+  // heading that promises concept demos.
+  const hasDemos = template.demos.length > 0;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 pb-24">
@@ -105,6 +128,17 @@ export const DemoShowcaseHub: FC<DemoShowcaseHubProps> = ({ slug, navigate }) =>
 
       {/* Demos Grid Showcase */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {!hasDemos ? (
+          <div className="text-center bg-slate-900 rounded-2xl border border-slate-800 p-12">
+            <p className="text-sm text-slate-400 mb-5">This template ships a single layout, so it has no concept showcase.</p>
+            <button
+              onClick={() => navigate(`/template/${template.slug}`)}
+              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
+            >
+              View its specs instead
+            </button>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredDemos.map((demo) => (
             <div 
@@ -184,6 +218,7 @@ export const DemoShowcaseHub: FC<DemoShowcaseHubProps> = ({ slug, navigate }) =>
             </div>
           ))}
         </div>
+        )}
       </section>
 
       {/* Highlights & Modules Section (SmartMag style) */}

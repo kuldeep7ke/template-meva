@@ -1,15 +1,22 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Product URLs are added here only when a product's status in
+  src/data/templates.ts is 'published'. tests/check-registry.cjs fails when this
+  file lists a slug that is not published, and when a published slug is missing
+  from it, so this file cannot drift from the catalog.
+
+  As of WEB-C001 it lists no product URLs at all: all nine catalog entries are
+  invented fixtures (`status: 'placeholder'`) and the one real Machine project,
+  BLG-GEL-001, is `draft` and recorded `not-for-resale`. They were previously
+  listed here, which is how nine fictional products ended up in a search index.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <!-- Core Pages -->
   <url>
     <loc>https://templatemeva.com/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://templatemeva.com/showcase/smartmag</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://templatemeva.com/contact</loc>
@@ -54,51 +61,6 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- Template Products -->
-  <url>
-    <loc>https://templatemeva.com/templates/spotlight</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://templatemeva.com/templates/smartmag</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://templatemeva.com/templates/techpulse</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://templatemeva.com/templates/foodiebite</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://templatemeva.com/templates/minimalgrid</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://templatemeva.com/templates/chrononews</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://templatemeva.com/templates/novastore</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>  <url>
-    <loc>https://templatemeva.com/templates/lumenlife</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://templatemeva.com/templates/traveltrove</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
+  <!-- Template Products: none published yet. See docs/REGISTRY.md. -->
+
 </urlset>
-
-

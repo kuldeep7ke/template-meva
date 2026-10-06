@@ -4,7 +4,7 @@ import {
   ExternalLink, Layers, CheckCircle2, ChevronRight,
   TrendingUp, Users, Award
 } from 'lucide-react';
-import { TEMPLATES } from '../data/templates';
+import { LISTED_TEMPLATES, MULTI_DEMO_TEMPLATES } from '../data/templates';
 import { CATEGORIES, SORT_OPTIONS } from '../data/siteConfig';
 import { TemplateCard } from '../components/TemplateCard';
 import { AnimatedIcon } from '../components/AnimatedIcon';
@@ -40,7 +40,7 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
 
   // Filter & Sort Logic
   const filteredTemplates = useMemo(() => {
-    return TEMPLATES.filter((tpl) => {
+    return LISTED_TEMPLATES.filter((tpl) => {
       // Category match
       if (selectedCategory !== 'All Templates' && tpl.category !== selectedCategory) {
         return false;
@@ -72,7 +72,10 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
     });
   }, [selectedCategory, searchQuery, selectedSort, selectedColumnFilter, onlyTrial]);
 
-  const spotlightTemplate = TEMPLATES.find(t => t.slug === 'spotlight') || TEMPLATES[0];
+  // The featured banner is a real product reference, so it must survive the catalog
+  // gate: if the flagship is not published the banner is dropped rather than
+  // advertising a product the store will not sell.
+  const spotlightTemplate = LISTED_TEMPLATES.find(t => t.slug === 'spotlight');
 
   return (
     <div className="min-h-screen bg-slate-50/50">
@@ -182,7 +185,8 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
         </div>
       </section>
 
-      {/* Featured Spotlight Banner */}
+      {/* Featured Spotlight Banner — rendered only while the flagship is published */}
+      {spotlightTemplate && (
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-7 space-y-4">
@@ -191,14 +195,14 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
                 FEATURED FLAGSHIP
               </span>
               <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">
-                Spotlight v2.4.0
+                Spotlight {spotlightTemplate.version}
               </span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Spotlight — The Gold Standard in Magazine Blogger Templates
+              {spotlightTemplate.title} — {spotlightTemplate.tagline}
             </h2>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Based on the world-renowned layout, Spotlight features 6 distinct concept demos, full RTL translation, instant Dark Mode, and pre-built high-CTR Google AdSense units.
+              {spotlightTemplate.description}
             </p>
             <div className="flex flex-wrap gap-4 pt-2">
               <button
@@ -215,17 +219,19 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
                 <ExternalLink className="w-4 h-4 text-indigo-600" />
                 <span>Responsive Live Demo</span>
               </button>
-              <button
-                onClick={() => navigate('/showcase/smartmag')}
-                className="px-5 py-2.5 border border-emerald-300 text-emerald-800 bg-emerald-50/50 hover:bg-emerald-100 text-sm font-bold rounded-xl transition-colors flex items-center gap-2 cursor-pointer"
-              >
-                <Layers className="w-4 h-4 text-emerald-600" />
-                <span>Multi-Demo Showcase</span>
-              </button>
+              {spotlightTemplate.demos.length > 1 && (
+                <button
+                  onClick={() => navigate(`/showcase/${spotlightTemplate.slug}`)}
+                  className="px-5 py-2.5 border border-emerald-300 text-emerald-800 bg-emerald-50/50 hover:bg-emerald-100 text-sm font-bold rounded-xl transition-colors flex items-center gap-2 cursor-pointer"
+                >
+                  <Layers className="w-4 h-4 text-emerald-600" />
+                  <span>Multi-Demo Showcase</span>
+                </button>
+              )}
             </div>
           </div>
 
-          <div className="lg:col-span-5 relative group cursor-pointer" onClick={() => navigate('/templates/spotlight')}>
+          <div className="lg:col-span-5 relative group cursor-pointer" onClick={() => navigate(`/templates/${spotlightTemplate.slug}`)}>
             <div className="aspect-16/10 rounded-xl overflow-hidden shadow-lg border border-slate-200 relative bg-slate-900">
               <img
                 src={spotlightTemplate.thumbnail}
@@ -234,14 +240,17 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-4">
                 <div className="text-white">
-                  <span className="text-xs font-bold text-amber-400">PageSpeed Score 99/100</span>
-                  <h4 className="text-base font-bold">Spotlight Newspaper Edition</h4>
+                  <span className="text-xs font-bold text-amber-400">
+                    PageSpeed {spotlightTemplate.pageSpeedScore.mobile}/100 mobile
+                  </span>
+                  <h4 className="text-base font-bold">{spotlightTemplate.title}</h4>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
+      )}
 
       {/* Main Catalog Store Area */}
       <section id="catalog" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 scroll-mt-24">
@@ -258,7 +267,7 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
           </div>
 
           <div className="text-xs text-slate-500 font-medium">
-            Showing <span className="font-bold text-slate-900">{filteredTemplates.length}</span> of {TEMPLATES.length} templates
+            Showing <span className="font-bold text-slate-900">{filteredTemplates.length}</span> of {LISTED_TEMPLATES.length} templates
           </div>
         </div>
 
@@ -495,24 +504,26 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
         </div>
       </section>
 
-      {/* Multi-Demo Callout Banner (SmartMag inspiration) */}
+{/* Multi-Demo Callout Banner -- only while a listed product actually has
+          concept demos to advertise. */}
+      {MULTI_DEMO_TEMPLATES[0] && (
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-indigo-950 rounded-3xl p-8 sm:p-12 text-white border border-emerald-500/20 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
-          
           <div className="space-y-4 max-w-xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold">
               <Layers className="w-3.5 h-3.5" />
               <span>Multi-Concept Feature</span>
             </div>
             <h3 className="text-2xl sm:text-3xl font-black">
-              Explore SmartMag Multi-Demo Showcase
+              Explore {MULTI_DEMO_TEMPLATES[0].title} Multi-Demo Showcase
             </h3>
             <p className="text-slate-300 text-sm leading-relaxed">
-              Want to see 6 distinct demo concepts in action? Test Tech, Viral Buzz, Crypto News, Recipe, and Fashion styles before picking the right layout for your audience.
+              {MULTI_DEMO_TEMPLATES[0].demos.length} distinct concept demos ship inside this one
+              template. Browse each one before picking the layout for your audience.
             </p>
             <div className="pt-2">
               <button
-                onClick={() => navigate('/showcase/smartmag')}
+                onClick={() => navigate(`/showcase/${MULTI_DEMO_TEMPLATES[0].slug}`)}
                 className="px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm rounded-xl transition-all shadow-lg flex items-center gap-2 cursor-pointer"
               >
                 <span>Open Multi-Demo Showcase Hub</span>
@@ -525,32 +536,18 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
             <div className="bg-slate-900/90 rounded-2xl p-5 border border-emerald-500/30 space-y-3">
               <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Concepts Included</div>
               <div className="space-y-2 text-xs text-slate-200">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Classic Newspaper & Editorial</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Tech Gadget Review & Specs</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Viral Buzz & Social Reactions</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Crypto, Finance & Market Watch</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Food & Culinary Recipes</span>
-                </div>
+                {MULTI_DEMO_TEMPLATES[0].demos.map((demo) => (
+                  <div key={demo.id} className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>{demo.title}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-
         </div>
       </section>
+      )}
 
     </div>
   );
