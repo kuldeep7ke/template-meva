@@ -67,3 +67,21 @@ defects rather than inheriting them silently:
   one-way.
 - `blogger-license-system` and this storefront disagree on serial format,
   endpoint and redirect domain. Recorded, not silently reconciled.
+
+### 2026-10-06 -- WEBSTR001-C004 through C006
+
+Session on this machine (DESKTOP-46HT2L6). Closed two self-inflicted gaps:
+
+- The ledger told operators to allocate with `npm run id:next`, but the script
+  did not exist. Added `tools/next-id.cjs` + the npm script. Its first answer
+  (C1000) was wrong: the naive regex also matched the "C001-C999 space" band
+  note. It now matches ledger row shape only.
+- `public/sitemap.xml` was hand-maintained. Now derived by
+  `tools/generate-sitemap.cjs` (`npm run sitemap`), with `sitemap:check`
+  failing `npm test` on a stale file. Core pages stay human-owned; product
+  URLs are derived from the catalog.
+
+Open-task dispositions updated: the for-real `new-project.ps1` round trip is
+DEFERRED by owner decision ("WhatIf only" — the dry run proves everything up
+to the write); the old blocker (no base theme XML) is solved, the real
+`blogger-llianmeva-template` product XML works as `-SourceXml`.
