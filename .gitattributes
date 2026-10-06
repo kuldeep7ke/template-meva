@@ -1,0 +1,4 @@
+# Normalize line endings so generated-file checks pass on Windows (core.autocrlf=true).
+# The sitemap generator writes LF; without this, checkout produces CRLF and
+# `npm test` (sitemap:check) fails on stale-comparison. See tools/generate-sitemap.cjs.
+/public/sitemap.xml text eol=lf

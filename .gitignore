@@ -20,8 +20,22 @@ dist-ssr
 !.vscode/extensions.json
 .idea
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Local-only clutter (nested clones, handover dumps, test artifacts) — never commit
+# Nested standalone repos (have their own remotes)
+/blogger-llianmeva-template/
+/blogger-new-template/
+/the-machine/
+/template-meva/
+
+# Local planning/screenshot/test artifacts
+/plan/
+/.playwright-mcp/
+/*.png
+.dev.vars
