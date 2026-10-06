@@ -5,7 +5,7 @@ import {
   TrendingUp, Users, Award
 } from 'lucide-react';
 import { LISTED_TEMPLATES, MULTI_DEMO_TEMPLATES } from '../data/templates';
-import { CATEGORIES, SORT_OPTIONS } from '../data/siteConfig';
+import { CATEGORIES, SORT_OPTIONS, STORE_STATS, HAS_STORE_STATS } from '../data/siteConfig';
 import { TemplateCard } from '../components/TemplateCard';
 import { AnimatedIcon } from '../components/AnimatedIcon';
 
@@ -34,7 +34,13 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
 
   const searchQuery = initialSearchQuery;
   const setSearchQuery = (query: string) => onSearchQueryChange?.(query);
-  const [selectedSort, setSelectedSort] = useState<string>('popular');
+  // Default sort is 'newest', not 'popular'.
+  //
+  // 'popular' orders by `salesCount`, which is a measurement. A brand-new product
+  // has none, and the nine fixtures have invented ones — so defaulting to
+  // 'popular' meant the default order of a real store was decided by numbers
+  // nobody measured. 'newest' is the only sort that is true on day one.
+  const [selectedSort, setSelectedSort] = useState<string>('newest');
   const [selectedColumnFilter, setSelectedColumnFilter] = useState<string>('all');
   const [onlyTrial, setOnlyTrial] = useState<boolean>(false);
 
@@ -139,48 +145,60 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
             </div>
           </div>
 
-          {/* Live Metrics Stats Bar */}
+          {/* Stats strip -- renders only when STORE_STATS carries a real measured
+              value. It used to read 99/100, 12,500+ and 4.96/5.0 as hardcoded
+              markup while the catalog listed nothing. */}
+          {HAS_STORE_STATS && (
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8 border-t border-white/10 text-left">
+            {STORE_STATS.pageSpeedMobile !== null && (
             <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-xs border border-white/5">
               <div className="p-2.5 rounded-lg bg-emerald-500/20 text-emerald-400">
                 <TrendingUp className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xl font-black text-white">99 / 100</div>
+                <div className="text-xl font-black text-white">{STORE_STATS.pageSpeedMobile} / 100</div>
                 <div className="text-xs text-slate-400">PageSpeed Mobile</div>
               </div>
             </div>
+            )}
 
+            {STORE_STATS.activeBloggers !== null && (
             <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-xs border border-white/5">
               <div className="p-2.5 rounded-lg bg-indigo-500/20 text-indigo-400">
                 <Users className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xl font-black text-white">12,500+</div>
+                <div className="text-xl font-black text-white">{STORE_STATS.activeBloggers.toLocaleString()}+</div>
                 <div className="text-xs text-slate-400">Active Bloggers</div>
               </div>
             </div>
+            )}
 
+            {STORE_STATS.customerRating !== null && (
             <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-xs border border-white/5">
               <div className="p-2.5 rounded-lg bg-amber-500/20 text-amber-400">
                 <Award className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xl font-black text-white">4.96 / 5.0</div>
+                <div className="text-xl font-black text-white">{STORE_STATS.customerRating.toFixed(2)} / 5.0</div>
                 <div className="text-xs text-slate-400">Customer Rating</div>
               </div>
             </div>
+            )}
 
+            {STORE_STATS.cleanXmlPercent !== null && (
             <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-xs border border-white/5">
               <div className="p-2.5 rounded-lg bg-cyan-500/20 text-cyan-400">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xl font-black text-white">100%</div>
+                <div className="text-xl font-black text-white">{STORE_STATS.cleanXmlPercent}%</div>
                 <div className="text-xs text-slate-400">Clean Blogger XML</div>
               </div>
             </div>
+            )}
           </div>
+          )}
 
         </div>
       </section>
@@ -430,7 +448,7 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
               Engineered for Blogger
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-3 tracking-tight">
-              Why 10,000+ Publishers Choose TemplateMeva
+              Why Publishers Choose TemplateMeva
             </h2>
             <p className="text-slate-500 text-sm sm:text-base mt-3">
               We eliminate the common pitfalls of slow Blogger templates. Clean, semantic XML code that loads instantly and ranks on Google.

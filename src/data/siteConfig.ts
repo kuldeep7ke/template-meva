@@ -25,6 +25,29 @@ export const SITE_CONFIG: SiteConfig = {
  * (except 'Newspaper', which is a live filter with no catalog entries yet —
  * retire it or add a template to avoid an always-empty results grid).
  */
+/**
+ * Store-wide figures shown in the homepage stats strip.
+ *
+ * Every value here must be MEASURED. `null` means "not measured yet", and the
+ * strip is hidden entirely rather than rendered with a placeholder, a zero or a
+ * plausible-looking guess.
+ *
+ * This existed as hardcoded markup reading `99 / 100`, `12,500+ Active Bloggers`
+ * and `4.96 / 5.0 Customer Rating` while the catalog listed nothing at all. That
+ * is a store claiming twelve thousand users with no product for sale. The catalog
+ * gate stopped the fixtures being sold; this is the same defect in the marketing
+ * copy, and it needed the same treatment.
+ */
+export const STORE_STATS = {
+  pageSpeedMobile: null as number | null,
+  activeBloggers: null as number | null,
+  customerRating: null as number | null,
+  cleanXmlPercent: null as number | null,
+};
+
+/** True when at least one stat has a real measured value. */
+export const HAS_STORE_STATS = Object.values(STORE_STATS).some((v) => typeof v === 'number');
+
 export const CATEGORIES = [
   'All Templates',
   'Magazine',

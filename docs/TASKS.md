@@ -115,7 +115,21 @@ adopted-to, not the reverse.
 
 ## Scaling past 10 templates
 
-- [ ] **Move the catalog out of the JS bundle.** The whole catalog is compiled into
+- [x] **DECIDED 2026-10-06 — the card keeps its trial download.** The redesigned
+  card showed a "7-Day Trial" badge with no way to get the trial, which sent the
+  buyer to the detail page for something the card had already promised. It is now
+  a `Get Trial` download on the card itself. It is an `<a download>` rather than a
+  route change, because a trial archive is a file and navigating to it would render
+  a template detail page for a `.zip`.
+  - decision: restore. Done in WEBSTR001-C007.
+- [ ] **Store-wide marketing claims still assert things nobody has measured.** The
+  top banner reads "99+ Core Web Vitals Blogger templates" and the feature cards
+  read "99+ Google PageSpeed Score" and "100% Clean XML & No Encrypted Code". The
+  fabricated *store metrics* were moved to `STORE_STATS` (WEBSTR001-C007), but these
+  are product-positioning claims and deleting the whole section is a product
+  decision, not a truth fix. They become defensible the moment one template has a
+  measured PageSpeed score.
+  - disposition: UNANSWERED (keep the section and make the claims true, or cut the section before launch)
   the bundle today: ~1.3 MB at 100 templates, ~1.6 MB total, ~400 kB gzipped, and
   up to 100 `<TemplateCard>`s with 100 image requests on first paint. Moving to
   static JSON keeps the bundle flat regardless of catalog size:

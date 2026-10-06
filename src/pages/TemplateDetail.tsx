@@ -240,7 +240,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>One license key activates your domain permanently</span>
+                  <span>One serial activates your domain permanently</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
@@ -253,7 +253,9 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                 <div className="flex items-start gap-2 text-[11px] text-indigo-700 bg-indigo-50 p-2.5 rounded-xl border border-indigo-100">
                   <Key className="w-3.5 h-3.5 text-indigo-500 shrink-0 mt-0.5" />
                   <span>
-                    <strong>How to activate:</strong> Paste your license key in the Blogger Layout "License Key" widget — done in under 30 seconds.
+                    <strong>How to activate:</strong> Paste your serial into the Blogger
+                    Layout &rarr; <strong>Licence Activation</strong> gadget &rarr; Edit HTML.
+                    Done in under 30 seconds.
                     <button onClick={() => navigate('/docs/activation')} className="block mt-0.5 underline font-bold text-indigo-600">
                       View Activation Guide →
                     </button>
@@ -271,7 +273,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                     7-Day Free Trial Available — No Credit Card Required
                   </p>
                   <p className="text-xs text-amber-700 mt-0.5 leading-relaxed">
-                    Download and install the trial on your Blogger blog today. All features work fully during the trial period. Enter your license key at any time to activate permanently.
+                    Download and install the trial on your Blogger blog today. All features work fully during the trial period. Paste your serial into the Licence Activation gadget at any time to activate permanently.
                   </p>
                   <a
                     href={template.trialDownloadUrl}
@@ -371,9 +373,9 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                 <div className="flex items-start gap-3">
                   <div className="w-9 h-9 rounded-full bg-indigo-600 text-white font-black text-sm flex items-center justify-center shrink-0">3</div>
                   <div>
-                    <h4 className="font-bold text-slate-900 text-sm mb-1">Activate with License Key</h4>
+                    <h4 className="font-bold text-slate-900 text-sm mb-1">Activate with your serial</h4>
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      Purchase your license and paste the key into the Blogger Layout "License Key" widget. Done in under 30 seconds — no re-upload required.
+                      Purchase your licence and paste your serial into the Blogger Layout &rarr; Licence Activation gadget. Done in under 30 seconds — no re-upload required.
                     </p>
                   </div>
                 </div>
@@ -471,7 +473,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                   Common Installation & Activation Documentation
                 </h4>
                 <p className="text-xs text-slate-600 max-w-xl">
-                  These guides apply to all TemplateMeva templates — learn how to upload the XML, activate your license key, setup your logo, and configure AdSense ad widgets.
+                  These guides apply to all TemplateMeva templates — learn how to upload the XML, activate your serial, setup your logo, and configure AdSense ad widgets.
                 </p>
               </div>
               <button
@@ -506,7 +508,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                 After 7 days without activation, the template displays a friendly activation notice to your blog visitors informing them the site owner is still setting up their theme. Your content remains online and accessible — the notice does not break your blog.
               </p>
               <p>
-                To dismiss the notice and restore full operation, simply purchase your license key and paste it into the Blogger Layout "License Key" widget. Activation is instant with no re-upload required.
+                To dismiss the notice and restore full operation, simply purchase your licence and paste your serial into the Blogger Layout &rarr; Licence Activation gadget. Activation is instant with no re-upload required.
               </p>
               <div className="pt-2 flex flex-wrap gap-4">
                 <button onClick={() => navigate('/unlicensed')} className="font-bold text-amber-800 underline hover:text-amber-950">

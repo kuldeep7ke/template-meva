@@ -56,19 +56,43 @@ export const TemplateCard: FC<TemplateCardProps> = ({ template, navigate }) => {
 
       {template.hasTrial && (
         <div className="absolute top-16 right-3 z-10">
-          <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-amber-400/95 text-slate-950 text-[11px] font-bold shadow-sm">
+          {/* The trial badge and the trial download belong together. The card
+              advertised a 7-day trial with no way to get it, which sent the buyer
+              to the detail page for something the card had already promised.
+              An `<a download>` is deliberate, not a navigate(): the trial archive
+              is a file, and routing it through the SPA would render a template
+              detail page for a .zip. */}
+          <a
+            href={template.trialDownloadUrl}
+            download
+            onClick={(e) => e.stopPropagation()}
+            className="flex items-center gap-1 px-2 py-1 rounded-md bg-amber-400/95 hover:bg-amber-300 text-slate-950 text-[11px] font-bold shadow-sm cursor-pointer"
+            title={`Download the ${template.trialDuration || '7-day free trial'}`}
+          >
             <Clock className="w-3 h-3" />
-            <span>7-Day Trial</span>
-          </div>
+            <span>Get Trial</span>
+          </a>
         </div>
       )}
 
       {/* Bottom gradient info */}
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent pt-16 p-5 mt-auto">
+        {/* A product with no reviews has no rating, and "0.0 (0)" is a worse thing to
+            show a buyer than "New". Only render the figures that exist. */}
         <div className="flex items-center gap-1.5 text-[11px] font-bold">
-          <Star className="w-3.5 h-3.5 fill-amber-400 stroke-amber-400" />
-          <span className="text-amber-300">{template.rating.toFixed(1)} ({template.reviewCount})</span>
-          <span className="text-slate-400">• {template.salesCount.toLocaleString()} sales</span>
+          {template.reviewCount > 0 ? (
+            <>
+              <Star className="w-3.5 h-3.5 fill-amber-400 stroke-amber-400" />
+              <span className="text-amber-300">{template.rating.toFixed(1)} ({template.reviewCount})</span>
+            </>
+          ) : (
+            <span className="px-1.5 py-0.5 rounded bg-emerald-400/20 text-emerald-300 text-[10px] font-black tracking-wide">
+              NEW
+            </span>
+          )}
+          {template.salesCount > 0 && (
+            <span className="text-slate-400">• {template.salesCount.toLocaleString()} sales</span>
+          )}
           <span className="text-slate-400 ml-auto">v{template.version}</span>
         </div>
 
@@ -82,10 +106,16 @@ export const TemplateCard: FC<TemplateCardProps> = ({ template, navigate }) => {
           {template.tagline}
         </p>
 
+        {/* The PageSpeed chip appears only when measured -- a product with no
+            measurement must not inherit the "98" the fixtures invented. Dark Mode
+            and AdSense are capabilities, not measurements, so they are unaffected. */}
+        {(template.pageSpeedScore.mobile > 0 || template.darkModeSupported || template.adsenseOptimized) && (
         <div className="flex flex-wrap gap-1.5 mt-2.5">
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white/10 text-slate-200 border border-white/10">
-            ⚡ {template.pageSpeedScore.mobile} PageSpeed
-          </span>
+          {template.pageSpeedScore.mobile > 0 && (
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white/10 text-slate-200 border border-white/10">
+              ⚡ {template.pageSpeedScore.mobile} PageSpeed
+            </span>
+          )}
           {template.darkModeSupported && (
             <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white/10 text-slate-200 border border-white/10">
               Dark Mode
@@ -97,6 +127,7 @@ export const TemplateCard: FC<TemplateCardProps> = ({ template, navigate }) => {
             </span>
           )}
         </div>
+        )}
 
         <div className="flex gap-2 mt-3">
           <button
