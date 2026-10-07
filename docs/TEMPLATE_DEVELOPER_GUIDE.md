@@ -22,16 +22,25 @@ domain on the server**, once, and from then on the page only proves *which domai
 it is on*.
 
 ```
-  1.  Buyer purchases.  The server issues a serial:  AB12C-34DEF-56789-0ABCD-EF012
-                        (25 hex characters, five groups of five, no prefix)
+  1.  Buyer purchases, giving email, name and blog ID. The server issues a
+      serial:  AB12C-34DEF-56789-0ABCD-EF012
+      (25 hex characters, five groups of five, no prefix)
 
-  2.  Buyer pastes one line into the Licence Activation gadget on their blog:
-                          you@example.com AB12C-34DEF-56789-0ABCD-EF012
+      The serial is derived from the blog ID ALONE. Email and name are kept as a
+      record of the sale and are never an input to the serial, so neither can
+      change it and neither can be used to validate it.
+
+  2.  Buyer pastes the serial into the Licence Activation gadget on their blog:
+                          AB12C-34DEF-56789-0ABCD-EF012
+
+      The serial alone. The parser's email group is optional, so an older note
+      with an email in front still works -- but email is not needed and there is
+      no reason to ask a buyer to type it.
 
   3.  On the next page load the guard reads that paste and makes EXACTLY ONE
       server call:   POST /?action=redeem     body: { serial, email, domain, templateId }
       The serial travels in a JSON body, never in a URL. It happens once per
-      serial, guarded by sessionStorage.
+      serial, guarded by sessionStorage, and only from the owner's own dashboard.
 
   4.  From then on, every page load makes:
       GET  /?action=validate&templateId=<id>&domain=<hostname>[&footer=<fp>]
@@ -113,6 +122,14 @@ function readPastedLicence() {
 
 The regex is deliberately forgiving about the email and strict about the serial.
 Serial groups are `[0-9A-Fa-f]` only — `G` through `Z` never appear.
+
+**The optional email group is a compatibility tolerance, not a feature.** The
+serial is computed from the blog ID alone, and the worker's redeem validates it
+against the blog ID it derives from the domain — the pasted email is never an
+input to either. So a buyer pasting `you@example.com AB12C-…` gets the identical
+result from pasting the bare serial, with the extra cost that their address is
+now written into their published markup. Document the serial alone and let the
+optional group absorb notes written the older way.
 
 ### 2.3 Redeem, once, and only from the owner's own screen
 

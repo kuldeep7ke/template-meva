@@ -54,7 +54,7 @@ export const ContactPage: FC<ContactPageProps> = ({ navigate }) => {
             Contact Us & Support Notes
           </h1>
           <p className="mt-2 text-sm text-slate-400 max-w-xl mx-auto">
-            Have questions before purchasing, need assistance with your license key, or found a bug? We are here to help.
+            Have questions before purchasing, need help activating your serial, or found a bug? We are here to help.
           </p>
         </div>
       </section>
@@ -123,7 +123,7 @@ export const ContactPage: FC<ContactPageProps> = ({ navigate }) => {
                     >
                       <option value="Pre-Sale Questions">Pre-Sale Questions & Pricing</option>
                       <option value="Technical Support">Technical Installation & Setup</option>
-                      <option value="License Key Issue">License Key / Activation Issue</option>
+                      <option value="Activation Issue">Serial / Activation Issue</option>
                       <option value="Bug Report">Bug Report & Suggestion</option>
                       <option value="Customization Service">Custom Design Request</option>
                     </select>

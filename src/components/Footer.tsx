@@ -58,7 +58,7 @@ export const Footer: FC<FooterProps> = ({ navigate }) => {
               <Key className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-white font-bold text-sm">Lifetime License</h4>
+              <h4 className="text-white font-bold text-sm">Lifetime Licence</h4>
               <p className="text-xs text-slate-400">One-time payment with unlimited updates</p>
             </div>
           </div>
@@ -163,7 +163,7 @@ export const Footer: FC<FooterProps> = ({ navigate }) => {
                 onClick={() => navigate('/docs/activation')}
                 className="hover:text-indigo-400 transition-colors text-left"
               >
-                License Activation
+                Licence Activation
               </button>
             </li>
             <li>

@@ -32,7 +32,7 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
           </div>
           <h3 className="text-xl sm:text-2xl font-black">{trialDuration} vs. Active Full Version</h3>
           <p className="text-sm text-slate-400 mt-1">
-            Start with the 7-day trial on your blog. Activate any time with your license key.
+            Start with the 7-day trial on your blog. Activate any time by pasting your serial.
           </p>
         </div>
 
@@ -55,7 +55,7 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
       <div className="bg-amber-50 border-b border-amber-200 px-6 py-3 flex items-center gap-3 text-xs text-amber-800">
         <Clock className="w-4 h-4 text-amber-600 shrink-0" />
         <span>
-          <strong>How it works:</strong> The 7-Day Trial includes all template features fully functional. After 7 days, the template displays an activation prompt to your visitors until you enter your license key. Activating removes all limits permanently with no expiry.
+          <strong>How it works:</strong> The 7-Day Trial includes all template features fully functional. After 7 days, the template displays an activation prompt to your visitors until you paste your serial. Activating removes all limits permanently with no expiry.
         </span>
       </div>
 
@@ -128,7 +128,7 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
           <tfoot>
             <tr className="bg-slate-50 border-t border-slate-200">
               <td className="py-4 px-6 text-xs text-slate-500">
-                <span className="font-semibold text-slate-700">Important Note about {templateTitle}:</span> The 7-day trial is fully functional. After the trial period, an activation notice appears on your blog until you enter a valid license key. Activation is instant and permanent.
+                <span className="font-semibold text-slate-700">Important Note about {templateTitle}:</span> The 7-day trial is fully functional. After the trial period, an activation notice appears on your blog until you paste your serial into the Licence Activation gadget in Blogger &gt; Layout. Activation is instant and permanent.
               </td>
               <td className="py-4 px-6 text-center">
                 <button

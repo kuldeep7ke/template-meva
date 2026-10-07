@@ -240,7 +240,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>One serial activates your domain permanently</span>
+                  <span>One serial activates your blog permanently</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />

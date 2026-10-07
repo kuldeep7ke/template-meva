@@ -55,7 +55,7 @@ export const Navbar: FC<NavbarProps> = ({
               className="hover:text-white transition-colors flex items-center gap-1 cursor-pointer"
             >
               <Key className="w-3.5 h-3.5 text-indigo-400" />
-              <span>License Key Activation</span>
+              <span>Licence Activation</span>
             </button>
           </div>
         </div>
@@ -291,7 +291,7 @@ export const Navbar: FC<NavbarProps> = ({
               className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center gap-2"
             >
               <Key className="w-4 h-4 text-amber-500" />
-              <span>License Key & Activation</span>
+              <span>Serial & Activation</span>
             </button>
             <button
               onClick={() => handleNav('/docs/troubleshooting')}

@@ -41,14 +41,14 @@ export const DOCS_ARTICLES: DocArticle[] = [
     slug: 'activation',
     title: 'Template Activation & Licence Verification',
     category: 'Activation',
-    excerpt: 'Activate your lifetime licence in about thirty seconds: paste your serial into the Licence Activation gadget on your blog. Verification runs server-side against your domain.',
+    excerpt: 'Activate your lifetime licence in about thirty seconds: paste your serial into the Licence Activation gadget on your blog. Verification runs server-side against your blog.',
     readingTime: '3 min read',
-    updatedAt: '2026-10-06',
+    updatedAt: '2026-10-07',
     steps: [
       {
         stepNumber: 1,
         title: 'Find your serial',
-        content: 'When you purchase a template, the serial is sent to your purchase email. It is twenty-five hexadecimal characters in five groups of five, with no prefix and no letters outside A-F.',
+        content: 'When you purchase a template, we send your serial to your purchase email. It is twenty-five hexadecimal characters in five groups of five, with no prefix and no letters outside A-F.',
         codeSnippet: 'AB12C-34DEF-56789-0ABCD-EF012',
         tip: 'Serials are not case-sensitive. They look similar to an order reference, so paste the whole thing rather than the nearest-looking string.'
       },
@@ -60,22 +60,23 @@ export const DOCS_ARTICLES: DocArticle[] = [
       },
       {
         stepNumber: 3,
-        title: 'Paste your email and serial on one line',
-        content: 'In the HTML Content box, paste a single line: your email address first, then the serial. Your email is optional — the serial alone on the line also works. Save.',
-        codeSnippet: 'you@example.com AB12C-34DEF-56789-0ABCD-EF012',
+        title: 'Paste your serial',
+        content: 'In the HTML Content box, paste your serial and nothing else, then save. Your serial is the only thing needed here — we already have your email and name on record from your purchase, and your blog\'s identity is read from your own site, so there is nothing for you to type twice.',
+        codeSnippet: 'AB12C-34DEF-56789-0ABCD-EF012',
+        tip: 'Paste the serial on its own. If you have an older note with your email written in front of it, the serial alone still works — just use the serial by itself.',
         warning: 'Do not add the widget\'s Blogger "hidden" attribute. The template reads your paste from the rendered page, and a hidden widget never renders — activation would silently never fire.'
       },
       {
         stepNumber: 4,
         title: 'Reload your blog',
-        content: 'Reload your site. The template sends the serial to our licensing server once, which binds the licence to your domain. From then on it verifies by domain alone on each page load. There is nothing to re-upload and nothing to reinstall.',
-        tip: 'The first visit after saving can take a couple of seconds: the template is talking to the server rather than checking a string locally.'
+        content: 'Reload your site once while you are still in your Blogger dashboard. The template sends your serial to our licensing server a single time, which binds the licence to your blog. From then on it verifies by your blog alone on each page load — there is nothing to re-upload and nothing to reinstall.',
+        tip: 'The first reload after saving can take a couple of seconds: the template is talking to the server rather than checking a string locally.'
       },
       {
         stepNumber: 5,
         title: 'Remove or customise the footer credits',
         content: 'Once the licence is active, the trial restrictions and the footer credit check are both disabled. You can edit the copyright line and links freely without triggering a redirect.',
-        warning: 'A licence is bound to ONE domain. Activating on a second blog needs its own licence — the same serial will not unlock it.'
+        warning: 'A licence is bound to ONE blog. Activating on a second blog needs its own serial — the same one will not unlock it, because each serial is generated for a single blog ID.'
       }
     ]
   },
@@ -152,7 +153,7 @@ Mega Menu by Label: Mega -> mega:Technology`
       {
         stepNumber: 2,
         title: 'Why is my blog redirecting to the Unlicensed page?',
-        content: 'If you are using a Free Trial version and altered or deleted the footer copyright attribution links, the integrity check triggers an automatic redirect to the /unlicensed page. To resolve this, restore the original footer credit widget or purchase an official Premium License Key to unlock 100% white-label freedom.',
+        content: 'If you are using a Free Trial version and altered or deleted the footer copyright attribution links, the integrity check triggers an automatic redirect to the /unlicensed page. To resolve this, restore the original footer credit widget or activate to unlock 100% white-label freedom.',
         tip: 'Premium licenses provide full copyright freedom and zero redirects.'
       },
       {

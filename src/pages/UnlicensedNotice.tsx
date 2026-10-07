@@ -12,16 +12,16 @@ type NoticeReason = 'trial_expired' | 'attribution_removed' | 'invalid_key' | 'u
 
 const REASON_COPY: Record<Exclude<NoticeReason, 'unknown'>, { title: string; body: string }> = {
   trial_expired: {
-    title: 'Trial Period Expired or License Not Active',
-    body: "The 7-day free trial for this template has expired, or the license key has not been entered yet. Visitors can still read your blog's content — but this notice is displayed until the template is activated with a valid license key."
+    title: 'Trial Period Expired or Licence Not Active',
+    body: "The 7-day free trial for this template has expired, or your serial has not been pasted yet. Visitors can still read your blog's content — but this notice is displayed until the template is activated."
   },
   attribution_removed: {
     title: 'Template Attribution Code Removed',
-    body: 'Our system detected that the "Powered by TemplateMeva" attribution code was removed from this blog before a license was purchased. Restoring the attribution — or activating a license — removes this notice immediately.'
+    body: 'Our system detected that the "Powered by TemplateMeva" attribution code was removed from this blog before a licence was purchased. Restoring the attribution — or activating — removes this notice immediately.'
   },
   invalid_key: {
-    title: 'License Key Invalid or Domain Mismatch',
-    body: 'A license key was entered for this template, but it is invalid, expired, or registered to a different domain. Each license key is tied to one domain. Enter the correct key or purchase a new license for this blog.'
+    title: 'Serial Invalid or Issued for Another Blog',
+    body: 'A serial was pasted for this template, but it is invalid or was generated for a different blog. Each serial is generated for one blog ID, so a serial issued for another blog will not unlock this one. Paste the correct serial, or contact us and we will check it against your blog.'
   }
 };
 
@@ -78,7 +78,7 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
         <div className="bg-amber-500 px-6 py-4 flex items-center gap-3">
           <ShieldAlert className="w-5 h-5 text-white shrink-0" />
           <p className="text-sm font-bold text-white">
-            This template is currently running without an active license
+            This template is currently running without an active licence
           </p>
         </div>
 
@@ -104,9 +104,9 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
               <p className="font-bold text-amber-900">What caused this notice?</p>
               {hasContext ? (
                 <ul className="mt-1 text-amber-800 space-y-1 list-inside list-disc text-xs">
-                  <li>The 7-day trial period has ended and no license key was entered</li>
-                  <li>The template attribution code was removed before purchasing a license</li>
-                  <li>The license key was entered but has expired or belongs to a different domain</li>
+                  <li>The 7-day trial period has ended and no serial was pasted</li>
+                  <li>The template attribution code was removed before purchasing</li>
+                  <li>The serial pasted was generated for a different blog</li>
                 </ul>
               ) : (
                 /* No query parameters arrived, which is the normal case: the guard
@@ -117,7 +117,7 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
                 <p className="mt-1 text-amber-800 text-xs leading-relaxed">
                   This page is not told which blog or which template sent you here, so
                   it cannot say what went wrong. The usual causes are an expired
-                  7-day trial, a licence that was activated for a different domain,
+                  7-day trial, a serial that was generated for a different blog,
                   or the trial's attribution code being removed before a licence was
                   bought. All three are fixed the same way — activate the licence
                   below. If you have already done that, contact support and quote
@@ -157,7 +157,7 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
                 </h3>
               </div>
               <p className="text-slate-600 text-xs leading-relaxed flex-1">
-                Purchase a lifetime activation license and activate this template in under 30 seconds by pasting your license key into the Blogger Layout. No re-upload required.
+                Purchase a lifetime activation and activate this template in under 30 seconds by pasting your serial into the Licence Activation gadget in Blogger &gt; Layout. No re-upload required.
               </p>
               <ul className="text-xs text-emerald-700 space-y-1.5">
                 <li className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" />Notice disappears immediately</li>
@@ -196,7 +196,7 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
                 </h3>
               </div>
               <p className="text-slate-600 text-xs leading-relaxed flex-1">
-                If you're still evaluating the template and your 7-day trial has expired, contact us to request a one-time trial extension. This is available once per domain for verified cases only.
+                If you're still evaluating the template and your 7-day trial has expired, contact us to request a one-time trial extension. This is available once per blog for verified cases only.
               </p>
               <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-800">
                 <p className="font-bold mb-1">
@@ -204,7 +204,7 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
                   Important:
                 </p>
                 <p>
-                  If you removed the template attribution code ("Powered by TemplateMeva") before purchasing a license, this is a violation of our trial usage terms. Please restore attribution or purchase a license to continue using the template.
+                  If you removed the template attribution code ("Powered by TemplateMeva") before purchasing, this is a violation of our trial usage terms. Please restore attribution or purchase a licence to continue using the template.
                 </p>
               </div>
               <div className="space-y-2 mt-auto pt-2">
@@ -254,20 +254,21 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
                   <strong className="text-white"> Edit HTML</strong>.
                 </li>
                 <li>
-                  Paste the line from your purchase email on a single line —
-                  your email first, then the serial:
+                  Paste your serial into that box — just the serial:
                   <div className="mt-2 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 font-mono text-[11px] text-emerald-400 break-all">
-                    you@example.com AB12C-34DEF-56789-0ABCD-EF012
+                    AB12C-34DEF-56789-0ABCD-EF012
                   </div>
                   <p className="mt-1 text-[11px] text-slate-400">
-                    The email is optional — the serial alone on the line works too.
+                    That is all you need. We already have your email and name from
+                    your purchase, and your blog is identified from your own site.
                   </p>
                 </li>
                 <li>Click <strong className="text-white">Save</strong>.</li>
                 <li>
-                  Reload your blog. The template verifies the serial with our
-                  licensing server against your domain and unlocks. There is no
-                  re-upload and nothing to reinstall.
+                  Reload your blog while you are still in your dashboard. The
+                  template sends the serial to our licensing server once, which
+                  binds the licence to your blog. There is no re-upload and nothing
+                  to reinstall.
                 </li>
               </ol>
 
@@ -277,7 +278,8 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
                   Your serial is read from the gadget on your own blog and is
                   <strong> never</strong> collected on this page, never stored here,
                   and never sent anywhere except the licensing server that checks it.
-                  One licence is tied to one domain.
+                  Each serial is generated for one specific blog, so it will not
+                  unlock a different one.
                 </span>
               </div>
             </div>

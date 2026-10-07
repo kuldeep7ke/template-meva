@@ -70,7 +70,7 @@ export const HelpDocs: FC<HelpDocsProps> = ({ initialSlug = 'installation', navi
             <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="Search help topics (e.g. restore xml, license key)..."
+              placeholder="Search help topics (e.g. restore xml, activation)..."
               value={searchDocQuery}
               onChange={(e) => setSearchDocQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-400 focus:outline-hidden focus:border-indigo-500"
@@ -198,16 +198,21 @@ export const HelpDocs: FC<HelpDocsProps> = ({ initialSlug = 'installation', navi
                     {/* Optional Tip */}
                     {step.tip && (
                       <div className="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-100 text-xs text-indigo-900 flex items-start gap-2.5">
-                        <span className="font-bold text-indigo-700">💡 Pro Tip:</span>
-                        <span>{step.tip}</span>
+                        {/* shrink-0 on the label, and min-w-0 on the body: without the first
+                            flex squeezes "Pro Tip:" to ~22px on a phone and wraps it one
+                            character per line, because the long tip text wins the space.
+                            Without the second the body cannot shrink below its longest word
+                            and can push the row wider than the card. */}
+                        <span className="shrink-0 font-bold text-indigo-700">💡 Pro Tip:</span>
+                        <span className="min-w-0">{step.tip}</span>
                       </div>
                     )}
 
                     {/* Optional Warning */}
                     {step.warning && (
                       <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-start gap-2.5">
-                        <span className="font-bold text-amber-700">⚠️ Note:</span>
-                        <span>{step.warning}</span>
+                        <span className="shrink-0 font-bold text-amber-700">⚠️ Note:</span>
+                        <span className="min-w-0">{step.warning}</span>
                       </div>
                     )}
                   </div>

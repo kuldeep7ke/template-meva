@@ -72,7 +72,7 @@ adopted-to, not the reverse.
 - [x] **No email/serial input on the public page.** Collecting them there is exactly
   what the licensing model forbids, and it implied a check that never existed.
   Replaced with the real instructions: Blogger > Layout > Licence Activation gadget
-  > Edit HTML > paste `email SERIAL` on one line.
+  > Edit HTML > paste the serial.
 - [x] **The notice page stopped inventing a cause.** The shipped guard redirects to
   a bare `AUTHOR_URL` and sends **no query parameters at all**, so `?domain=`,
   `?reason=` and `?template=` never arrive. The page now says so instead of
