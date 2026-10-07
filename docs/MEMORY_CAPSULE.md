@@ -139,3 +139,100 @@ price chip with discount, badge/category/trial chips, bottom gradient with
 rating, sales, version, PageSpeed/Dark/AdSense pills, always-visible Preview
 + Details buttons. Other machines: pull `main`, run `npm.cmd run dev` — no
 migration, no registry change, placeholders untouched.
+
+
+### 2026-10-06 -- WEBSTR001-C008 (backfilled 2026-10-07)
+
+Four live-page defects, every one found by opening a browser while the suite was
+green: mockups generated 800x500 landscape into an `aspect-[3/4]` card, so
+`object-cover` cropped the headline to "...gger Experience"; four strings
+sitting directly under the Buy button still told buyers to paste into a Blogger
+"License Key" widget that does not exist; and the homepage hard-coded
+`99 / 100`, `12,500+ Active Bloggers` and `4.96 / 5.0 Customer Rating` over a
+catalog listing nothing.
+
+Remembered for: a green suite was not evidence here. Three of the four are the
+kind of lie a page tells about itself, and nothing in the repo asserts "the
+number on screen corresponds to anything".
+
+### 2026-10-07 -- WEBSTR001-C009 and C010 (backfilled 2026-10-07)
+
+C009 -- the licence-redeem AUDIENCE. The `redeem` body is
+`{ serial, email, domain, templateId }`, which is buyer data rather than an
+anonymous proof; the serial sits in the served HTML because the guard has to read
+it; and a redeem reachable on the ordinary page-load path fires once per visitor
+of that buyer's blog. `sessionStorage` caps repetition and does nothing about
+the audience, which is exactly why the old guidance read as defensible in review
+-- every individual fact in it was correct and the conclusion still was not.
+
+C010 -- the storefront told buyers to paste their email and serial together. The
+serial is `HMAC(SECRET, blogId:templateId)` and the worker recomputes it from
+the blog's own domain, so the email is never an input (the `isValidEmail` guard
+at `worker/src/index.js:425`); asking for it invites the buyer's address into
+their own published markup, which is what the outbound-call rule exists to
+prevent. Same change: the `Pro Tip` and `Note` callouts collapsed to one
+character per line on a phone, because a flex label needs `shrink-0` *and* the
+body needs `min-w-0` -- measured 22x48 at 360px before, 59x16 at every width
+from 320 to 1280 after.
+
+Remembered for: the leak is who can trigger a call, not what it returns; and
+"paste your email" is a design defect even when nothing uses the email.
+
+### 2026-10-07 -- WEBSTR001-C013
+
+Staleness watermark added: `tests/check-capsule-staleness.cjs`, run as
+`npm run capsule:check`, inside `npm test`. This closes the deferral written
+at the foot of the C011/C012 entry above, which named the gap and said it was
+"worth its own change rather than three paragraphs written in passing" -- so it
+is one now, and the three missed entries (C008, C009, C010) are backfilled above.
+
+The rule is ORDER, not coverage: the highest `| WEBSTR001-C### |` row in
+`docs/CHANGES.md` must be <= the highest id named in this file. Coverage stays
+deliberately unchecked, because this capsule holds a selective history and
+demanding every row would force retroactive entries for state that has already
+moved on. BLG-C207 in the sibling project settled that, and BLG-C081 records a
+check being deleted for firing on rows it never owed.
+
+Two traps are encoded in the gate rather than left for a reader to rediscover.
+The ledger is parsed as rows, never as prose, because line 61 of
+`docs/CHANGES.md` reserves the band with `WEBSTR001-C001`-`WEBSTR001-C999` and
+a prose scan reads that as a real C999 -- a failure that reads as plausible, and
+`docs/MEMORY_CAPSULE.md:77` records an earlier naive regex hitting it. And this
+file's own span forms are parsed: it writes `WEBSTR001-C004 through C006` and
+`WEBSTR001-C011 and C012`, so a gate matching only the prefixed id would stop
+at 011 and report this capsule stale on an entry that says 012 in plain sight --
+the same defect as the sibling's first version reading `BLG-C200-C206` as 200.
+
+The prefix is derived from `PROJECT_ID` rather than written here, as established
+in C011, so a pinned literal cannot outlive the project id (B-041).
+
+### 2026-10-07 -- WEBSTR001-C014
+
+**A fix that was itself wrong, caught by re-reading it instead of trusting it.**
+
+C012 replaced "Nine products render" with "30 products render" because it read
+"30 slugs" in `src/data/templates.ts` and took that to disprove the guide.
+Measured: **9** products, **28** slug fields, 36 `id:` in total because 27 of
+them belong to nested `demos:`. So the doc was right, the number was wrong, and
+the reasoning that produced the wrong number was counting a different unit than
+the sentence it was correcting.
+
+That is the recurring shape in this project -- R26 again: **the observation was
+true, the conclusion drawn from it was not.** There really are 30-ish slug
+looking strings in that file, and it really is true that they are not products.
+A gate cannot catch this, because every check that could run was green: the file
+parsed, the guide rendered, the registry printed rows, `npm test` passed. What
+found it was going back and reading the claim against a fresh measurement.
+
+The delivered sentence was also self-defeating -- a hard figure followed
+immediately by "read it from there rather than trusting this sentence" -- and
+C012's ledger row still says "the count now reads from the file that holds it",
+which the diff shows it does not. Ledger rows are written by the session that
+made the change, so they inherit that session's belief. **A row is a record of
+what was intended, not proof of what shipped.** When the two disagree, measure.
+
+Fix is to remove the figure rather than correct it to 9. "Nine" was correct the
+first time and is still not worth restoring: it rots the instant the catalog
+changes, and it has already rotted once inside a single change. `src/data/templates.ts`
+is the source, `npm run registry` prints the count, and any sentence that wants
+a number should point at those rather than restate one.

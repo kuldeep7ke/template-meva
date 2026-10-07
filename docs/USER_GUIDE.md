@@ -6,7 +6,7 @@ How to manage the template catalog, documentation, branding, and deployments. No
 
 ## 0. Read this first: the catalog is currently empty
 
-30 products render in a fresh `npm run dev`, and **every one of them is invented**. The count is whatever `src/data/templates.ts` holds, so read it from there rather than trusting this sentence.
+Products render in a fresh `npm run dev`, and **every one of them is invented**. The count is whatever `src/data/templates.ts` holds, so read it from there rather than trusting this sentence.
 They exist so a new clone shows something. They are `status: 'placeholder'`, and
 a production build hides them. Do not publish one, and do not read a figure off
 one — the prices, ratings and sales counts are fiction.
