@@ -13,6 +13,15 @@
 | [RELATIONSHIPS.md](RELATIONSHIPS.md) | How this store connects to `the-machine` and to every template project |
 | [REGISTRY.md](REGISTRY.md) | Every product registered from a ProjectID, and its status |
 
+## Session records
+
+| Document | What it answers |
+|----------|-----------------|
+| [SESSION-REPORT-2026-10-07.md](SESSION-REPORT-2026-10-07.md) | What the 2026-10-07 session (WEBSTR001-C009 through C016) changed, how each claim was verified, and where the companion records live in the sibling repos |
+
+One report per session, named `SESSION-REPORT-<date>.md`. The sibling repos'
+companion records are listed in [RELATIONSHIPS.md](RELATIONSHIPS.md) -> "Session records".
+
 ## Build and code
 
 | Document | What it answers |

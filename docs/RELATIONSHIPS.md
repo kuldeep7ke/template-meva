@@ -66,6 +66,31 @@ and recording `resale: allowed`.
 - It does not touch the other template projects. It writes only into this
   repository, and only the two files named above.
 
+## Session records: one document here, one pointer per sibling
+
+A session that touches more than one repository leaves one record per
+repository, each written through that repository's own mechanism:
+
+| Repo | Record | How it is written |
+|------|--------|-------------------|
+| `template-meva` (this one) | `docs/SESSION-REPORT-YYYY-MM-DD.md` | by hand; one per session |
+| `the-machine` | an entry in `SYNC.md` | **only** via `node machine/sync-log.cjs add ...` -- never hand-edited |
+| `blogger-llianmeva-template` | an entry in `SYNC.md` | **only** via `node tests/sync-log.cjs add ...` |
+| `blogger-license-system` | an entry in `docs/WORKLOG.md` | by hand, newest first, inserted above the previous entry |
+| `blogger-new-template` | none, deliberately | it is the byte-identical scaffold under gate 10; a session record there would drift it |
+
+A session report here names its sibling companions in its Scope paragraph, and
+each sibling entry names this report back. Worked example: the 2026-10-07
+storefront session (WEBSTR001-C009 through C016) left this project's report
+(WEBSTR001-C017), the-machine's B-044 entry, the Blogger project's BLG-C302
+entry, and a read-only cross-check entry in the licence repo's WORKLOG.
+
+**Standing practice: every change to this repository updates its session record
+and the sibling pointers in the same session.** The template-meva half is
+enforced by `npm run capsule:check`; each sibling entry is checked by that
+sibling's own gates (the-machine `machine/check-repo.ps1`, the Blogger project's
+full chain, the licence repo's `check-docs.mjs` inside its worker suite).
+
 ## Cross-references
 
 | Need | Where |

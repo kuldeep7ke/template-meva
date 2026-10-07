@@ -23,8 +23,10 @@
   a content change ships as a rebuild.
 - Routes: `/`, `/templates/:slug`, `/showcase/:slug`, `/preview/:slug`,
   `/docs/:slug`, `/unlicensed`, `/contact`. Unknown paths fall back to `home`.
-- Gates: `npm run typecheck` (tsc -b), `npm run lint` (oxlint),
-  `npm run registry` (`tests/check-registry.cjs`), `npm test` (all four).
+- Gates: `npm test` runs six -- `typecheck` (tsc -b), `lint` (oxlint),
+  `registry` (`tests/check-registry.cjs`), `sitemap:check`, `id:check`
+  (`tests/check-ids.cjs`), `capsule:check` (`tests/check-capsule-staleness.cjs`).
+  `npm run build` is separate and not part of `npm test`.
 
 ## The three facts most likely to be forgotten
 
@@ -36,12 +38,13 @@
    template, but its README says it was built for one specific blog and is not
    for resale. `resale` is recorded per product in `docs/REGISTRY.md` and the
    gate refuses to `publish` anything that is not `allowed`.
-3. **The licensing model is split.** The storefront validates
-   `MEVA-XXXX-XXXX-XXXX` client-side and calls nothing. The real system is
-   `blogger-license-system`, whose serial is 5 groups of 5 hex characters with no
-   prefix, validated server-side with `templateId` + `domain`. `src/data/docs.ts`
-   currently describes the real system to buyers while the code does something
-   else. See `docs/TASKS.md` -> Licensing.
+3. **Licensing is singular and server-side.** The client-side `MEVA-` validator
+   was deleted in C002 -- it was inverted, accepting invented keys and rejecting
+   real serials. `blogger-license-system` owns the model: a serial is five groups
+   of five hex characters, an HMAC of `SECRET_KEY` over `blogId:templateId`,
+   recomputed server-side from the blog's own domain. The buyer pastes the
+   serial alone, never their email (C010). The storefront's copy describes this
+   model and calls nothing. See `docs/TASKS.md` -> Licensing.
 
 ## Read order
 
@@ -305,3 +308,42 @@ repository. The registry:sync tool catches version drift in products.json,
 but only because the version is data it owns -- the prose claims in README
 and TASKS have no gate, which is why they rotted. Closed by hand, with
 citations.
+
+### 2026-10-07 -- WEBSTR001-C017
+
+**One session, one record per repo -- and a standing practice so it stays that
+way.**
+
+`docs/SESSION-REPORT-2026-10-07.md` is this project's unique record of the
+C009 through C016 storefront session: what each change delivered, the verified
+facts behind each claim, the five patterns the session named (a green suite is
+not evidence; R26's observation-true-conclusion-wrong; a gate over `git
+ls-files` sees a different repository before and after `git add`; a question
+can be closed by a rule arriving; the leak is the audience, not the
+repetition), the operator-owned leftovers, and the commit table. It is not
+about the same day's separate one-guard session (B20 / BLG-C261), which has
+its own three sibling reports.
+
+The companion records live in the sibling repos, each through that repo's own
+mechanism: `the-machine` SYNC entry B-044 (the registry rows that had gone
+stale, this project's change prefix among them), the Blogger project's SYNC
+entry BLG-C302 (whose own text records the storefront cross-check as its
+origin), and a read-only cross-check entry in `blogger-license-system`
+`docs/WORKLOG.md`. `RELATIONSHIPS.md` now carries "Session records: one
+document here, one pointer per sibling" -- the table of where each repo's
+record lives and how it is written -- so the next session repeats the practice
+mechanically instead of rediscovering it.
+
+**Standing practice, recorded here as the rule:** every change to this
+repository updates its session record and the sibling pointers the same
+session. The template-meva half is enforced by `capsule:check`; the sibling
+halves are enforced by each sibling's own gates.
+
+Two statements in this capsule were corrected while writing the report, both
+predating the work they misdescribed: the "three facts" item 3 still described
+the deleted client-side `MEVA-` validator and a split licensing model, and the
+baseline Gates line said "all four" when `npm test` has run six gates since
+C011 and C013. Both are the same failure this capsule exists to catch, in
+miniature -- prose about the code, outliving the code. Also re-measured:
+C014's "28 slug fields" holds (28 data assignments + 2 function-signature
+parameters is the raw 30).
