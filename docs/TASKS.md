@@ -94,11 +94,25 @@ adopted-to, not the reverse.
   Only the shipped template disagrees.
   - decision: `templatemeva.com` is the product domain.
 - [ ] **`AUTHOR_URL` in the shipped template still points at `mevatemplates.com`.**
-  `blogger-llianmeva-template/template/product/…v1.1.0.xml` line 2734 hardcodes it,
-  so every unlicensed trial blog redirects its visitors off this store to a domain
-  that is not the store. This is the highest-impact open bug: it is the exact path
-  a frustrated buyer takes.
-  - disposition: UNANSWERED (it is an edit to blogger-llianmeva-template's product XML, which needs its own BLG-C### change ID and backup-and-validate cycle. Not made from this repository — say the word and I will do it there properly.)
+  Re-verified 2026-10-07 against the current product, because a task box that
+  reports a line number is only true until the file moves: it is now
+  `template/product/Blogger LlianMeva Template v1.1.0.xml` **line 2752**, and the
+  operator's contact email on line 3292 carries the same wrong domain. Every
+  unlicensed trial blog redirects its visitors off this store to a domain that is
+  not the store, and the contact address a buyer is given bounces. This is the
+  highest-impact open bug: it is the exact path a frustrated buyer takes.
+  - disposition: UNANSWERED — **raised again for a decision.** It is an edit to
+    `blogger-llianmeva-template`'s product XML, which needs its own BLG-C### id, a
+    `Backup/` snapshot and its validation cycle, so it cannot be made from this
+    repository. It is a two-line change in that repo when approved. Note the
+    second line: the operator email is the same string, so fixing only
+    `AUTHOR_URL` leaves a wrong domain on the page.
+  - [x] **The redeem audience gap is closed in both docs** (WEBSTR001-C009).
+    `TEMPLATE_DEVELOPER_GUIDE.md` §2.3 and `ARCHITECTURE.md` now carry the
+    `document.body.id === 'layout'` screen gate, the reason it is easy to ship
+    broken (the carrier must stay in the *rendered* page, so the serial is in
+    served HTML and an ungated redeem fires once per visitor), and a checklist
+    item. `validate` is documented as deliberately ungated.
 - [ ] **The guard sends no context to the notice page.** Either the guard appends
   `?domain=&template=&reason=`, or the server's `policy` redirect URL carries them.
   Until one happens, the notice page cannot name the blog or template.

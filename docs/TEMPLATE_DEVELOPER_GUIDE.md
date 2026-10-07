@@ -114,7 +114,7 @@ function readPastedLicence() {
 The regex is deliberately forgiving about the email and strict about the serial.
 Serial groups are `[0-9A-Fa-f]` only — `G` through `Z` never appear.
 
-### 2.3 Redeem, once
+### 2.3 Redeem, once, and only from the owner's own screen
 
 ```js
 fetch(API_URL + '?action=redeem', {
@@ -129,7 +129,28 @@ fetch(API_URL + '?action=redeem', {
 });
 ```
 
-Guard it so it fires once per serial, or a page refresh re-posts it:
+**Gate it to your dashboard before anything else.** The body carries the buyer's
+serial *and* their email, so the audience matters more than the payload:
+
+```js
+function initLicenceGadget() {
+  if (document.body.id !== 'layout') { return; }   // owner screen only
+  var pasted = readPastedLicence();
+  if (!pasted) { return; }
+  // ...
+}
+```
+
+Without that line this ships a real leak, and it is subtle. The paste has to sit
+in the **rendered** page for the guard to read it, and Blogger's `hidden='true'`
+attribute is what stops a widget rendering — so the carrier is deliberately
+un-hidden, the serial is in the served HTML, and a redeem called from your
+ordinary page-load path fires **for every visitor of the buyer's blog**. Each one
+posts that buyer's email to your endpoint, once per session. `sessionStorage` caps
+the repetition and does nothing about the audience, which is exactly why it reads
+as defensible in review.
+
+Once per serial, as well:
 
 ```js
 var key = 'meva_redeemed_' + TEMPLATE_ID + '_' + pasted.serial;
@@ -137,6 +158,9 @@ try { if (sessionStorage.getItem(key) === '1') { return; } } catch (e) {}
 // ... on a successful response:
 try { sessionStorage.setItem(key, '1'); } catch (e) {}
 ```
+
+Both together. The session key is not a substitute for the screen gate — it
+answers "how often", and only the gate answers "by whom".
 
 ### 2.4 Validate, by domain only
 
@@ -190,6 +214,7 @@ The licensing model is sold on this, and the store's own gate
 - [ ] `TEMPLATE_ID` equals your repository name, exactly.
 - [ ] Serial regex is `[0-9A-Fa-f]{5}(-[0-9A-Fa-f]{5}){4}`.
 - [ ] `redeem` posts a JSON body and is guarded to once per serial.
+- [ ] `redeem` only runs on the owner's dashboard (`document.body.id === 'layout'`), so a visitor's page load never sends that buyer's serial and email. This is the one that is easy to ship broken, because the carrier must stay in the *rendered* page for the guard to read it — see §2.3.
 - [ ] `validate` sends `templateId` + `domain` + `footer` and nothing sensitive.
 - [ ] The gadget is hidden by CSS, **not** by the Blogger `hidden` attribute.
 - [ ] A network failure leaves the site working.

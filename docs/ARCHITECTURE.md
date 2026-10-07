@@ -184,10 +184,29 @@ This store is a **visitor-facing storefront**. It is not the licensing system.
 `../blogger-license-system` is, and since WEBSTR001-C002 it is the single source of
 truth. What the real system does:
 
-| Step | Call | Carries |
-|------|------|---------|
-| Bind the licence (once per serial) | `POST /?action=redeem` | `{ serial, email, domain, templateId }` in a **JSON body** |
-| Check the licence (every load) | `GET /?action=validate` | `templateId`, `domain`, `footer` fingerprint — **nothing else** |
+| Step | Call | Carries | Who may call it |
+|------|------|---------|---------------|
+| Bind the licence (once per serial) | `POST /?action=redeem` | `{ serial, email, domain, templateId }` in a **JSON body** | **the buyer's own dashboard only** |
+| Check the licence (every load) | `GET /?action=validate` | `templateId`, `domain`, `footer` fingerprint — **nothing else** | anyone |
+
+The `redeem` audience column is where the risk sits, and it is not visible from
+the call itself. The body carries the buyer's serial **and their email**, so it is
+buyer data rather than an anonymous proof. The paste has to sit in the *rendered*
+page for the guard to read it, and Blogger's `hidden` attribute is what stops a
+widget rendering — so the carrier is deliberately un-hidden, the serial lives in
+the served HTML, and a `redeem` reachable from the ordinary page-load path would
+fire **once per visitor** of that buyer's blog, each one posting their email
+somewhere third-party. `sessionStorage` caps the repetition and does nothing
+about the audience, which is why it reads as defensible in review. The fix is a
+screen gate, not a payload change:
+
+```js
+if (document.body.id !== 'layout') { return; }
+```
+
+`validate` stays ungated deliberately. It carries no credential, and every reader
+should be able to run it — that is how a licensed site proves itself to its own
+visitors.
 
 The serial is 25 hex characters in five groups of five (`AB12C-34DEF-56789-0ABCD-EF012`).
 It is **bound to the buyer's domain**, and the domain is what is checked from then
