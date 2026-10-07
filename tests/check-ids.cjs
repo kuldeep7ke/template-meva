@@ -171,14 +171,32 @@ const tracked = execSync('git ls-files', { cwd: ROOT, encoding: 'utf8' })
   .filter((f) => !/(^|\/)(CHANGES|CHANGELOG|MEMORY_CAPSULE|SYNC)\.md$/.test(f));
 
 const refRe = new RegExp(`${prefix}-C\\d{3}`, 'g');
+
+// A band reservation -- `WEBSTR001-C001`-`WEBSTR001-C999` -- declares the id
+// space; it does not claim the upper bound was ever allocated. Exempting that
+// one shape is the precise version of the blanket CHANGES.md exemption below:
+// that file is exempt because line 61 carries this same sentence, and any
+// document explaining the trap has to quote it too. Without this, the gate
+// fails on tests/check-capsule-staleness.cjs -- a file written to WARN about
+// the band -- because of the band. That is R26 in its purest form: the
+// observation is true (the file really does contain that reservation) and the
+// conclusion is not (nothing was ever promised at the number it ends on).
+//
+// Kept deliberately narrow: only a span OPENING at C001 is a reservation. Any
+// other `WEBSTR001-C###` still has to resolve, so the check keeps its actual
+// job -- catching a doc that names a change nobody recorded.
+const bandRe = new RegExp(`${prefix}-C001\\s*['"\`]?\\s*-\\s*['"\`]?\\s*${prefix}-C\\d{3}`, 'g');
+
 const dangling = new Map();
 for (const rel of tracked) {
   let text;
   try {
     text = fs.readFileSync(path.join(ROOT, rel), 'utf8');
-  } catch (e) {
+  } catch {
     continue;
   }
+  // Strip reservations before scanning; .replace(/g) resets lastIndex itself.
+  text = text.replace(bandRe, '');
   let m;
   while ((m = refRe.exec(text)) !== null) {
     if (!byId.has(m[0])) {

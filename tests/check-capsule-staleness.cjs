@@ -201,9 +201,10 @@ function rowIds(text, prefix) {
  * it -- a selftest that reimplements the rule tests nothing when the rule changes.
  *
  * The intersection is what keeps a quotation from counting as awareness. See the
- * header: docs/MEMORY_CAPSULE.md cites `WEBSTR001-C999` to warn about the band,
- * and taking the capsule's highest mention at face value would report "current"
- * on that number while the ledger head went unmentioned.
+ * header: docs/MEMORY_CAPSULE.md quotes the reserved band `WEBSTR001-C001`-`WEBSTR001-C999`
+ * in order to warn about it, and taking the capsule's highest mention at face
+ * value would report "current" on that number while the ledger head went
+ * unmentioned.
  */
 function watermark(capsuleText, ledgerText, prefix) {
   const rows = rowIds(ledgerText, prefix);

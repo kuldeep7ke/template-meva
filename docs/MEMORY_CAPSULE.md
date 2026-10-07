@@ -236,3 +236,45 @@ first time and is still not worth restoring: it rots the instant the catalog
 changes, and it has already rotted once inside a single change. `src/data/templates.ts`
 is the source, `npm run registry` prints the count, and any sentence that wants
 a number should point at those rather than restate one.
+
+### 2026-10-07 -- WEBSTR001-C015
+
+**I built a gate to warn about a trap, then walked straight into the same trap
+one gate over.**
+
+The C013 work is about one sentence: `docs/CHANGES.md` line 61 reserves
+`WEBSTR001-C001`-`WEBSTR001-C999`, and a prose scan reads that as a real row
+at 999. My new gate documents it, tests it, and quotes the band in three places.
+Then `check-ids.cjs` -- which scans every tracked file for unresolved ids --
+found `WEBSTR001-C999` in those comments and failed the build.
+
+Notably, `check-ids.cjs` already handles this exact content, by exempting
+`docs/CHANGES.md` wholesale at line 171, because that file has the same
+sentence on line 61. That is a file-level exemption standing in for a rule
+nobody wrote down, and it worked only because the file happened to be on the
+list. The rule itself -- *a band reservation is not a reference* -- was never
+encoded. It is now, narrowly: strip spans that open at `PREFIX-C001`.
+
+Two things worth keeping:
+
+**First, the process one.** Every `npm test` I ran before committing was green,
+and not by luck: the file was untracked, and a gate built on `git ls-files`
+literally cannot see it. Staging changed the input. So the failure appeared only
+on the post-push re-run. If the workflow said "commit, push, done" instead of
+"commit, push, re-run", `main` would now be red. **A gate over `git ls-files`
+sees a different repository before and after `git add`.**
+
+**Second, on exemptions.** The temptation was to exempt `tests/` outright --
+"test files legitimately contain fake ids". Rejected: that would also blind the
+gate to a test asserting against a change nobody recorded, which is exactly the
+thing worth catching. An exemption stated as a *shape* (a span opening at C001)
+keeps the signal; an exemption stated as a *location* (`tests/`, one filename)
+loses it. The same logic is why C013 parses the ledger by row structure rather
+than skipping `docs/CHANGES.md`.
+
+Also worth recording because it cost a false alarm: my first mutation probe for
+"corrupt the seal" silently no-opped -- it matched `/f3105f9\s*\$/` against a
+markdown row that ENDS in a pipe -- so the gate reported exit 0 and looked like
+a miss. **A mutation that fails to apply is indistinguishable from a gate that
+failed to fire** unless you assert the mutation applied first. The probe now
+aborts when `badLine === sealedLine`.
