@@ -93,39 +93,42 @@ adopted-to, not the reverse.
   is actually sold. The storefront already uses it in `siteConfig` and `index.html`.
   Only the shipped template disagrees.
   - decision: `templatemeva.com` is the product domain.
-- [ ] **`AUTHOR_URL` in the shipped template still points at `mevatemplates.com`.**
-  Re-verified 2026-10-07 against the current product, because a task box that
-  reports a line number is only true until the file moves: it is now
-  `template/product/Blogger LlianMeva Template v1.1.0.xml` **line 2752**, and the
-  operator's contact email on line 3292 carries the same wrong domain. Every
-  unlicensed trial blog redirects its visitors off this store to a domain that is
-  not the store, and the contact address a buyer is given bounces. This is the
-  highest-impact open bug: it is the exact path a frustrated buyer takes.
-  - disposition: UNANSWERED — **raised again for a decision.** It is an edit to
-    `blogger-llianmeva-template`'s product XML, which needs its own BLG-C### id, a
-    `Backup/` snapshot and its validation cycle, so it cannot be made from this
-    repository. It is a two-line change in that repo when approved. Note the
-    second line: the operator email is the same string, so fixing only
-    `AUTHOR_URL` leaves a wrong domain on the page.
+- [x] **`AUTHOR_URL` in the shipped template pointed at `mevatemplates.com`. FIXED UPSTREAM (BLG-C426).**
+  - disposition: RESOLVED UPSTREAM — fixed in `blogger-llianmeva-template` as
+    BLG-C426 and shipped in template v1.2.0: `template/product/Blogger LlianMeva
+    Template v1.2.0.xml` line 2758 now reads
+    `var AUTHOR_URL = 'https://templatemeva.com/unlicensed'` and the operator
+    email on line 3298 is `support@templatemeva.com` — both wrong-domain strings
+    fixed together, as this task required. Re-verified 2026-10-07 on N24S1
+    against the v1.2.0 product file; all three template trees point at
+    templatemeva.com.
   - [x] **The redeem audience gap is closed in both docs** (WEBSTR001-C009).
     `TEMPLATE_DEVELOPER_GUIDE.md` §2.3 and `ARCHITECTURE.md` now carry the
     `document.body.id === 'layout'` screen gate, the reason it is easy to ship
     broken (the carrier must stay in the *rendered* page, so the serial is in
     served HTML and an ungated redeem fires once per visitor), and a checklist
     item. `validate` is documented as deliberately ungated.
-- [ ] **The guard sends no context to the notice page.** Either the guard appends
-  `?domain=&template=&reason=`, or the server's `policy` redirect URL carries them.
-  Until one happens, the notice page cannot name the blog or template.
-  - disposition: UNANSWERED (a design choice between editing the guard and configuring the server)
+- [x] **The guard sends no context to the notice page. DECIDED 2026-10-07 —
+  deliberate, per R30.**
+  - disposition: WON'T-FIX (by rule) — R30 of `the-machine/build-plan/RULES.md`
+    ("Ship nothing that can get the owner's blog taken down") says: don't put a
+    buyer's email, serial, or any customer identifier in an outbound call or a
+    URL, because "query strings are logged by everyone." Appending
+    `?domain=&template=&reason=` to the redirect would do exactly that on every
+    unlicensed page view. The notice page stays generic; a buyer proves
+    identity through the redeem flow with their serial instead.
 - [ ] **The 9 catalog slugs are not registered template IDs.** The server requires
   `templateId`, and its registry is keyed on repo name (`blogger-llianmeva-template`).
   Until real products exist, nothing can be validated against it.
   - disposition: OPERATOR (unblocked by building a real template)
 - [ ] Should the notice page call `?action=validate` itself? The endpoint is
-  deliberately open to any origin (BLG-C408) and takes `templateId` + `domain`, so
-  it would work — but only once the guard supplies a domain. Not attempted until
-  the previous item is settled.
-  - disposition: DEFERRED (blocked by the guard-context decision)
+  deliberately open to any origin (BLG-C408) and takes `templateId` + `domain`,
+  but the guard deliberately ships neither to the page (see the R30 decision
+  above), and the only remaining source — the visitor's own browser via
+  `document.referrer` — is unreliable and would still be extracting a customer
+  identifier to send back over the network.
+  - disposition: DEFERRED (its stated form is unanswerable under R30; revisit
+    only if the operator wants a signed, non-identifier token design)
 
 ## Scaling past 10 templates
 

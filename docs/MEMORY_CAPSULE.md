@@ -278,3 +278,30 @@ markdown row that ENDS in a pipe -- so the gate reported exit 0 and looked like
 a miss. **A mutation that fails to apply is indistinguishable from a gate that
 failed to fire** unless you assert the mutation applied first. The probe now
 aborts when `badLine === sealedLine`.
+
+### 2026-10-07 -- WEBSTR001-C016
+
+**The verification sweep found this repo's licensing record three facts behind
+the product it describes, and every one was checkable rather than arguable.**
+
+A full cross-repo verification session (this machine, N24S1) read the shipped
+template's guard against what this store claims about it. Three stale facts:
+
+1. The README and TASKS.md both still sold the AUTHOR_URL bug as open. It was
+   fixed upstream as BLG-C426 and shipped in v1.2.0. The lesson repeated from
+   C009: a task citing a line number is true until the file moves, so the fix
+   here re-verified lines 2758 and 3298 in the v1.2.0 product before writing
+   them down.
+2. The guard-context question was filed as UNANSWERED. It isn't unanswered any
+   more -- the takedown on 2026-10-06 produced R30, and R30 forbids a customer
+   identifier in a URL outright. A question can be closed by a rule arriving,
+   not just by code landing. Disposition rewritten from UNANSWERED to
+   WON'T-FIX with the rule quoted.
+3. The registry said BLG-GEL-001 was v1.1.0; the trees all ship v1.2.0.
+
+The pattern across all three: the store's words about the template drifted
+while the template moved, and nothing in this repo's gates can see another
+repository. The registry:sync tool catches version drift in products.json,
+but only because the version is data it owns -- the prose claims in README
+and TASKS have no gate, which is why they rotted. Closed by hand, with
+citations.

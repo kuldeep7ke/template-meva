@@ -8,7 +8,7 @@
 
 | ProjectID | Product | Version | Status | Resale | Repo |
 |-----------|---------|---------|--------|--------|------|
-| `BLG-GEL-001` | BloggerMeva -- City Politics Blogger Template | v1.1.0 | **draft** | not-for-resale | [repo](https://github.com/kuldeep7ke/blogger-llianmeva-template) |
+| `BLG-GEL-001` | BloggerMeva -- City Politics Blogger Template | v1.2.0 | **draft** | not-for-resale | [repo](https://github.com/kuldeep7ke/blogger-llianmeva-template) |
 
 `published` is the only status that appears in the storefront catalog and in
 `public/sitemap.xml`. The gate refuses to publish an entry whose `resale` is

@@ -42,11 +42,12 @@ owner consents to resale, so it never publishes anything, and
    `WEBSTR001-C002` the Worker is the single source of truth. The storefront's
    old key box — which accepted any invented key and rejected every real one — is
    deleted. Serials look like `AB12C-34DEF-56789-0ABCD-EF012`, they are bound to
-   your domain server-side, and the 7-day trial runs on the server clock. Two
-   things remain unresolved: the shipped template redirects to
-   `mevatemplates.com/unlicensed` while this store is `templatemeva.com`, and the
-   guard sends the notice page no context. See [`docs/TASKS.md`](docs/TASKS.md)
-   -> *Licensing*.
+   your domain server-side, and the 7-day trial runs on the server clock. The
+   shipped template's unlicensed redirect now points at this store
+   (`templatemeva.com/unlicensed` — fixed upstream as BLG-C426, template
+   v1.2.0). One deliberate limit remains: the guard sends the notice page no
+   context, because R30 of the shared rules forbids a customer identifier
+   travelling in a URL. See [`docs/TASKS.md`](docs/TASKS.md) -> *Licensing*.
 
 ---
 
