@@ -347,3 +347,31 @@ C011 and C013. Both are the same failure this capsule exists to catch, in
 miniature -- prose about the code, outliving the code. Also re-measured:
 C014's "28 slug fields" holds (28 data assignments + 2 function-signature
 parameters is the raw 30).
+
+### 2026-10-07 -- WEBSTR001-C018
+
+**Two sessions, one working tree, one id: the C017 collision.**
+
+The C009-C016 storefront session and the licence-system session ran
+concurrently on this machine. Both read the same ledger maximum -- the
+storefront session's C017 row was written but not yet committed -- so
+`npm run id:next` returned the same C017 to both, and both wrote
+`docs/SESSION-REPORT-2026-10-07.md`. The licence-system session's write
+replaced the storefront session's uncommitted file; the storefront session
+then committed `13b657f`, capturing the other session's content under its
+own C017 row, which `ea52ea7` sealed. The sealed row described a file that
+was never committed; the committed file was described by no row. C018
+reconciles: the file now carries the storefront record the C017 row
+promises (reconstructed from the row, this capsule's C017 entry and the
+commit message) plus the licence-system day the operator's standing rule
+requires -- licence-repo changes are reflected in every sibling's daily
+record. The C017 entry's "not about the one-guard session" sentence above
+described the file as authored and is superseded by that rule; recorded
+here, never by editing an append-only row.
+
+This is C008's collision recurring intra-machine: `id:next` protects
+against writers it can see in the ledger, and an uncommitted row is
+invisible to it. Single-machine is not single-writer. Allocate, write and
+commit in one stretch; when a tree is shared, re-read the file you are
+about to `git add` -- the storefront session committed a file it had
+written, and the file it committed was not the file it wrote.

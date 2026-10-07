@@ -73,7 +73,7 @@ repository, each written through that repository's own mechanism:
 
 | Repo | Record | How it is written |
 |------|--------|-------------------|
-| `template-meva` (this one) | `docs/SESSION-REPORT-YYYY-MM-DD.md` | by hand; one per session |
+| `template-meva` (this one) | `docs/SESSION-REPORT-YYYY-MM-DD.md` | by hand; one per working day |
 | `the-machine` | an entry in `SYNC.md` | **only** via `node machine/sync-log.cjs add ...` -- never hand-edited |
 | `blogger-llianmeva-template` | an entry in `SYNC.md` | **only** via `node tests/sync-log.cjs add ...` |
 | `blogger-license-system` | an entry in `docs/WORKLOG.md` | by hand, newest first, inserted above the previous entry |

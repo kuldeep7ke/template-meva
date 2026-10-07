@@ -17,9 +17,9 @@
 
 | Document | What it answers |
 |----------|-----------------|
-| [SESSION-REPORT-2026-10-07.md](SESSION-REPORT-2026-10-07.md) | What the 2026-10-07 session (WEBSTR001-C009 through C016) changed, how each claim was verified, and where the companion records live in the sibling repos |
+| [SESSION-REPORT-2026-10-07.md](SESSION-REPORT-2026-10-07.md) | What the 2026-10-07 working day changed -- the storefront session (WEBSTR001-C009 through C016) plus, per C018, the same day's licence-system sessions and the concurrent-session collision that shaped this file -- how each claim was verified, and where the companion records live in the sibling repos |
 
-One report per session, named `SESSION-REPORT-<date>.md`. The sibling repos'
+One report per working day, named `SESSION-REPORT-<date>.md`. The sibling repos'
 companion records are listed in [RELATIONSHIPS.md](RELATIONSHIPS.md) -> "Session records".
 
 ## Build and code
