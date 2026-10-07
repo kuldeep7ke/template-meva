@@ -12,9 +12,10 @@
     "preview": "vite preview",
     "registry": "node tests/check-registry.cjs",
     "id:next": "node tools/next-id.cjs",
+    "id:check": "node tests/check-ids.cjs",
     "registry:sync": "node tools/register-product.cjs --sync",
     "registry:add": "node tools/register-product.cjs",
-    "test": "npm run typecheck && npm run lint && npm run registry && npm run sitemap:check",
+    "test": "npm run typecheck && npm run lint && npm run registry && npm run sitemap:check && npm run id:check",
     "sitemap": "node tools/generate-sitemap.cjs",
     "sitemap:check": "node tools/generate-sitemap.cjs --check"
   },

@@ -86,6 +86,51 @@ DEFERRED by owner decision ("WhatIf only" — the dry run proves everything up
 to the write); the old blocker (no base theme XML) is solved, the real
 `blogger-llianmeva-template` product XML works as `-SourceXml`.
 
+### 2026-10-07 -- WEBSTR001-C011 and C012
+
+  - **The ID system here was half a system.** `npm run id:next` existed (C004) and
+    `docs/CHANGES.md` promised that the prefix is "derived from PROJECT_ID, never
+    typed by hand" so a second project could not collide with the first. That
+    promise is about *collision across projects*. Nothing checked whether the
+    ledger was intact *within* this one: not that a referenced id had a row, not
+    that the counter had no gap, not that a seal pointed at a commit. And
+    `npm test` ran four gates - typecheck, lint, registry, sitemap - none of which
+    touches the ledger. **The one append-only artefact that carries traceability
+    was the only one with no gate.** The sibling Blogger project has had one for
+    hundreds of changes, which is exactly how this stayed invisible.
+  - **The prefix is derived here too, on purpose.** A gate hardcoding `WEBSTR001`
+    would be right today and would keep passing after the ProjectID changed. That
+    is B-041 in the KB: a literal pinned in a tool while the assertion above it
+    quietly stopped meaning anything. Reading `PROJECT_ID` means a copied prefix
+    cannot start a second ledger in the same space.
+  - **Two bugs in the gate itself, both of which made it measure nothing while
+    looking perfectly healthy.** It read the seal from the *last* cell of a row
+    that ends in `|`, so `cells[length-1]` was always empty and **every row looked
+    unsealed**; the fix is `length-2`. Then it built a `Set` of full 40-char shas
+    and looked up 7-char ones, so **four genuine seals were reported as lies** --
+    and the rational response to that would have been to delete the seals. Both
+    failures are indistinguishable from a passing gate, which is why the mutations
+    below matter more than the code.
+  - **Proven by three mutations:** an id referenced with no row (red, and names
+    every dangling id, not just the last one iterated); a middle row deleted (red
+    on the gap *and* on the dangling reference -- the same fact caught twice from
+    two directions); and a seal rewritten to `deadbee` (red, naming file and line).
+    A real 7-char prefix is still accepted, because git accepts it.
+  - **C012: the guide told you to hand-edit a generated file.** Three separate
+    instructions said "add it to `public/sitemap.xml`", and C005 had already made
+    that file generated with `sitemap:check` inside `npm test`. So the documented
+    procedure produced a change the next `npm run sitemap` silently undid -- the
+    worst kind of wrong, because the guide is how you find out what to do.
+  - **"Nine products render" against 30 slugs.** Fixed at the source rather than
+    the number: the sentence now reads the count from `src/data/templates.ts` and
+    says to trust that file rather than the sentence. **A count in prose is a
+    claim with nothing behind it** -- the same defect as BLG-C432's five wrong
+    gate counts, and the same fix.
+  - **Also found while auditing, and NOT fixed here:** C008, C009 and C010 are in
+    `docs/CHANGES.md` and committed, but this capsule's journal stops at C007. The
+    record went quiet while the work kept landing. The sibling project has a
+    staleness watermark for exactly this; this one does not, which is a gap worth
+    its own change rather than three paragraphs written in passing.
 ### 2026-10-06 -- WEBSTR001-C007
 
 Catalog card redesigned (this machine). `src/components/TemplateCard.tsx` is

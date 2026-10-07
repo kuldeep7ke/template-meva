@@ -6,7 +6,7 @@ How to manage the template catalog, documentation, branding, and deployments. No
 
 ## 0. Read this first: the catalog is currently empty
 
-Nine products render in a fresh `npm run dev`, and **all nine are invented**.
+30 products render in a fresh `npm run dev`, and **every one of them is invented**. The count is whatever `src/data/templates.ts` holds, so read it from there rather than trusting this sentence.
 They exist so a new clone shows something. They are `status: 'placeholder'`, and
 a production build hides them. Do not publish one, and do not read a figure off
 one — the prices, ratings and sales counts are fiction.
@@ -51,7 +51,7 @@ To publish:
 2. Set `status: "published"` in `docs/products.json`.
 3. Set `resale: "allowed"` in `docs/products.json` — **only** if you have the
    owner's permission to sell it.
-4. Add `/templates/<slug>` to `public/sitemap.xml`.
+4. Regenerate the sitemap: `npm run sitemap`. `public/sitemap.xml` is generated from the product registry and is never hand-edited: `npm run sitemap:check` runs inside `npm test` and fails on any disagreement.
 5. `npm run registry:sync && npm run registry`
 
 `npm run registry` fails if you skip a step, publish without resale consent, or
@@ -153,7 +153,7 @@ After adding it:
 1. Drop the trial archive at `public/download/<slug>-7day-trial.zip`, matching `trialDownloadUrl`.
 2. Add a thumbnail to `public/images/`, or generate one with `npm run assets`.
 3. Register it in `docs/products.json` (fixtures list or products list).
-4. Add the page to `public/sitemap.xml` — but only once `status` is `published`.
+4. Regenerate the sitemap with `npm run sitemap` once `status` is `published`. `public/sitemap.xml` is generated from the product registry and is never hand-edited: `npm run sitemap:check` runs inside `npm test` and fails on any disagreement.
 5. `npm run registry:sync && npm run registry`
 
 The template is then live at `/templates/my-new-template`, `/preview/my-new-template`, and `/showcase/my-new-template`.
