@@ -87,7 +87,7 @@ function listCommitShas() {
   let text;
   try {
     text = execSync('git rev-list --all', { cwd: ROOT, encoding: 'utf8' });
-  } catch (e) {
+  } catch {
     return null;
   }
   // A ledger records SHORT shas (7 hex), so an exact-match Set never contains one

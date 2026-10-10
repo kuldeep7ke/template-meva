@@ -40,11 +40,14 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
   // Params the anti-piracy redirect MAY send:
   // /unlicensed?domain=<blog domain>&reason=<trial_expired|attribution_removed|invalid_key|element_deleted|element_hidden|href_tampered>&template=<slug>
   //
-  // IMPORTANT: the shipped guard does NOT send these today. It redirects to the
-  // server's `redirectUrl`, falling back to a bare AUTHOR_URL with no query at
-  // all. So the common case is an EMPTY query, and the page must be honest about
-  // that rather than confidently asserting a cause it cannot possibly know.
-  // Read if present; do not assume.
+  // IMPORTANT: the shipped guard does NOT send these today. Per R30 of
+  // the-machine/build-plan/RULES.md ("ship nothing that can get the owner's
+  // blog taken down"), no customer identifier may travel in a URL, and query
+  // strings are logged by everyone -- so the redirect appends nothing. It goes
+  // to the server's `redirectUrl`, falling back to a BARE AUTHOR_URL with no
+  // query params at all. So the common case is an EMPTY query, and the page
+  // must be honest about that rather than confidently asserting a cause it
+  // cannot possibly know. Read if present; do not assume.
   const flaggedDomain = getQueryParam('domain');
   const rawReason = getQueryParam('reason');
   const normalizedReason: NoticeReason = TAMPER_REASONS.includes(rawReason)
