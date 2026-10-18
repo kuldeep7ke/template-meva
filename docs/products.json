@@ -35,6 +35,24 @@
       "trialArtifact": null,
       "registeredAt": "2026-10-06",
       "notes": "Real, finished, the most advanced project in the workspace. NOT listed for sale: its README states it was built for one specific blog and is not for distribution. AdSense slots exist but no AdSense code is integrated, so adsenseOptimized is false rather than assumed. No hosted docs site and no packaged trial build exist yet."
+    },
+    {
+      "projectId": "BLG-CHI-001",
+      "slug": "blg-chi-001-template",
+      "productName": "hannelsidmeva",
+      "repo": "https://github.com/kuldeep7ke/hannelsidmeva-blg-chi-001",
+      "version": "v1.0.0",
+      "status": "draft",
+      "resale": "undecided",
+      "category": "Magazine",
+      "columns": null,
+      "darkModeSupported": null,
+      "rtlSupported": null,
+      "adsenseOptimized": null,
+      "liveUrl": null,
+      "trialArtifact": null,
+      "registeredAt": "2026-10-18",
+      "notes": "Auto-registered by new-project.ps1 on 2026-10-18. Needs: price, buyUrl, trial artifact, demo URL, and a resale decision."
     }
   ],
   "fixtures": [

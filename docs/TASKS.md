@@ -27,9 +27,12 @@
   entry is `published`.
 - [x] `the-machine/machine/new-project.ps1` calls the auto-register step after it
   writes its own registry row.
-- [~] Prove the round trip end to end: generate a throwaway project with
-  `-WhatIf`, then for real, and confirm the draft lands in the storefront and the
-  registry row lands in `the-machine/projects.md`.
+- [x] Prove the round trip end to end (closed 2026-10-18, WEBSTR001-C019). The
+  original plan was a throwaway project; the proof came from a real one instead:
+  BLG-CHI-001 was generated through the full flow on N24S2, its draft landed in
+  the storefront (`docs/products.json`, `docs/REGISTRY.md`,
+  `src/data/templates.ts`), and its registry row landed in
+  `the-machine/projects.md` (machine commit `7baed58`).
   - 2026-10-06 (WEBSTR001-C005 session): the `-WhatIf` half is proven.
     `new-project.ps1 -WhatIf` with `-SourceXml` pointed at the real
     `blogger-llianmeva-template` product XML allocates `BLG-GEL-002`,
@@ -37,8 +40,10 @@
     draft step. The for-real half is DEFERRED, by decision: it would register
     a `BLG-GEL-002` row in `the-machine/projects.md` and a draft product in
     `docs/products.json` that we would then have to retract.
-  - disposition: DEFERRED (owner chose "WhatIf only"; the SourceXml blocker is
-    solved, so the real run only needs a decision to execute it)
+  - closed 2026-10-18 (WEBSTR001-C019) -- the real run happened, as a real
+    project rather than a throwaway; the draft it produced is in this repo and
+    its registry row is in `the-machine/projects.md` (commit `7baed58`). No
+    retraction was needed.
 
 ## Catalog honesty
 

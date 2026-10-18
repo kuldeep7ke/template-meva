@@ -869,7 +869,48 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
         verifiedPurchase: true
       }
     ]
-  }
+  },
+  {
+    // AUTO-REGISTERED from BLG-CHI-001. Do not fill these in by guessing --
+    // TODO(operator): price, originalPrice, buyUrl, trialDownloadUrl, liveDemoUrl.
+    id: 'blg-chi-001-template',
+    slug: 'blg-chi-001-template',
+    status: 'draft',
+    projectId: 'BLG-CHI-001',
+    title: 'hannelsidmeva',
+    tagline: 'TODO(operator): one line for the catalog card',
+    description: 'TODO(operator): one-line summary used in listings',
+    fullOverview: 'TODO(operator): long overview for the detail page.',
+    price: 0,
+    originalPrice: 0,
+    hasTrial: false,
+    trialDuration: '7 Days Free Trial',
+    trialDownloadUrl: '',
+    buyUrl: '',
+    rating: 0,
+    reviewCount: 0,
+    salesCount: 0,
+    version: 'v1.0.0',
+    releaseDate: '2026-10-18',
+    lastUpdated: '2026-10-18',
+    category: 'Magazine',
+    tags: [],
+    columns: '2 Columns',
+    layout: 'Magazine',
+    pageSpeedScore: { mobile: 0, desktop: 0 },
+    features: [],
+    specifications: [],
+    demos: [],
+    comparisonTable: [],
+    reviews: [],
+    thumbnail: '',
+    galleryImages: [],
+    liveDemoUrl: '',
+    rtlSupported: false,
+    darkModeSupported: false,
+    adsenseOptimized: false,
+    seoReady: false,
+  },
 ];
 
 /**

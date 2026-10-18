@@ -25,6 +25,8 @@
 //     --name "My Template" --repo https://github.com/o/my-template \
 //     --version v1.0.0 [--category Magazine] [--dry-run]
 //
+//   node tools/register-product.cjs --selftest     prove the catalog insert still bites
+//
 // Exits 0 on success, 1 on a bad argument or a duplicate ProjectID.
 
 'use strict';
@@ -43,7 +45,7 @@ function die(msg) {
   process.exit(1);
 }
 
-const FLAGS = new Set(['--dry-run', '--sync']);
+const FLAGS = new Set(['--dry-run', '--sync', '--selftest']);
 
 function parseArgs(argv) {
   const out = { dryRun: false };
@@ -59,7 +61,75 @@ function parseArgs(argv) {
   return out;
 }
 
+// --- the catalog insert --------------------------------------------------------
+// One new element before the closing `];` of TEMPLATES, and the comma is the
+// whole reason this is a function. The element that was LAST before an insert
+// carries no trailing comma -- it did not need one -- so inserting after it
+// REQUIRES adding one. The first real run of this tool (BLG-CHI-001,
+// 2026-10-18) did not, and wrote `}\n  {`: src/data/templates.ts stopped
+// parsing, which makes `tsc` -- the first step of `npm test` -- fail on the very
+// registration this tool exists to make. A registration tool whose success
+// state is a red suite is worse than one that refuses.
+function insertCatalogEntry(catalog, entryText) {
+  const anchor = catalog.lastIndexOf('\n];');
+  if (anchor === -1) die('could not find the end of TEMPLATES in src/data/templates.ts');
+  const before = catalog.slice(0, anchor);
+  // No comma when the previous element already has one, or when there is no
+  // element to separate from (an empty array ends with its own '[').
+  const needsComma = !/[,[]\s*$/.test(before);
+  const head = needsComma ? before.replace(/\s+$/, '') + ',' : before;
+  return head + catalog.slice(anchor, anchor + 1) + entryText + '\n' + catalog.slice(anchor + 1);
+}
+
 const args = parseArgs(process.argv.slice(2));
+
+// --- selftest ------------------------------------------------------------------
+// The fixture is the exact shape that broke in the field (a comma-less last
+// element), the assertion is a real PARSE of the result, and the PRE-FIX
+// algorithm is re-run beside it and must fail the same parse -- otherwise the
+// test could pass for a reason unrelated to the bug. No argument parsing, no
+// files touched.
+if (args.selftest) {
+  const entry = '  { b: 2 },';
+  const parseLength = (text) => {
+    try { return new Function('return ' + text)().length; } catch { return null; }
+  };
+  let failCount = 0;
+  const check = (name, ok, detail) => {
+    console.log((ok ? 'PASS  ' : 'FAIL  ') + name);
+    if (!ok) { console.log('        ' + detail); failCount++; }
+  };
+
+  // 1. the bug as it happened: last element WITHOUT a comma must gain one.
+  const bare = '[\n  { a: 1 }\n];\n';
+  const inserted = insertCatalogEntry(bare, entry);
+  check('an element appended after a comma-less last element still parses',
+    parseLength(inserted) === 2, JSON.stringify(inserted));
+
+  // 2. the pre-fix algorithm, byte for byte, fails the same parse.
+  const oldWay = ((cat, e) => {
+    const a = cat.lastIndexOf('\n];');
+    return cat.slice(0, a + 1) + e + '\n' + cat.slice(a + 1);
+  })(bare, entry);
+  check('  ...and the pre-fix algorithm fails it, so this test bites',
+    parseLength(oldWay) === null, JSON.stringify(oldWay));
+
+  // 3. an element that already has its comma must not get a second.
+  const trailing = '[\n  { a: 1 },\n];\n';
+  const inserted2 = insertCatalogEntry(trailing, entry);
+  check('an already-comma-terminated element does not get a double comma',
+    parseLength(inserted2) === 2 && !inserted2.includes(',,'), JSON.stringify(inserted2));
+
+  // 4. an empty array must not start with a comma.
+  const empty = '[\n];\n';
+  const inserted3 = insertCatalogEntry(empty, entry);
+  check('an empty array gains the element without a leading comma',
+    parseLength(inserted3) === 1, JSON.stringify(inserted3));
+
+  console.log('');
+  console.log(failCount === 0 ? 'register-product selftest: all passed' : 'register-product selftest: ' + failCount + ' FAILED');
+  process.exit(failCount === 0 ? 0 : 1);
+}
 
 if (args.sync) {
   const db0 = JSON.parse(fs.readFileSync(PRODUCTS, 'utf8'));
@@ -173,9 +243,7 @@ const catalogEntry = `  {
   },`;
 
 const catalog = fs.readFileSync(CATALOG, 'utf8');
-const anchor = catalog.lastIndexOf('\n];');
-if (anchor === -1) die('could not find the end of TEMPLATES in src/data/templates.ts');
-fs.writeFileSync(CATALOG, catalog.slice(0, anchor + 1) + catalogEntry + '\n' + catalog.slice(anchor + 1));
+fs.writeFileSync(CATALOG, insertCatalogEntry(catalog, catalogEntry));
 console.log(`  templates.ts    <- ${slug} (status: 'draft')`);
 
 // --- the human-readable registry ----------------------------------------------

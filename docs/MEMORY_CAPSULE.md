@@ -375,3 +375,28 @@ invisible to it. Single-machine is not single-writer. Allocate, write and
 commit in one stretch; when a tree is shared, re-read the file you are
 about to `git add` -- the storefront session committed a file it had
 written, and the file it committed was not the file it wrote.
+
+### 2026-10-18 -- WEBSTR001-C019
+
+**The generator's auto-registration step lands its first draft product here: BLG-CHI-001 (`hannelsidmeva`).**
+
+A template project scaffolded on this machine ran `new-project.ps1`, which
+called `tools/register-product.cjs` on its own -- the round trip the
+TASKS.md box had held open since 2026-10-06 as "prove it end to end".
+The draft landed in `docs/products.json`, its row in `docs/REGISTRY.md`,
+and the catalog entry in `src/data/templates.ts` with every operator-owned
+field still a `TODO(operator)` placeholder (price, buy URL, trial
+artifact, demo URL) and `resale` left `undecided`. Nothing was invented to
+fill a cell: the gate refuses to publish an entry whose resale is not
+`allowed`, so the remaining decisions sit on the product where the next
+session will see them -- and the task box is ticked by a real project
+rather than the throwaway the 2026-10-06 note had planned.
+
+One find on the way, and it is the deferred-proof kind this file keeps
+recording: the registrar had never run for real before, and its first real
+run wrote the new element into `src/data/templates.ts` without the comma
+the previously-last element needed -- the catalog stopped parsing, so
+`tsc` (the first step of `npm test`) failed on the very registration the
+tool exists to make. The tool now inserts comma-aware and carries a
+`--selftest`: the pre-fix algorithm is re-run beside the fix and must fail
+the same parse, so the four cases bite rather than describe.
