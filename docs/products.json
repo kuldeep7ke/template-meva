@@ -71,6 +71,24 @@
       "trialArtifact": null,
       "registeredAt": "2026-10-19",
       "notes": "Auto-registered by new-project.ps1 on 2026-10-19. Needs: price, buyUrl, trial artifact, demo URL, and a resale decision."
+    },
+    {
+      "projectId": "BLG-PBH-001",
+      "slug": "blg-pbh-001-template",
+      "productName": "Blogger PermagMeva Template",
+      "repo": "https://github.com/kuldeep7ke/blogger-permagmeva-template",
+      "version": "v1.0.0",
+      "status": "draft",
+      "resale": "undecided",
+      "category": "Magazine",
+      "columns": null,
+      "darkModeSupported": null,
+      "rtlSupported": null,
+      "adsenseOptimized": null,
+      "liveUrl": null,
+      "trialArtifact": null,
+      "registeredAt": "2026-10-19",
+      "notes": "Registered 2026-10-19 via tools/register-product.cjs (WEBSTR001-C021). Needs: price, buyUrl, trial artifact, demo URL, and a resale decision."
     }
   ],
   "fixtures": [

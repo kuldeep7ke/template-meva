@@ -425,3 +425,12 @@ was re-done on canonical with the fixed tool and the real repository
 URL; the mirror line survives on a branch named for what it is, never
 to be pushed. Canonical homes for workspace repos should be declared
 somewhere id:next can consult, or the next mirror will collide again.
+
+## 2026-10-19 - WEBSTR001-C021 - BLG-PBH-001 lands in the storefront as a draft
+
+The third Machine template product is registered: `blg-pbh-001-template`,
+draft, resale undecided, real repository URL
+(`kuldeep7ke/blogger-permagmeva-template`). The generator's stock note
+claimed new-project.ps1 had done it; the note now names the tool and the
+change that actually ran it. Publishing stays with the operator: price,
+buyUrl, trial artifact, demo URL, resale.
