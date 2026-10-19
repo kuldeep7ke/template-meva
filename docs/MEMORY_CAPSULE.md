@@ -400,3 +400,28 @@ the previously-last element needed -- the catalog stopped parsing, so
 tool exists to make. The tool now inserts comma-aware and carries a
 `--selftest`: the pre-fix algorithm is re-run beside the fix and must fail
 the same parse, so the four cases bite rather than describe.
+
+### 2026-10-19 -- WEBSTR001-C020
+
+**One id, two repos: a mirror answered id:next with its own maximum.**
+
+This machine's template-meva tree was pointed at
+`news24sahyadri/template-meva` — a 2026-10-11 squashed-import mirror —
+while the canonical history continued at the public
+`kuldeep7ke/template-meva`. The discovery came from the transfer that
+was supposed to move the repo: the API refused with "kuldeep7ke/
+template-meva already exists", which is how a private mirror was found
+masquerading as the whole project. Each ledger had last seen a
+different maximum, so both sides allocated C019 the same weekend — the
+mirror for seal repairs, canonical for the generator's first real run.
+C008's and C018's lesson, one level up: a mirror is a second writer
+`id:next` cannot see.
+
+The salvage was small and clean, because canonical had independently
+fixed the same comma bug and held every commit hash the mirror's
+import had dropped — the mirror's twelve "lost" seals were an artifact
+of the squashed copy, not of history. The BLG-BLBL-001 registration
+was re-done on canonical with the fixed tool and the real repository
+URL; the mirror line survives on a branch named for what it is, never
+to be pushed. Canonical homes for workspace repos should be declared
+somewhere id:next can consult, or the next mirror will collide again.

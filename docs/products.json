@@ -53,6 +53,24 @@
       "trialArtifact": null,
       "registeredAt": "2026-10-18",
       "notes": "Auto-registered by new-project.ps1 on 2026-10-18. Needs: price, buyUrl, trial artifact, demo URL, and a resale decision."
+    },
+    {
+      "projectId": "BLG-BLBL-001",
+      "slug": "blg-blbl-001-template",
+      "productName": "blogger-rldnewsmeva-templaet",
+      "repo": "https://github.com/kuldeep7ke/blogger-rldnewsmeva-templaet",
+      "version": "v1.0.0",
+      "status": "draft",
+      "resale": "undecided",
+      "category": "Magazine",
+      "columns": null,
+      "darkModeSupported": null,
+      "rtlSupported": null,
+      "adsenseOptimized": null,
+      "liveUrl": null,
+      "trialArtifact": null,
+      "registeredAt": "2026-10-19",
+      "notes": "Auto-registered by new-project.ps1 on 2026-10-19. Needs: price, buyUrl, trial artifact, demo URL, and a resale decision."
     }
   ],
   "fixtures": [
