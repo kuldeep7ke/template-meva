@@ -918,7 +918,7 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
     slug: 'blg-blbl-001-template',
     status: 'draft',
     projectId: 'BLG-BLBL-001',
-    title: 'blogger-rldnewsmeva-templaet',
+    title: 'blogger-rldnewsmeva-template',
     tagline: 'TODO(operator): one line for the catalog card',
     description: 'TODO(operator): one-line summary used in listings',
     fullOverview: 'TODO(operator): long overview for the detail page.',

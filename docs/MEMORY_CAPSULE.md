@@ -434,3 +434,15 @@ draft, resale undecided, real repository URL
 claimed new-project.ps1 had done it; the note now names the tool and the
 change that actually ran it. Publishing stays with the operator: price,
 buyUrl, trial artifact, demo URL, resale.
+
+## 2026-10-21 - WEBSTR001-C022 - BLG-BLBL-001's repository takes the corrected name
+
+The operator renamed the GitHub repository `kuldeep7ke/blogger-rldnewsmeva-templaet`
+to `kuldeep7ke/blogger-rldnewsmeva-template` on 2026-10-21 (the one-letter typo is
+gone from the name of record; GitHub redirects the old name, so stale links still
+resolve). The storefront surfaces that restate the name follow it: `products.json`
+(`productName` + `repo`), the generated `REGISTRY.md` row, and the catalog card
+title in `src/data/templates.ts`. The product's own bytes are untouched -- the
+template XML filenames keep their original spelling, and this repo does not own
+those. The same correction lands in the-machine's registry row, which had recorded
+the misspelling as the name of record.
