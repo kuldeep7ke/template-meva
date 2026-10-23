@@ -512,3 +512,21 @@ attribute is ignored cross-origin and same-tab navigation would walk the buyer
 out of the store. Known state: the page 404s until the operator publishes it;
 that was an explicit decision, not an oversight. No blog-URL change was needed --
 every demo/blog link already pointed at `https://llianmeva.blogspot.com/`.
+
+## 2026-10-23 - WEBSTR001-C026 - Both custom domains retired; Pages URL is the domain
+
+At the operator's direction, both custom domains are out and the product domain
+is the verified-live production URL `https://templatemeva.pages.dev`: `siteConfig`
+`siteUrl`, `index.html` canonical/social/schema tags, the sitemap generator and
+its output, `robots.txt`, and all 28 mockup SVGs name it, so every declared
+address resolves and no custom-domain wiring is needed. (The operator briefly
+chose `marathimeva.com` first, then redirected here before anything shipped; the
+support email is the operator-provided `templatemeva@gmail.com`.) Social handles (`@templatemeva`) and the TemplateMeva brand are
+untouched. Sealed ledger rows and old journal entries keep the previous name;
+rewriting history would falsify when each claim was true. Grep of the current
+v1.2.0 product file found no `AUTHOR_URL` and no support-email string at all --
+the C016 citations describe a pre-rebuild file -- only DEMO credit wording
+(`Marathi Meva`) the file says to replace before shipping. Confirming the
+Worker-served redirect and runtime credit match this store is recorded in
+TASKS.md as operator work. Lesson repeated: a line citation is only true until
+the file moves, so this one was checked against the bytes, not the task box.

@@ -26,7 +26,7 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const CATALOG = path.join(ROOT, 'src', 'data', 'templates.ts');
 const SITEMAP = path.join(ROOT, 'public', 'sitemap.xml');
-const DOMAIN = 'https://templatemeva.com';
+const DOMAIN = 'https://templatemeva.pages.dev';
 
 // Core pages a human owns. Every product URL is derived, never listed here.
 const CORE_PAGES = [

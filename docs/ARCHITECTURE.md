@@ -233,12 +233,17 @@ wrong cases.
 
 ### Still divergent
 
-The shipped template hardcodes `AUTHOR_URL = 'https://mevatemplates.com/unlicensed'`
-while this store is `templatemeva.com`, and the guard redirects to a bare URL
-with no query parameters — so this page cannot name the blog or template it was
-served to. Both are recorded in `docs/TASKS.md` and neither is fixed here: the
-first means editing the shipped XML in `blogger-llianmeva-template`, which needs
-its own change ID.
+The shipped template v1.2.0 carries no baked redirect constant and no support
+email at all — verified by grep in `WEBSTR001-C026` on the source tree and the
+local artifact; the BLG-C426 line citations no longer match the rebuilt file.
+The redirect is served by the Worker instead, and the baked footer credit is
+explicitly DEMO wording (`Marathi Meva`, BLG-C545) the operator replaces before
+shipping. Whether the served `redirectUrl` and runtime credit match this store
+(`https://templatemeva.pages.dev`) is confirmed operator-side, and the guard
+redirects to a bare URL with no query parameters — so this page cannot name the
+blog or template it was served to. Both are recorded in `docs/TASKS.md` and
+neither is fixed here: the first means the template repo plus Worker config,
+which need their own change IDs there.
 
 ### The invariant, enforced
 

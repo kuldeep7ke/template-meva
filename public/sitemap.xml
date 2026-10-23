@@ -9,56 +9,56 @@
 
   <!-- Core Pages -->
   <url>
-    <loc>https://templatemeva.com/</loc>
+    <loc>https://templatemeva.pages.dev/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://templatemeva.com/contact</loc>
+    <loc>https://templatemeva.pages.dev/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://templatemeva.com/unlicensed</loc>
+    <loc>https://templatemeva.pages.dev/unlicensed</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <!-- Help & Docs Pages -->
   <url>
-    <loc>https://templatemeva.com/docs</loc>
+    <loc>https://templatemeva.pages.dev/docs</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://templatemeva.com/docs/installation</loc>
+    <loc>https://templatemeva.pages.dev/docs/installation</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://templatemeva.com/docs/activation</loc>
+    <loc>https://templatemeva.pages.dev/docs/activation</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://templatemeva.com/docs/customization</loc>
+    <loc>https://templatemeva.pages.dev/docs/customization</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://templatemeva.com/docs/adsense</loc>
+    <loc>https://templatemeva.pages.dev/docs/adsense</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://templatemeva.com/docs/troubleshooting</loc>
+    <loc>https://templatemeva.pages.dev/docs/troubleshooting</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Template Products (derived: status published only) -->
   <url>
-    <loc>https://templatemeva.com/templates/llianmeva</loc>
+    <loc>https://templatemeva.pages.dev/templates/llianmeva</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://templatemeva.com/sitemap.xml
+Sitemap: https://templatemeva.pages.dev/sitemap.xml

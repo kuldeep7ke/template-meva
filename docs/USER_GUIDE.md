@@ -284,7 +284,7 @@ npx wrangler pages deploy dist --project-name=templatemeva
 
 - [ ] Replace placeholder archives in `public/download/` with real trial XMLs
 - [ ] Replace placeholder `buyUrl` values with live checkout links
-- [ ] Update `siteUrl` in `src/data/siteConfig.ts` plus the canonical, OpenGraph, and JSON-LD URLs in `index.html` if the domain differs from `templatemeva.com`
+- [ ] Update `siteUrl` in `src/data/siteConfig.ts` plus the canonical, OpenGraph, and JSON-LD URLs in `index.html` if the domain differs from `templatemeva.pages.dev`
 - [ ] Update `robots.txt` and `sitemap.xml` for the final domain
 - [ ] Connect the contact form and newsletter to a real endpoint (both currently show success without sending anything)
 - [ ] Connect the license-key validator on `/unlicensed` to your licensing backend

@@ -241,16 +241,22 @@ The licensing model is sold on this, and the store's own gate
 
 ---
 
-## 5. Open: which domain?
+## 5. Open: the template bakes no redirect; the Worker serves it
 
-The shipped template has `AUTHOR_URL = 'https://mevatemplates.com/unlicensed'`
-baked in. The storefront is configured as `https://templatemeva.com`. **These are
-different domains and one of them is wrong.** Until that is settled, an unlicensed
-blog redirects visitors somewhere that is not this store.
+The shipped template v1.2.0 contains no `AUTHOR_URL` and no support-email string
+at all — verified by grep in `WEBSTR001-C026` on the source tree and the local
+artifact. The old BLG-C426 line citations no longer match the rebuilt file, so
+they are history, not instructions. The unlicensed redirect is served by the
+Worker (`redirectUrl` wins over any baked value, per the checklist above), and
+the baked footer credit is explicitly DEMO wording (`Marathi Meva` linking
+`marathimeva.com/templatemeva/`, BLG-C545) that the operator replaces before
+shipping to anyone.
 
-Fixing it means changing `AUTHOR_URL` in the shipped XML, which is a change to
-`blogger-llianmeva-template` and needs its own change ID there — not an edit to
-this repository.
+Two confirmations are operator-side: that the served `redirectUrl` points at
+`https://templatemeva.pages.dev/unlicensed`, and that the runtime credit wording
+matches the store's "TemplateMeva credit" claim. Both live in the template repo
+plus Worker config and need their own change IDs there — not edits to this
+repository. See `TASKS.md`.
 
 ---
 

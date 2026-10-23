@@ -105,6 +105,13 @@ adopted-to, not the reverse.
   is actually sold. The storefront already uses it in `siteConfig` and `index.html`.
   Only the shipped template disagrees.
   - decision: `templatemeva.com` is the product domain.
+  - superseded 2026-10-23 (WEBSTR001-C026): both custom domains are retired and
+    the product domain is now `https://templatemeva.pages.dev`, the verified-live
+    production URL, so every declared address resolves and no custom-domain wiring
+    is needed. The shipped template v1.2.0 still points at the retired domain —
+    see the re-release task below.
+- [ ] **Reconcile the template's baked URLs and the Worker's served wording with the store.** The current v1.2.0 product file contains no `AUTHOR_URL` and no support-email string at all (verified by grep 2026-10-23 on the source tree and the local artifact; the C016 line citations no longer match — the file was rebuilt upstream since). What it does bake is DEMO credit wording — `Marathi Meva` linking `https://marathimeva.com/templatemeva/` — with an explicit comment that the operator replaces both before shipping (BLG-C545: the Worker serves the runtime wording; the baked copy is the offline fallback). Open items, all operator-side: (1) confirm the Worker `redirectUrl` points at `https://templatemeva.pages.dev/unlicensed`; (2) confirm the runtime credit wording matches the store's "TemplateMeva credit" claim; (3) replace the DEMO credit and cut a new tagged release; (4) refresh the local artifact `public/download/llianmeva-v1.2.0.xml` from it. Its bytes are left untouched here: this repo does not forge releases.
+  - disposition: OPERATOR (template repo + Worker config; this repo cannot cut either)
 - [x] **`AUTHOR_URL` in the shipped template pointed at `mevatemplates.com`. FIXED UPSTREAM (BLG-C426).**
   - disposition: RESOLVED UPSTREAM — fixed in `blogger-llianmeva-template` as
     BLG-C426 and shipped in template v1.2.0: `template/product/Blogger LlianMeva
@@ -114,6 +121,12 @@ adopted-to, not the reverse.
     fixed together, as this task required. Re-verified 2026-10-07 on N24S1
     against the v1.2.0 product file; all three template trees point at
     templatemeva.com.
+  - NOTE 2026-10-23 (WEBSTR001-C026): the citations above no longer match the
+    file. The current v1.2.0 product file contains no `AUTHOR_URL` and no
+    `support@` string (verified by grep on the source tree and the local
+    artifact) — the file was rebuilt upstream after 2026-10-07. See the
+    reconcile task above. The closed state stands as the record of what was
+    verified then.
   - [x] **The redeem audience gap is closed in both docs** (WEBSTR001-C009).
     `TEMPLATE_DEVELOPER_GUIDE.md` §2.3 and `ARCHITECTURE.md` now carry the
     `document.body.id === 'layout'` screen gate, the reason it is easy to ship

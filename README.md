@@ -44,9 +44,12 @@ owner consents to resale, so it never publishes anything, and
    old key box — which accepted any invented key and rejected every real one — is
    deleted. Serials look like `AB12C-34DEF-56789-0ABCD-EF012` and are bound to
    your domain server-side. The published free edition runs until a serial is
-   activated. The shipped template's unlicensed redirect now points at this store
-   (`templatemeva.com/unlicensed` — fixed upstream as BLG-C426, template
-   v1.2.0). One deliberate limit remains: the guard sends the notice page no
+   activated. The shipped template v1.2.0 carries no baked redirect or support
+   email at all (verified by grep in `WEBSTR001-C026`; the old BLG-C426 line
+   citations no longer match the rebuilt file) — the redirect is served by the
+   Worker, and the baked footer credit is explicitly DEMO wording. Confirming
+   both match this store is an operator-side task in `docs/TASKS.md`.
+   One deliberate limit remains: the guard sends the notice page no
    context, because R30 of the shared rules forbids a customer identifier
    travelling in a URL. See [`docs/TASKS.md`](docs/TASKS.md) -> *Licensing*.
 
