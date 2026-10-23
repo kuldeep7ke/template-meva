@@ -1002,7 +1002,7 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
     slug: 'llianmeva',
     status: 'published',
     projectId: 'BLG-GEL-001',
-    title: 'Blogger LlianMeva -- City Politics Blogger Template',
+    title: 'LlianMeva Blogger Template',
     tagline: 'A two-column city-politics and local-news magazine with Reading Mode, dark mode and visible breadcrumbs.',
     description: 'LlianMeva is a production-tested Blogger theme for city politics, local news and long-form reporting. The free edition is the complete v1.2.0 template: install it in one upload, then activate with a serial to move the footer credit to your own copyright.',
     fullOverview: `LlianMeva is the published build of a real city-politics blog, not a concept mockup. It keeps a two-column magazine layout for local news and long reads, and adds a Reading Mode that narrates in English, Hindi and Marathi, tracks the spoken word, and flips between light and dark.

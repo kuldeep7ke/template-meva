@@ -530,3 +530,16 @@ the C016 citations describe a pre-rebuild file -- only DEMO credit wording
 Worker-served redirect and runtime credit match this store is recorded in
 TASKS.md as operator work. Lesson repeated: a line citation is only true until
 the file moves, so this one was checked against the bytes, not the task box.
+
+## 2026-10-23 - WEBSTR001-C027 - Product renamed to LlianMeva Blogger Template
+
+The operator asked to change the store product title, pointing at the blog as
+the source of truth. The live blog's title tag, og:title, twitter:title,
+JSON-LD name, and skin header all read `LlianMeva` (`v1.2.0`, by Template Meva),
+so the rename was offered as exact (`LlianMeva`) vs descriptive
+(`LlianMeva Blogger Template`); the operator picked the descriptive variant,
+keeping the SEO keywords the bare name would drop. Two fields changed --
+catalog `title` and registry `productName`, plus regenerated `REGISTRY.md` --
+and every buyer-facing surface (H1, card, navbar CTA, contact dropdown,
+comparison note) derives from the catalog row. Slug, price, URLs, tagline, and
+tags untouched.
