@@ -68,6 +68,12 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
     }
   };
 
+  // A same-origin trialDownloadUrl is a file, so the anchors below use the
+  // `download` attribute. An absolute URL is a download page on another site:
+  // the attribute would be ignored cross-origin, so those links open in a new
+  // tab instead of navigating the buyer away from the store.
+  const isExternalDownload = template.trialDownloadUrl.startsWith('http');
+
   return (
     <div className="min-h-screen bg-slate-50/50 pb-20">
 
@@ -116,9 +122,11 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                     <Clock className="w-3 h-3" /> {template.trialDuration}
                   </span>
                 )}
-                <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700">
-                  PageSpeed {template.pageSpeedScore.desktop}/100
-                </span>
+                {template.pageSpeedScore.desktop > 0 && (
+                  <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700">
+                    PageSpeed {template.pageSpeedScore.desktop}/100
+                  </span>
+                )}
               </div>
 
               <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
@@ -129,19 +137,29 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
               </p>
 
               <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-500">
-                <div className="flex items-center gap-1 text-amber-500">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 stroke-amber-400" />
-                  ))}
-                  <span className="font-bold text-slate-800 ml-1">{template.rating.toFixed(2)}</span>
-                  <span>({template.reviewCount} reviews)</span>
-                </div>
+                {template.reviewCount > 0 ? (
+                  <div className="flex items-center gap-1 text-amber-500">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-400 stroke-amber-400" />
+                    ))}
+                    <span className="font-bold text-slate-800 ml-1">{template.rating.toFixed(2)}</span>
+                    <span>({template.reviewCount} reviews)</span>
+                  </div>
+                ) : (
+                  <span className="font-semibold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md">
+                    New release — no reviews yet
+                  </span>
+                )}
+                {template.salesCount > 0 && (
+                  <>
+                    <span>•</span>
+                    <span className="font-medium text-slate-700">
+                      {template.salesCount.toLocaleString()} active users
+                    </span>
+                  </>
+                )}
                 <span>•</span>
-                <span className="font-medium text-slate-700">
-                  {template.salesCount.toLocaleString()} active users
-                </span>
-                <span>•</span>
-                <span>Updated: {template.lastUpdated} (v{template.version})</span>
+                <span>Updated: {template.lastUpdated} ({template.version})</span>
               </div>
 
               {/* Screenshot Preview — grows on large screens to fill the gap left by the taller buy-box column; keeps 16:9 on mobile */}
@@ -190,7 +208,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                   className="w-full py-3 bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm rounded-xl border border-slate-300 shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Eye className="w-4 h-4 text-indigo-600" />
-                  <span>Live Preview (All Demos)</span>
+                  <span>{template.demos.length > 1 ? 'Live Preview (All Demos)' : 'Live Preview'}</span>
                 </button>
 
                 {/* Multi-demo if available */}
@@ -212,18 +230,26 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                   className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer text-center block"
                 >
                   <ShoppingBag className="w-4 h-4" />
-                  <span>Buy Activation License (${template.price.toFixed(2)})</span>
+                  <span>{template.buyUrl.startsWith('/') ? 'Contact to Buy' : 'Buy Activation License'} (${template.price.toFixed(2)})</span>
                 </a>
+
+                {template.buyUrl.startsWith('/') && (
+                  <p className="text-[11px] text-slate-500 leading-relaxed text-center px-1">
+                    Checkout is arranged by contact while the store is pre-launch. No payment is taken on this site.
+                  </p>
+                )}
 
                 {/* Trial download — secondary */}
                 {template.hasTrial && (
                   <a
                     href={template.trialDownloadUrl}
-                    download
+                    {...(isExternalDownload
+                      ? { target: '_blank' as const, rel: 'noopener noreferrer' }
+                      : { download: true })}
                     className="w-full py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold text-xs rounded-xl border border-amber-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer text-center block"
                   >
                     <Clock className="w-3.5 h-3.5 text-amber-600" />
-                    <span>Start 7-Day Free Trial (No Login Needed)</span>
+                    <span>Download {template.trialDuration} (No Login Needed)</span>
                   </a>
                 )}
               </div>
@@ -232,11 +258,11 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
               <div className="mt-4 pt-3 border-t border-slate-200/70 text-[11px] text-slate-500 space-y-1.5">
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>7-Day trial — test on your blog, no credit card</span>
+                  <span>{template.trialDuration} — install it on your blog before you buy</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>Instant digital download (.xml + full docs)</span>
+                  <span>Instant digital download (.xml)</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
@@ -244,7 +270,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>Lifetime updates & 24/7 priority support</span>
+                  <span>One-time payment — no recurring fee</span>
                 </div>
               </div>
 
@@ -264,24 +290,27 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
               </div>
             </div>
 
-            {/* 7-Day Trial Highlight Bar — snug under the buy box so the right column fills perfectly */}
+            {/* Trial/free-edition highlight bar — snug under the buy box so the right column fills perfectly */}
             {template.hasTrial && (
               <div className="mt-4 flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-2xl">
                 <Clock className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-bold text-amber-900">
-                    7-Day Free Trial Available — No Credit Card Required
+                    {template.trialDuration} Available — No Credit Card Required
                   </p>
                   <p className="text-xs text-amber-700 mt-0.5 leading-relaxed">
-                    Download and install the trial on your Blogger blog today. All features work fully during the trial period. Paste your serial into the Licence Activation gadget at any time to activate permanently.
+                    {template.trialNote ??
+                      'Download and install the trial on your Blogger blog today. All features work fully during the trial period. Paste your serial into the Licence Activation gadget at any time to activate permanently.'}
                   </p>
                   <a
                     href={template.trialDownloadUrl}
-                    download
+                    {...(isExternalDownload
+                      ? { target: '_blank' as const, rel: 'noopener noreferrer' }
+                      : { download: true })}
                     className="inline-flex items-center gap-1.5 mt-2 text-xs font-bold text-amber-800 hover:text-amber-900 underline cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5" />
-                    <span>Download 7-Day Trial (.xml)</span>
+                    <span>Download {template.trialDuration}{isExternalDownload ? '' : ' (.xml)'}</span>
                   </a>
                 </div>
               </div>
@@ -350,23 +379,23 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
 
             {/* How Trial & Activation Works */}
             <div className="bg-gradient-to-r from-amber-50 via-white to-indigo-50 rounded-2xl border border-slate-200 p-6 sm:p-8">
-              <h3 className="text-xl font-black text-slate-900 mb-6">How the 7-Day Trial & Activation Works</h3>
+              <h3 className="text-xl font-black text-slate-900 mb-6">How the {template.trialDuration} & Activation Works</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="flex items-start gap-3">
                   <div className="w-9 h-9 rounded-full bg-amber-500 text-white font-black text-sm flex items-center justify-center shrink-0">1</div>
                   <div>
-                    <h4 className="font-bold text-slate-900 text-sm mb-1">Download the 7-Day Trial</h4>
+                    <h4 className="font-bold text-slate-900 text-sm mb-1">Download the {template.trialDuration}</h4>
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      Download the trial XML file — no credit card or account required. Install it on your Blogger blog via Theme → Restore → Upload.
+                      Download the template XML — no credit card or account required. Install it on your Blogger blog via Theme → Restore → Upload.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-9 h-9 rounded-full bg-amber-500 text-white font-black text-sm flex items-center justify-center shrink-0">2</div>
                   <div>
-                    <h4 className="font-bold text-slate-900 text-sm mb-1">Test Everything for 7 Days</h4>
+                    <h4 className="font-bold text-slate-900 text-sm mb-1">Test Everything</h4>
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      All features — Dark Mode, Mega Menu, AdSense placements, Infinite Scroll, RTL — are fully enabled during the trial. Evaluate on real content with real traffic.
+                      Every feature the template ships is enabled — dark mode, Reading Mode, navigation, ad slots and structured data. Evaluate on real content with real traffic.
                     </p>
                   </div>
                 </div>
@@ -375,7 +404,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                   <div>
                     <h4 className="font-bold text-slate-900 text-sm mb-1">Activate with your serial</h4>
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      Purchase your licence and paste your serial into the Blogger Layout &rarr; Licence Activation gadget. Done in under 30 seconds — no re-upload required.
+                      Get your activation licence and paste your serial into the Blogger Layout &rarr; Licence Activation gadget. Done in under 30 seconds — no re-upload required.
                     </p>
                   </div>
                 </div>
@@ -395,13 +424,15 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                   <Download className="w-3.5 h-3.5" />
                   <span>Installation Guide →</span>
                 </button>
-                <button
-                  onClick={() => navigate('/unlicensed')}
-                  className="text-xs font-bold text-amber-600 hover:text-amber-700 flex items-center gap-1.5 cursor-pointer"
-                >
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>What happens after trial expires? →</span>
-                </button>
+                {!template.trialNote && (
+                  <button
+                    onClick={() => navigate('/unlicensed')}
+                    className="text-xs font-bold text-amber-600 hover:text-amber-700 flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>What happens after the trial expires? →</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -458,7 +489,12 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
               templatePrice={template.price}
               templateTitle={template.title}
               trialDuration={template.trialDuration}
-              onDownloadTrial={() => { window.location.href = template.trialDownloadUrl; }}
+              trialNote={template.trialNote}
+              buyLabel={template.buyUrl.startsWith('/') ? 'Contact to Buy' : 'Buy Activation License'}
+              onDownloadTrial={() => {
+                if (isExternalDownload) window.open(template.trialDownloadUrl, '_blank', 'noopener,noreferrer');
+                else window.location.href = template.trialDownloadUrl;
+              }}
               onBuyActive={() => { window.open(template.buyUrl, '_blank'); }}
             />
 
@@ -494,31 +530,54 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
               templatePrice={template.price}
               templateTitle={template.title}
               trialDuration={template.trialDuration}
-              onDownloadTrial={() => { window.location.href = template.trialDownloadUrl; }}
+              trialNote={template.trialNote}
+              buyLabel={template.buyUrl.startsWith('/') ? 'Contact to Buy' : 'Buy Activation License'}
+              onDownloadTrial={() => {
+                if (isExternalDownload) window.open(template.trialDownloadUrl, '_blank', 'noopener,noreferrer');
+                else window.location.href = template.trialDownloadUrl;
+              }}
               onBuyActive={() => { window.open(template.buyUrl, '_blank'); }}
             />
 
-            {/* What happens when trial expires box */}
-            <div className="bg-amber-50 rounded-2xl p-6 border border-amber-200 text-amber-900 text-xs space-y-3">
-              <h4 className="font-bold text-sm flex items-center gap-1.5 text-amber-800">
-                <Clock className="w-4 h-4 text-amber-600" />
-                What Happens When the 7-Day Trial Expires?
-              </h4>
-              <p>
-                After 7 days without activation, the template displays a friendly activation notice to your blog visitors informing them the site owner is still setting up their theme. Your content remains online and accessible — the notice does not break your blog.
-              </p>
-              <p>
-                To dismiss the notice and restore full operation, simply purchase your licence and paste your serial into the Blogger Layout &rarr; Licence Activation gadget. Activation is instant with no re-upload required.
-              </p>
-              <div className="pt-2 flex flex-wrap gap-4">
-                <button onClick={() => navigate('/unlicensed')} className="font-bold text-amber-800 underline hover:text-amber-950">
-                  See the trial expiry notice page →
-                </button>
-                <button onClick={() => navigate('/docs/activation')} className="font-bold text-indigo-700 underline hover:text-indigo-900">
-                  License activation guide →
-                </button>
+            {/* Trial-expiry box for time-limited editions; free editions do not expire. */}
+            {template.trialNote ? (
+              <div className="bg-emerald-50 rounded-2xl p-6 border border-emerald-200 text-emerald-900 text-xs space-y-3">
+                <h4 className="font-bold text-sm flex items-center gap-1.5 text-emerald-800">
+                  <Clock className="w-4 h-4 text-emerald-600" />
+                  About the {template.trialDuration}
+                </h4>
+                <p>{template.trialNote}</p>
+                <p>
+                  This edition does not expire. Activation is a one-time purchase and does not require re-uploading the XML.
+                </p>
+                <div className="pt-2 flex flex-wrap gap-4">
+                  <button onClick={() => navigate('/docs/activation')} className="font-bold text-indigo-700 underline hover:text-indigo-900">
+                    Licence activation guide →
+                  </button>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="bg-amber-50 rounded-2xl p-6 border border-amber-200 text-amber-900 text-xs space-y-3">
+                <h4 className="font-bold text-sm flex items-center gap-1.5 text-amber-800">
+                  <Clock className="w-4 h-4 text-amber-600" />
+                  What Happens When the 7-Day Trial Expires?
+                </h4>
+                <p>
+                  After 7 days without activation, the template displays a friendly activation notice to your blog visitors informing them the site owner is still setting up their theme. Your content remains online and accessible — the notice does not break your blog.
+                </p>
+                <p>
+                  To dismiss the notice and restore full operation, simply purchase your licence and paste your serial into the Blogger Layout &rarr; Licence Activation gadget. Activation is instant with no re-upload required.
+                </p>
+                <div className="pt-2 flex flex-wrap gap-4">
+                  <button onClick={() => navigate('/unlicensed')} className="font-bold text-amber-800 underline hover:text-amber-950">
+                    See the trial expiry notice page →
+                  </button>
+                  <button onClick={() => navigate('/docs/activation')} className="font-bold text-indigo-700 underline hover:text-indigo-900">
+                    License activation guide →
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -527,7 +586,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
           <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
             <div className="p-6 border-b border-slate-200">
               <h3 className="font-black text-slate-900 text-lg">Technical Specifications</h3>
-              <p className="text-xs text-slate-500 mt-1">Compatibility, trial period, and architecture metadata</p>
+              <p className="text-xs text-slate-500 mt-1">Compatibility, licensing, and architecture metadata</p>
             </div>
             <div className="divide-y divide-slate-100 text-sm">
               {template.specifications.map((spec, i) => (
@@ -545,13 +604,24 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xs">
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-3xl font-black text-slate-900">{template.rating.toFixed(1)}</span>
-                  <div className="flex text-amber-400">
-                    {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
-                  </div>
-                </div>
-                <p className="text-xs text-slate-500 mt-1">Based on {template.reviewCount} verified buyer ratings</p>
+                {template.reviewCount > 0 ? (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <span className="text-3xl font-black text-slate-900">{template.rating.toFixed(1)}</span>
+                      <div className="flex text-amber-400">
+                        {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-1">Based on {template.reviewCount} verified buyer ratings</p>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-lg font-black text-slate-900">No reviews yet</span>
+                    <p className="text-xs text-slate-500 mt-1">
+                      This template is new to the store. Reviews appear here only after a verified purchase.
+                    </p>
+                  </>
+                )}
               </div>
               <button
                 onClick={() => alert('Please sign in with your verified purchase Order ID to leave a review.')}
@@ -589,27 +659,29 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
           </div>
         )}
 
-        {/* Related Templates */}
-        <div className="mt-16 pt-12 border-t border-slate-200">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h3 className="text-xl sm:text-2xl font-black text-slate-900">You May Also Like</h3>
-              <p className="text-xs text-slate-500 mt-1">Other high-performance Blogger templates with 7-day trials</p>
+        {/* Related Templates — hidden when the store has only this product. */}
+        {relatedTemplates.length > 0 && (
+          <div className="mt-16 pt-12 border-t border-slate-200">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900">You May Also Like</h3>
+                <p className="text-xs text-slate-500 mt-1">Other Blogger templates in the store</p>
+              </div>
+              <button
+                onClick={() => navigate('/')}
+                className="text-indigo-600 hover:text-indigo-700 font-bold text-xs flex items-center gap-1 cursor-pointer"
+              >
+                <span>View All</span>
+                <ExternalLink className="w-3 h-3" />
+              </button>
             </div>
-            <button
-              onClick={() => navigate('/')}
-              className="text-indigo-600 hover:text-indigo-700 font-bold text-xs flex items-center gap-1 cursor-pointer"
-            >
-              <span>View All</span>
-              <ExternalLink className="w-3 h-3" />
-            </button>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {relatedTemplates.map((t) => (
+                <TemplateCard key={t.id} template={t} navigate={navigate} />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {relatedTemplates.map((t) => (
-              <TemplateCard key={t.id} template={t} navigate={navigate} />
-            ))}
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

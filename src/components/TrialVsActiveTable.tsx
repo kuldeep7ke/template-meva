@@ -7,8 +7,10 @@ interface TrialVsActiveTableProps {
   templatePrice: number;
   templateTitle: string;
   trialDuration?: string;
+  trialNote?: string;
   trialDownloadUrl?: string;
   buyUrl?: string;
+  buyLabel?: string;
   onDownloadTrial?: () => void;
   onBuyActive?: () => void;
 }
@@ -18,6 +20,8 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
   templatePrice,
   templateTitle,
   trialDuration = '7 Days Free Trial',
+  trialNote,
+  buyLabel = 'Buy Activation License',
   onDownloadTrial,
   onBuyActive
 }) => {
@@ -32,7 +36,7 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
           </div>
           <h3 className="text-xl sm:text-2xl font-black">{trialDuration} vs. Active Full Version</h3>
           <p className="text-sm text-slate-400 mt-1">
-            Start with the 7-day trial on your blog. Activate any time by pasting your serial.
+            Start with the {trialDuration.toLowerCase()} on your blog. Activate any time by pasting your serial.
           </p>
         </div>
 
@@ -46,7 +50,7 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
             className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-xl shadow-lg transition-colors flex items-center gap-2 cursor-pointer"
           >
             <ShoppingBag className="w-4 h-4" />
-            <span>Buy Activation License</span>
+            <span>{buyLabel}</span>
           </button>
         </div>
       </div>
@@ -55,7 +59,9 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
       <div className="bg-amber-50 border-b border-amber-200 px-6 py-3 flex items-center gap-3 text-xs text-amber-800">
         <Clock className="w-4 h-4 text-amber-600 shrink-0" />
         <span>
-          <strong>How it works:</strong> The 7-Day Trial includes all template features fully functional. After 7 days, the template displays an activation prompt to your visitors until you paste your serial. Activating removes all limits permanently with no expiry.
+          <strong>How it works:</strong>{' '}
+          {trialNote ??
+            'The 7-Day Trial includes all template features fully functional. After 7 days, the template displays an activation prompt to your visitors until you paste your serial. Activating removes all limits permanently with no expiry.'}
         </span>
       </div>
 
@@ -67,7 +73,7 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
               <th className="py-4 px-6 text-sm font-bold text-slate-700 w-1/2">Features & Inclusions</th>
               <th className="py-4 px-6 text-center text-sm font-bold text-amber-700 w-1/4">
                 <div className="flex flex-col items-center gap-0.5">
-                  <span>7-Day Free Trial</span>
+                  <span>{trialDuration}</span>
                   <span className="text-[10px] font-normal text-slate-400">Download &amp; Test Now</span>
                 </div>
               </th>
@@ -128,7 +134,9 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
           <tfoot>
             <tr className="bg-slate-50 border-t border-slate-200">
               <td className="py-4 px-6 text-xs text-slate-500">
-                <span className="font-semibold text-slate-700">Important Note about {templateTitle}:</span> The 7-day trial is fully functional. After the trial period, an activation notice appears on your blog until you paste your serial into the Licence Activation gadget in Blogger &gt; Layout. Activation is instant and permanent.
+                <span className="font-semibold text-slate-700">Important Note about {templateTitle}:</span>{' '}
+                {trialNote ??
+                  'The 7-day trial is fully functional. After the trial period, an activation notice appears on your blog until you paste your serial into the Licence Activation gadget in Blogger > Layout. Activation is instant and permanent.'}
               </td>
               <td className="py-4 px-6 text-center">
                 <button
@@ -136,7 +144,7 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
                   className="px-4 py-2 rounded-lg border border-amber-300 text-amber-700 hover:bg-amber-50 text-xs font-bold transition-colors inline-flex items-center gap-1.5 cursor-pointer"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  <span>Download 7-Day Trial</span>
+                  <span>Download {trialDuration}</span>
                 </button>
               </td>
               <td className="py-4 px-6 text-center bg-indigo-50/30">
@@ -145,7 +153,7 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
                   className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-sm hover:shadow inline-flex items-center gap-1.5 cursor-pointer"
                 >
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>Activate (${templatePrice.toFixed(2)})</span>
+                  <span>{buyLabel === 'Buy Activation License' ? `Activate ($${templatePrice.toFixed(2)})` : buyLabel}</span>
                 </button>
               </td>
             </tr>

@@ -993,6 +993,125 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
     adsenseOptimized: false,
     seoReady: false,
   },
+  {
+    // Real product BLG-GEL-001. Its owner cleared resale and it was published in
+    // WEBSTR001-C023. Free-edition downloads route via the blog download page
+    // (WEBSTR001-C025); trialNote records what the free edition carries.
+    // public/download/llianmeva-v1.2.0.xml is the retained release artifact.
+    id: 'blg-gel-001-template',
+    slug: 'llianmeva',
+    status: 'published',
+    projectId: 'BLG-GEL-001',
+    title: 'Blogger LlianMeva -- City Politics Blogger Template',
+    tagline: 'A two-column city-politics and local-news magazine with Reading Mode, dark mode and visible breadcrumbs.',
+    description: 'LlianMeva is a production-tested Blogger theme for city politics, local news and long-form reporting. The free edition is the complete v1.2.0 template: install it in one upload, then activate with a serial to move the footer credit to your own copyright.',
+    fullOverview: `LlianMeva is the published build of a real city-politics blog, not a concept mockup. It keeps a two-column magazine layout for local news and long reads, and adds a Reading Mode that narrates in English, Hindi and Marathi, tracks the spoken word, and flips between light and dark.
+
+    The template ships with visible Home > section > title breadcrumbs, an automatic table of contents, label-driven trending and related blocks, a mega menu, Ajax search, Blogger-resized images with native lazy loading, and JSON-LD for BlogPosting, BreadcrumbList and WebSite. Four pre-styled ad positions are documented, but no AdSense code is bundled: you add your own.
+
+    The free edition is not a time-limited trial. It is the full template with a TemplateMeva footer credit and a one-time activation notice while the install is unregistered. Pasting a licence serial in Blogger's Licence Activation gadget removes both and lets the footer carry your own copyright.`,
+    price: 12.95,
+    originalPrice: 29.00,
+    hasTrial: true,
+    trialDuration: 'Free Edition',
+    trialNote: 'The free edition is the complete template. It keeps a TemplateMeva credit in the footer and may show a one-time activation notice while the install is unregistered. Pasting a licence serial removes the credit and the notice, and the footer then carries your own copyright. It does not expire.',
+    trialDownloadUrl: 'https://llianmeva.blogspot.com/p/download.html',
+    buyUrl: '/contact',
+    rating: 0,
+    reviewCount: 0,
+    salesCount: 0,
+    version: 'v1.2.0',
+    releaseDate: '2026-10-06',
+    lastUpdated: '2026-10-22',
+    category: 'Magazine',
+    tags: ['Magazine', 'City Politics', 'Local News', 'Dark Mode', 'Reading Mode', 'Free Edition', 'SEO Rich', '2 Columns'],
+    columns: '2 Columns',
+    layout: 'Magazine',
+    pageSpeedScore: { mobile: 0, desktop: 0 },
+    thumbnail: '/images/llianmeva-preview.png',
+    galleryImages: ['/images/llianmeva-preview.png'],
+    liveDemoUrl: 'https://llianmeva.blogspot.com/',
+    badge: 'FEATURED',
+    rtlSupported: false,
+    darkModeSupported: true,
+    adsenseOptimized: false,
+    seoReady: true,
+    features: [
+      {
+        title: 'Reading Mode with Narration',
+        description: 'A distraction-free reader with English, Hindi and Marathi narration, word tracking, three text sizes, swipe paging and its own light/dark flip.',
+        iconName: 'Sliders',
+        isHighlight: true
+      },
+      {
+        title: 'Dark Mode',
+        description: "A header toggle that remembers the reader's choice and respects prefers-color-scheme; light stays the default.",
+        iconName: 'Moon',
+        isHighlight: true
+      },
+      {
+        title: 'Visible Breadcrumbs & Structured Data',
+        description: 'Home > section > title breadcrumbs on every post, matched by BreadcrumbList and BlogPosting JSON-LD.',
+        iconName: 'Search',
+        isHighlight: true
+      },
+      {
+        title: 'Automatic Table of Contents',
+        description: 'H2 and H3 headings become a collapsible, keyboard-accessible contents panel above long articles.',
+        iconName: 'Layout',
+        isHighlight: true
+      },
+      {
+        title: 'Magazine Homepage Blocks',
+        description: 'Label-driven trending, breaking, related and featured blocks, plus a mega menu built from your labels.',
+        iconName: 'Layers'
+      },
+      {
+        title: 'Responsive, Lazy-Loaded Media',
+        description: 'Blogger-resized image variants and native lazy loading keep the mobile layout readable without extra scripts.',
+        iconName: 'Smartphone'
+      },
+      {
+        title: 'Four Ad Slots, No Ad Code',
+        description: 'Pre-styled header, in-article, sidebar and footer placements are named in the guide; you paste your own ad code, so none ships in the theme.',
+        iconName: 'DollarSign'
+      },
+      {
+        title: 'Free Edition + Serial Activation',
+        description: 'One upload installs the full template. A serial pasted into the Licence Activation gadget removes the credit and the activation notice.',
+        iconName: 'Key'
+      },
+    ],
+    specifications: [
+      { label: 'Template Platform', value: 'Google Blogger (Blogspot), single XML theme' },
+      { label: 'Version', value: 'v1.2.0' },
+      { label: 'Layout', value: '2 columns, magazine' },
+      { label: 'Reading Mode', value: 'English, Hindi and Marathi narration; three text sizes' },
+      { label: 'Dark Mode', value: 'Yes — header toggle, localStorage, prefers-color-scheme' },
+      { label: 'RTL (Right to Left)', value: 'Not supported in v1.2.0' },
+      { label: 'Ad Placements', value: '4 pre-styled slots; no AdSense code included' },
+      { label: 'SEO', value: 'Visible breadcrumbs; BlogPosting, BreadcrumbList and WebSite JSON-LD' },
+      { label: 'Images', value: 'Blogger-resized variants with native lazy loading' },
+      { label: 'Free Edition', value: 'Full template with footer credit + activation notice' },
+      { label: 'Activation', value: 'Blogger Layout -> Licence Activation gadget; one serial per blog' },
+      { label: 'Download', value: 'Free edition (v1.2.0) via the blog download page' },
+      { label: 'Documentation', value: 'Installation, activation, customization and theming guides in the project repo' },
+      { label: 'Demo', value: 'https://llianmeva.blogspot.com/' },
+    ],
+    demos: [],
+    comparisonTable: [
+      { feature: 'Full template and layout', trial: true, active: true },
+      { feature: 'Reading Mode and dark mode', trial: true, active: true },
+      { feature: 'Breadcrumbs, table of contents and JSON-LD', trial: true, active: true },
+      { feature: 'Four pre-styled ad slots', trial: true, active: true },
+      { feature: 'TemplateMeva footer credit', trial: 'Included', active: 'Removed', note: 'The free edition names TemplateMeva in the footer until a serial is activated.' },
+      { feature: 'Activation notice', trial: 'May appear', active: 'Removed' },
+      { feature: 'Your own footer copyright', trial: false, active: true },
+      { feature: 'Licence activation', trial: 'Not activated', active: 'Serial-activated' },
+      { feature: 'Price', trial: 'Free', active: '$12.95 one-time' },
+    ],
+    reviews: [],
+  },
 ];
 
 /**
@@ -1002,9 +1121,10 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
  * in `npm run dev` and hidden in a production build, because a production build is
  * the thing that gets deployed and a fixture in it is a lie with a URL on it.
  *
- * This means a production build of the store currently lists NOTHING: all nine
- * products are fixtures and `BLG-GEL-001` is `draft`. That is the true state of
- * the catalog, not a bug. See docs/TASKS.md -> "Catalog honesty".
+ * A production build therefore lists exactly one real product, `BLG-GEL-001`
+ * (slug `llianmeva`, published in WEBSTR001-C023), and hides the nine invented
+ * fixtures. That is the true state of the catalog. See docs/TASKS.md ->
+ * "Catalog honesty".
  */
 const INCLUDE_PLACEHOLDERS = import.meta.env.DEV;
 

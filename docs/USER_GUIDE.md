@@ -4,17 +4,24 @@ How to manage the template catalog, documentation, branding, and deployments. No
 
 ---
 
-## 0. Read this first: the catalog is currently empty
+## 0. Read this first: one real product, nine fixtures
 
-Products render in a fresh `npm run dev`, and **every one of them is invented**. The count is whatever `src/data/templates.ts` holds, so read it from there rather than trusting this sentence.
-They exist so a new clone shows something. They are `status: 'placeholder'`, and
-a production build hides them. Do not publish one, and do not read a figure off
-one — the prices, ratings and sales counts are fiction.
+A fresh `npm run dev` shows the catalog in `src/data/templates.ts`. Nine of those
+rows are invented fixtures: `spotlight`, `smartmag`, `techpulse`, `foodiebite`,
+`minimalgrid`, `chrononews`, `novastore`, `lumenlife` and `traveltrove`. They
+exist so a new clone shows something. They are `status: 'placeholder'`, and a
+production build hides them. Do not publish one, and do not read a figure off one
+— their prices, ratings and sales counts are fiction.
 
-The one real project in the workspace, `BLG-GEL-001`, is registered as a **draft**
-and marked `not-for-resale` because that project's own README says it was built
-for one specific blog. Adding it to the store means getting that owner's
-agreement, not editing a field.
+The tenth row is real: `BLG-GEL-001` (slug `llianmeva`) was published on
+2026-10-23 in `WEBSTR001-C023`. It is the only row a production build lists. Its
+price is $12.95 (was $29.00), its buy button opens `/contact` while the store is
+pre-launch, and its download buttons route via the blog download page
+(`https://llianmeva.blogspot.com/p/download.html`), with the v1.2.0 XML retained
+as the release artifact. It carries
+no PageSpeed score, reviews or sales because none of those have been measured yet;
+the detail page hides those figures rather than inventing them. Resale was
+cleared by the project owner — it is not a field to flip for any other project.
 
 | Status | Meaning | Where you see it |
 |--------|---------|------------------|
@@ -150,7 +157,7 @@ Spreads across multiple lines.`,
 
 After adding it:
 
-1. Drop the trial archive at `public/download/<slug>-7day-trial.zip`, matching `trialDownloadUrl`.
+1. Drop the trial/free-edition XML (or archive) at `public/download/`, matching `trialDownloadUrl`.
 2. Add a thumbnail to `public/images/`, or generate one with `npm run assets`.
 3. Register it in `docs/products.json` (fixtures list or products list).
 4. Regenerate the sitemap with `npm run sitemap` once `status` is `published`. `public/sitemap.xml` is generated from the product registry and is never hand-edited: `npm run sitemap:check` runs inside `npm test` and fails on any disagreement.
@@ -158,7 +165,7 @@ After adding it:
 
 The template is then live at `/templates/my-new-template`, `/preview/my-new-template`, and `/showcase/my-new-template`.
 
-> **Licensing model:** there is no free version. Every template ships as a **7-Day Free Trial** (fully functional, footer attribution required) and a **Premium version** that requires a license key. Trial XML must include the anti-tamper redirect described in [TEMPLATE_DEVELOPER_GUIDE.md](TEMPLATE_DEVELOPER_GUIDE.md). Note that this storefront's key format does **not** currently match `blogger-license-system` — see [TASKS.md](TASKS.md) -> *Licensing* before telling any buyer how to activate.
+> **Licensing model:** a template may ship as a **time-limited trial** or as a **permanent free edition** (full template with a footer credit and a possible activation notice). Both are activated with a real serial pasted into Blogger's Licence Activation gadget. The published LlianMeva free edition is the second kind and does not expire. Serial validation is owned by `blogger-license-system`; the old client-side `MEVA-` validator is gone. See [TASKS.md](TASKS.md) -> *Licensing* before telling any buyer how to activate a new template.
 
 ---
 

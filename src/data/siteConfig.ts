@@ -2,14 +2,14 @@ import type { SiteConfig } from '../types';
 
 export const SITE_CONFIG: SiteConfig = {
   siteName: 'TemplateMeva',
-  siteTitle: 'TemplateMeva - Premium Blogger Templates Store (7-Day Free Trial)',
-  siteDescription: 'Discover the fastest, SEO-optimized, and most beautiful Blogger (Blogspot) templates. Designed for high PageSpeed, maximum AdSense revenue, and effortless customization.',
+  siteTitle: 'TemplateMeva - Premium Blogger Templates Store',
+  siteDescription: 'Discover responsive, SEO-optimized Blogger (Blogspot) templates for publishers — free editions, one-time activation, and clean human-readable XML.',
   siteUrl: 'https://templatemeva.com',
   supportEmail: 'support@templatemeva.com',
   author: 'TemplateMeva',
   currencySymbol: '$',
   contactAddress: 'TemplateMeva, Global Digital Hub, Cloudflare Edge',
-  workingHours: 'Mon - Sat: 9AM - 5PM UTC',
+  workingHours: 'Email support — no fixed hours',
   socials: {
     twitter: 'https://twitter.com/templatemeva',
     facebook: 'https://facebook.com/templatemeva',

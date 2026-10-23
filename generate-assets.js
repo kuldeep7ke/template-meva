@@ -228,6 +228,7 @@ const entries = [
     pageSpeed: p.pageSpeed,
     rating: p.rating,
     reviewCount: p.reviewCount,
+    status: p.status,
     invented: false,
   })),
 ];

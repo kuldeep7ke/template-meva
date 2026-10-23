@@ -39,7 +39,7 @@ export const Navbar: FC<NavbarProps> = ({
           <div className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="font-medium text-white">Cloudflare Edge Powered</span>
-            <span>— Ultra-fast loading speeds & 99+ Core Web Vitals Blogger templates</span>
+            <span>— Clean, human-readable Blogger templates with free editions</span>
           </div>
           <div className="flex items-center gap-4 text-slate-400">
             <button 

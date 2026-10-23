@@ -55,11 +55,18 @@
   products are still being built. Do not "fix" the empty production catalog by
   publishing a fixture.
   - decision: keep as-is. Re-open only when a real template is ready to sell.
+  - superseded 2026-10-23 (WEBSTR001-C023): `BLG-GEL-001` is the first real
+    product and is published. A production build now lists exactly one product;
+    the nine fixtures remain dev-only.
 - [x] **DECIDED 2026-10-06 — `BLG-GEL-001` stays `not-for-resale`.** It is
   registered as a draft and the gate keeps refusing to publish it. That project
   was built for one specific blog; listing it as a product is a separate decision
   needing that owner's agreement, not a field edit.
   - decision: do not publish. Revisit only if the owner agrees to sell it.
+  - superseded 2026-10-23 (WEBSTR001-C023): the owner cleared resale.
+    `BLG-GEL-001` is now `resale: allowed` and published as `llianmeva` at
+    $12.95, with `buyUrl: /contact` and the real v1.2.0 XML as the free-edition
+    download. The gate still refuses any other product without `resale: allowed`.
 
 ## Licensing
 
@@ -122,10 +129,12 @@ adopted-to, not the reverse.
     `?domain=&template=&reason=` to the redirect would do exactly that on every
     unlicensed page view. The notice page stays generic; a buyer proves
     identity through the redeem flow with their serial instead.
-- [ ] **The 9 catalog slugs are not registered template IDs.** The server requires
-  `templateId`, and its registry is keyed on repo name (`blogger-llianmeva-template`).
-  Until real products exist, nothing can be validated against it.
-  - disposition: OPERATOR (unblocked by building a real template)
+- [ ] **The nine fixture slugs are not registered template IDs.** The server
+  requires `templateId`, and its registry is keyed on repo name
+  (`blogger-llianmeva-template`). `BLG-GEL-001` is now real and registered, but
+  validating it end-to-end against the Worker is still the remaining step; the
+  fixture slugs cannot be validated until they are real products.
+  - disposition: OPERATOR (validate `BLG-GEL-001`; the list shrinks as fixtures are replaced)
 - [ ] Should the notice page call `?action=validate` itself? The endpoint is
   deliberately open to any origin (BLG-C408) and takes `templateId` + `domain`,
   but the guard deliberately ships neither to the page (see the R30 decision
@@ -140,23 +149,29 @@ adopted-to, not the reverse.
 - [x] **DECIDED 2026-10-06 — the card keeps its trial download.** The redesigned
   card showed a "7-Day Trial" badge with no way to get the trial, which sent the
   buyer to the detail page for something the card had already promised. It is now
-  a `Get Trial` download on the card itself. It is an `<a download>` rather than a
-  route change, because a trial archive is a file and navigating to it would render
-  a template detail page for a `.zip`.
-  - decision: restore. Done in WEBSTR001-C007.
-- [ ] **Store-wide marketing claims still assert things nobody has measured.** The
-  top banner reads "99+ Core Web Vitals Blogger templates" and the feature cards
-  read "99+ Google PageSpeed Score" and "100% Clean XML & No Encrypted Code". The
-  fabricated *store metrics* were moved to `STORE_STATS` (WEBSTR001-C007), but these
-  are product-positioning claims and deleting the whole section is a product
-  decision, not a truth fix. They become defensible the moment one template has a
-  measured PageSpeed score.
-  - disposition: UNANSWERED (keep the section and make the claims true, or cut the section before launch)
-  the bundle today: ~1.3 MB at 100 templates, ~1.6 MB total, ~400 kB gzipped, and
-  up to 100 `<TemplateCard>`s with 100 image requests on first paint. Moving to
-  static JSON keeps the bundle flat regardless of catalog size:
-  `public/data/index.json` for the grid, `public/data/templates/<slug>.json` for
-  detail, fetched on demand. No backend needed on Cloudflare Pages.
+  a download link on the card itself. It is an `<a download>` rather than a route
+  change, because the artifact is a file and navigating to it would render a
+  template detail page for a `.zip`.
+  - decision: restore. Done in WEBSTR001-C007; label generalized to `Download`
+    in WEBSTR001-C023 so the same card serves a free edition and a time-limited
+    trial.
+- [x] **Store-wide marketing claims asserted things nobody had measured.** The
+  banner read "99+ Core Web Vitals", the feature cards read "99+ Google PageSpeed
+  Score" and "Google AdSense Auto & In-Feed Ads", and the activation card promised
+  "lifetime updates and priority customer support". Closed in WEBSTR001-C023: the
+  99+ claims and the priority-support promise are gone from the banner, navbar,
+  footer and feature cards, the ad card now says the theme ships slots but no ad
+  code, the JSON-LD card names the schemas the template actually ships, and the
+  fabricated payment badges were replaced by "Checkout: By contact". The
+  measured-stat strip still renders only when `STORE_STATS` holds real numbers.
+  - decision: make the claims true rather than delete the section. Re-open only if
+    a measured PageSpeed score or real support policy is added.
+- [ ] **The catalog bundle grows linearly with the template count.** It is ~1.3 MB
+  at 100 templates, ~1.6 MB total, ~400 kB gzipped, and up to 100
+  `<TemplateCard>`s with 100 image requests on first paint. Moving to static JSON
+  keeps the bundle flat regardless of catalog size: `public/data/index.json` for
+  the grid, `public/data/templates/<slug>.json` for detail, fetched on demand. No
+  backend needed on Cloudflare Pages.
   - disposition: UNANSWERED (do it BEFORE template #20. It is far cheaper before 20 products are added by hand than after, and every product added now is one more thing to move. See "What to do before template #20" below.)
 - [x] **Generate `sitemap.xml` from the registry.** Done in WEBSTR001-C005:
   `npm run sitemap` regenerates it, and `npm run sitemap:check` (wired into
@@ -178,15 +193,26 @@ adopted-to, not the reverse.
 
 ## Pre-launch
 
-- [ ] Replace the 9 placeholder `.zip` archives in `public/download/` with real
-  trial XMLs. Each currently contains only `README-PLACEHOLDER.txt`.
+- [ ] Replace the nine placeholder `.zip` archives in `public/download/` with real
+  trial XMLs. Each fixture archive currently contains only
+  `README-PLACEHOLDER.txt`. `BLG-GEL-001` routes its download buttons via the
+  blog download page (C025); `llianmeva-v1.2.0.xml` is retained as the release
+  artifact.
   - disposition: OPERATOR (the trial XML is built per template project)
-- [ ] Replace the 9 `buyUrl` values, which point at `gumroad.com/l/<slug>-blogger-template`
-  and are unverified.
+- [ ] Replace the nine fixture `buyUrl` values, which point at
+  `gumroad.com/l/<slug>-blogger-template` and are unverified. The published
+  LlianMeva row uses `/contact` by decision (C023) and needs the same replacement
+  once a checkout exists.
   - disposition: OPERATOR (needs the real checkout)
-- [ ] Wire the contact form and the newsletter form. Both render a success state
-  and send nothing.
-  - disposition: UNANSWERED (which endpoint -- Cloudflare Worker, Formspree, or a mailto?)
+- [ ] Move the published LlianMeva `buyUrl` from `/contact` to a real checkout.
+  The licence Worker validates serials but does not process payments, so the
+  current path is a contact conversation, not a purchase.
+  - disposition: OPERATOR (C023 deliberately launched with contact-only checkout)
+- [ ] Wire the newsletter form; it still renders a success state and subscribes
+  nowhere. The contact form now opens the visitor's mail client (C023) but still
+  has no server endpoint, so a real inbox copy depends on the visitor pressing
+  Send in their own mail app.
+  - disposition: UNANSWERED (newsletter and contact endpoints -- Cloudflare Worker, Formspree, or a hosted form)
 - [ ] Add prerendering for `/templates/:slug`. The store is a client-rendered
   SPA, so individual template pages currently index as an empty shell.
   - disposition: DEFERRED (largest single SEO win, but a real build decision)

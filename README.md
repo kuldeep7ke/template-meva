@@ -29,21 +29,22 @@ owner consents to resale, so it never publishes anything, and
 
 ### Three things worth knowing before you change anything
 
-1. **All nine catalog products are invented.** `spotlight`, `smartmag`,
+1. **Nine catalog products are invented.** `spotlight`, `smartmag`,
    `techpulse`, `foodiebite`, `minimalgrid`, `chrononews`, `novastore`,
    `lumenlife` and `traveltrove` have no corresponding project anywhere in the
    workspace. They are `status: 'placeholder'`, they are hidden from production
    builds, and the sitemap excludes them. See [`docs/REGISTRY.md`](docs/REGISTRY.md).
-2. **`BLG-GEL-001` is real but is not for sale.** It is registered as a `draft`
-   with `resale: 'not-for-resale'`, because that project's own README states it
-   was built for one specific blog. The gate exists so that fact cannot be
-   quietly overridden.
+2. **`BLG-GEL-001` is real and now published.** Its owner cleared resale and it
+   went live in `WEBSTR001-C023` as `llianmeva` at $12.95, with checkout arranged
+   through `/contact` while the store is pre-launch. It is the only row a
+   production build lists. The gate still refuses any other product whose
+   `resale` is not `allowed`.
 3. **Licensing is owned by `blogger-license-system`, not by this store.** As of
    `WEBSTR001-C002` the Worker is the single source of truth. The storefront's
    old key box — which accepted any invented key and rejected every real one — is
-   deleted. Serials look like `AB12C-34DEF-56789-0ABCD-EF012`, they are bound to
-   your domain server-side, and the 7-day trial runs on the server clock. The
-   shipped template's unlicensed redirect now points at this store
+   deleted. Serials look like `AB12C-34DEF-56789-0ABCD-EF012` and are bound to
+   your domain server-side. The published free edition runs until a serial is
+   activated. The shipped template's unlicensed redirect now points at this store
    (`templatemeva.com/unlicensed` — fixed upstream as BLG-C426, template
    v1.2.0). One deliberate limit remains: the guard sends the notice page no
    context, because R30 of the shared rules forbids a customer identifier
@@ -54,20 +55,22 @@ owner consents to resale, so it never publishes anything, and
 ## ✨ Features & Scope
 
 - 🏪 **Curated Template Gallery (`/`)** — the single home of search. One search box sits in the hero and filters the catalog grid directly beneath it, so results stay in place to browse. Categories live in the URL (`/?category=Tech`) so a filtered view is shareable and survives reload. The full filter panel (column layout, trial-only, sorting) sits below `md`; mobile gets a compact Category + Sort bar instead.
-- 📰 **Template Deep-Dive (`/templates/:slug`)** — long-form detail page with PageSpeed scores, AdSense highlights, a Free-trial vs. Activated comparison table, technical specifications, and customer reviews, in four tabs.
+- 📰 **Template Deep-Dive (`/templates/:slug`)** — long-form detail page with PageSpeed scores when measured, ad-slot details, a free-edition vs. activated comparison table, technical specifications, and customer reviews, in four tabs.
 - 🎯 **Multi-Demo Showcase Hub (`/showcase/:slug`)** — concept demo switcher for templates that ship multiple layouts (SmartMag has six), with per-category demo filtering and one-click launch.
 - 📱 **Responsive Device Frame (`/preview/:slug`)** — ThemeForest-style iframe tester for **Desktop (100%)**, **Tablet (768px)**, and **Mobile (375px)**, with a reload control and a direct-open fallback for demo hosts that refuse framing.
 - 📚 **Help & Documentation Center (`/docs/:slug`)** — installation, activation, customization, AdSense placement, and troubleshooting guides.
 - ⚠️ **Anti-Piracy Notice (`/unlicensed`)** — landing page for visitors redirected from unlicensed or modified trial installs. Accepts `?domain=`, `?reason=`, and `?template=` query params and maps attribution-tamper reasons to the correct message.
-- ✉️ **Contact & Support (`/contact`)** — department-routed inquiry form with SLA expectations and pre-requisite guidance.
+- ✉️ **Contact & Support (`/contact`)** — department-routed inquiry form that opens the visitor's mail client with the message filled in; no server endpoint yet.
 - ☁️ **Cloudflare Pages edge setup** — `_redirects` SPA rewrite, `_headers` caching and security policy, `robots.txt`, and `sitemap.xml`.
 
 ### Pre-launch placeholders
 
-Two features are intentionally non-functional until you connect a backend. Both are marked in code:
+Two features are intentionally non-functional until you connect a backend:
 
-- The **contact form** and **newsletter form** render success states but submit nowhere.
-- The **license-key validator** on `/unlicensed` only checks the `MEVA-XXXX-XXXX-XXXX` shape client-side.
+- The **contact form** composes a `mailto:` message to `SITE_CONFIG.supportEmail`; it does not submit to a server, and the success panel says so.
+- The **newsletter form** still renders a success state but subscribes nowhere.
+
+The old client-side `MEVA-` key validator is deleted (`WEBSTR001-C002`); `/unlicensed` describes the real server-side licence mechanism instead.
 
 ---
 
@@ -82,7 +85,7 @@ npm run dev       # start dev server at http://localhost:5173
 
 | Command | What it does |
 | :--- | :--- |
-| `npm run dev` | Vite dev server with HMR. Dev builds show the invented fixtures |
+| `npm run dev` | Vite dev server with HMR. Dev builds show the published product plus the invented fixtures |
 | `npm run build` | Typecheck (`tsc -b`) then build to `dist/`. Production builds list only `published` products |
 | `npm run preview` | Serve the production build locally |
 | `npm run lint` | oxlint over source and scripts |
@@ -90,7 +93,7 @@ npm run dev       # start dev server at http://localhost:5173
 | `npm run registry` | The registry gate: catalog, registry, sitemap and images must agree |
 | `npm run registry:sync` | Regenerate `docs/REGISTRY.md` from `docs/products.json` |
 | `npm run registry:add` | Register a new project as a draft product |
-| `npm run test` | `typecheck` + `lint` + `registry` |
+| `npm run test` | `typecheck` + `lint` + registry + sitemap + id + capsule gates |
 | `npm run assets` | Generate preview + share images for every product, from the registry |
 
 A production build completes in roughly 400ms and emits ~110 kB of gzipped JavaScript.
@@ -116,11 +119,13 @@ It writes a **draft** to `docs/products.json` plus a draft catalog row, with
 to see exactly what it would write without touching anything.
 
 To publish one, fill in the price, `buyUrl`, trial archive and demo URL, set
-`status: "published"` and `resale: "allowed"`, add it to `public/sitemap.xml`,
-then `npm run registry:sync && npm run registry`.
+`status: "published"` and `resale: "allowed"`, regenerate the sitemap with
+`npm run sitemap`, then `npm run registry:sync && npm run registry`.
 
-**Never invent a price, a sales count or a rating.** All nine current fixtures
-have fabricated numbers, which is exactly why they are invisible in production.
+**Never invent a price, a sales count or a rating.** All nine fixtures have
+fabricated numbers, which is exactly why they are invisible in production. The
+published LlianMeva row carries a real $12.95 price, zero reviews and zero sales,
+because that is the true state of a first listing.
 
 ---
 
@@ -149,7 +154,7 @@ npm run build
 npx wrangler pages deploy dist --project-name=templatemeva
 ```
 
-> Before going live: replace the placeholder files in `public/download/` with the real trial `.xml` archives, and point `buyUrl` values in `src/data/templates.ts` at your live checkout.
+> Before going live: the nine fixture archives in `public/download/` are still placeholders. The published LlianMeva download buttons route via the blog download page (`https://llianmeva.blogspot.com/p/download.html`); `public/download/llianmeva-v1.2.0.xml` is retained as the release artifact. Its `buyUrl` points at `/contact` by decision, and should move to a real checkout when one exists.
 
 ---
 
@@ -164,7 +169,7 @@ template-meva/
 │   ├── favicon.svg, logo.svg       # Brand assets
 │   ├── icons.svg                   # SVG symbol sprite
 │   ├── robots.txt, sitemap.xml     # Crawler directives (published products only)
-│   ├── download/                   # 7-day trial .zip archives (placeholders)
+│   ├── download/                   # free-edition XML + nine fixture placeholders
 │   └── images/                     # Generated SVG template mockups
 ├── src/
 │   ├── components/

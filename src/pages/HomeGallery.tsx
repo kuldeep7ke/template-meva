@@ -105,7 +105,7 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
           </h1>
 
           <p className="mt-5 text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Turn your free Google Blogspot website into an ultra-fast, high-earning media portal. 99+ Core Web Vitals, pre-styled AdSense slots, and zero encrypted scripts.
+            Turn your free Google Blogspot website into a professional publication. Reading mode, dark mode, pre-styled ad slots, and no encrypted scripts.
           </p>
 
           {/* Hero Search Box */}
@@ -133,7 +133,7 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
             {/* Quick Keyword Badges */}
             <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-400">
               <span className="font-semibold text-slate-300">Popular:</span>
-              {['Spotlight Magazine', 'SmartMag Multi-Demo', 'Tech Gadget', 'Dark Mode', 'RTL Arabic'].map((kw) => (
+              {['LlianMeva', 'City Politics', 'Magazine', 'Dark Mode', 'Free Edition'].map((kw) => (
                 <button
                   key={kw}
                   onClick={() => setSearchQuery(kw.split(' ')[0])}
@@ -344,7 +344,7 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
                   onChange={(e) => setOnlyTrial(e.target.checked)}
                   className="rounded text-indigo-600"
                 />
-                <span>Includes 7-Day Free Trial</span>
+                <span>Includes free download</span>
               </label>
             </div>
 
@@ -451,7 +451,7 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
               Why Publishers Choose TemplateMeva
             </h2>
             <p className="text-slate-500 text-sm sm:text-base mt-3">
-              We eliminate the common pitfalls of slow Blogger templates. Clean, semantic XML code that loads instantly and ranks on Google.
+              Clean, human-readable Blogger XML with the features a publisher actually needs. No invented scores and no encrypted scripts.
             </p>
           </div>
 
@@ -461,9 +461,9 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
               <div className="w-14 h-14 rounded-2xl bg-indigo-100 flex items-center justify-center mb-6">
                 <AnimatedIcon type="rocket" size={32} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">99+ Google PageSpeed Score</h3>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Built for Core Web Vitals</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
-                Minified CSS, lazy-loaded thumbnails, and zero third-party render-blocking scripts ensure your website passes Google Core Web Vitals on mobile and desktop.
+                Semantic XML, native lazy loading, and no render-blocking third-party bundle. We publish a PageSpeed score only when it has actually been measured.
               </p>
             </div>
 
@@ -491,9 +491,9 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
               <div className="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center mb-6">
                 <AnimatedIcon type="zap" size={32} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">Google AdSense Auto & In-Feed Ads</h3>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">AdSense-Ready Ad Slots</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
-                Strategically tested ad placement slots designed to maximize revenue (RPM) while maintaining a clean, high-retention reading experience.
+                Pre-styled header, in-article, sidebar and footer placements. You paste your own AdSense code, so no ad script ships inside the theme.
               </p>
             </div>
 
@@ -501,9 +501,9 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
               <div className="w-14 h-14 rounded-2xl bg-purple-100 flex items-center justify-center mb-6">
                 <AnimatedIcon type="star" size={32} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">Schema.org JSON-LD Rich Snippets</h3>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Schema.org JSON-LD</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
-                Includes NewsArticle, BreadcrumbList, and Author profile structured data so Google search indexes your articles with star ratings and rich cards.
+                BlogPosting, BreadcrumbList and WebSite structured data let search engines read the page hierarchy. No fake review markup is added.
               </p>
             </div>
 
@@ -511,9 +511,9 @@ export const HomeGallery: FC<HomeGalleryProps> = ({
               <div className="w-14 h-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6">
                 <AnimatedIcon type="lock" size={32} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">One-Click License Activation</h3>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Serial Activation</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
-                Simple license verification unlocks 100% white-label freedom, removes trial footer credits, and grants lifetime updates and priority customer support.
+                Pasting a serial removes the free-edition footer credit and activation notice, and lets the footer carry your own copyright. One serial, one blog, no recurring fee.
               </p>
             </div>
 

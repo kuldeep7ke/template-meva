@@ -78,9 +78,10 @@ lost by a page that forgets to ask:
 7. `sitemap.xml` and the catalog agree in **both** directions.
 8. No buyer's email or serial can reach the served page (see §9).
 
-**As of WEBSTR001-C001 a production build lists nothing.** All nine rows are fixtures
-and `BLG-GEL-001` is a draft. That is the true state of the catalog. `npm run dev`
-shows the fixtures so a fresh clone renders something.
+**As of WEBSTR001-C023 a production build lists one product.** `BLG-GEL-001`
+(slug `llianmeva`) is published; the nine fixture rows still exist only for
+`npm run dev`, and the other three registered projects remain drafts. That is the
+true state of the catalog.
 
 ---
 
@@ -210,8 +211,8 @@ visitors.
 
 The serial is 25 hex characters in five groups of five (`AB12C-34DEF-56789-0ABCD-EF012`).
 It is **bound to the buyer's domain**, and the domain is what is checked from then
-on. The 7-day trial also runs on the server clock, so clearing `localStorage`
-cannot extend it. `validate` and `redeem` deliberately allow any CORS origin
+on. Any time-limited trial also runs on the server clock, so clearing `localStorage`
+cannot extend it (the published LlianMeva free edition is not time-limited). `validate` and `redeem` deliberately allow any CORS origin
 (BLG-C408) because they run on buyers' own sites; every other action is
 dashboard-only.
 

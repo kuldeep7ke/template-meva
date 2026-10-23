@@ -4,7 +4,9 @@ import {
   MessageSquare, Clock, Globe
 } from 'lucide-react';
 import { SITE_CONFIG } from '../data/siteConfig';
-import { TEMPLATES } from '../data/templates';
+import { LISTED_TEMPLATES } from '../data/templates';
+
+const DEFAULT_TEMPLATE = LISTED_TEMPLATES[0]?.title ?? 'Other / General';
 
 interface ContactPageProps {
   navigate: (to: string) => void;
@@ -14,7 +16,7 @@ export const ContactPage: FC<ContactPageProps> = ({ navigate }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    templateName: 'Spotlight Blogger Template',
+    templateName: DEFAULT_TEMPLATE,
     orderId: '',
     inquiryType: 'Technical Support',
     subject: '',
@@ -25,19 +27,20 @@ export const ContactPage: FC<ContactPageProps> = ({ navigate }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // There is no form endpoint yet. Opening the visitor's mail client is a real
+    // delivery path; showing "Message Received" when nothing was sent is not.
+    const subject = `[${formData.inquiryType}] ${formData.subject} — ${formData.templateName}`;
+    const body = [
+      `Name: ${formData.name}`,
+      `Email: ${formData.email}`,
+      `Template: ${formData.templateName}`,
+      `Blog URL: ${formData.blogUrl || '—'}`,
+      `Order / serial reference: ${formData.orderId || '—'}`,
+      '',
+      formData.message,
+    ].join('\n');
+    window.location.href = `mailto:${SITE_CONFIG.supportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setIsSubmitted(true);
-    setTimeout(() => {
-      setFormData({
-        name: '',
-        email: '',
-        templateName: 'Spotlight Blogger Template',
-        orderId: '',
-        inquiryType: 'Technical Support',
-        subject: '',
-        message: '',
-        blogUrl: ''
-      });
-    }, 1000);
   };
 
   return (
@@ -48,7 +51,7 @@ export const ContactPage: FC<ContactPageProps> = ({ navigate }) => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold mb-4">
             <Mail className="w-3.5 h-3.5" />
-            <span>Dedicated Customer Assistance</span>
+            <span>Email Support</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black">
             Contact Us & Support Notes
@@ -73,15 +76,22 @@ export const ContactPage: FC<ContactPageProps> = ({ navigate }) => {
             {isSubmitted ? (
               <div className="p-8 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-3">
                 <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
-                <h3 className="text-lg font-bold text-emerald-900">Message Received!</h3>
+                <h3 className="text-lg font-bold text-emerald-900">Check your email app</h3>
                 <p className="text-xs text-emerald-800 max-w-md mx-auto leading-relaxed">
-                  Thank you for reaching out. Our support engineering team will review your inquiry and reply to your email within 24 hours.
+                  Your email app should have opened with the message filled in. Send it from there — this form does not submit to a server.
+                </p>
+                <p className="text-xs text-emerald-800 max-w-md mx-auto leading-relaxed">
+                  If nothing opened, email{' '}
+                  <a href={`mailto:${SITE_CONFIG.supportEmail}`} className="font-bold underline">
+                    {SITE_CONFIG.supportEmail}
+                  </a>{' '}
+                  directly.
                 </p>
                 <button
                   onClick={() => setIsSubmitted(false)}
                   className="mt-4 px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-lg cursor-pointer"
                 >
-                  Send Another Message
+                  Back to the form
                 </button>
               </div>
             ) : (
@@ -136,7 +146,7 @@ export const ContactPage: FC<ContactPageProps> = ({ navigate }) => {
                       onChange={(e) => setFormData({ ...formData, templateName: e.target.value })}
                       className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-hidden focus:border-indigo-500"
                     >
-                      {TEMPLATES.map((t) => (
+                      {LISTED_TEMPLATES.map((t) => (
                         <option key={t.id} value={t.title}>{t.title}</option>
                       ))}
                       <option value="Other / General">Other / General Question</option>
@@ -221,7 +231,7 @@ export const ContactPage: FC<ContactPageProps> = ({ navigate }) => {
               <ul className="text-xs text-slate-600 space-y-3 leading-relaxed">
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-indigo-600 mt-0.5">•</span>
-                  <span><strong>Check the Help Docs first:</strong> Over 90% of issues are resolved by checking our <button onClick={() => navigate('/docs/installation')} className="text-indigo-600 underline font-semibold">Installation Guide</button> and <button onClick={() => navigate('/docs/activation')} className="text-indigo-600 underline font-semibold">Activation Guide</button>.</span>
+                  <span><strong>Check the Help Docs first:</strong> The <button onClick={() => navigate('/docs/installation')} className="text-indigo-600 underline font-semibold">Installation Guide</button> and <button onClick={() => navigate('/docs/activation')} className="text-indigo-600 underline font-semibold">Activation Guide</button> cover the common setup steps.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-indigo-600 mt-0.5">•</span>
@@ -233,14 +243,14 @@ export const ContactPage: FC<ContactPageProps> = ({ navigate }) => {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-indigo-600 mt-0.5">•</span>
-                  <span><strong>Trial Version Support:</strong> 7-day trial versions receive community docs support only. Priority 1-on-1 ticket assistance is exclusive to verified Premium license owners.</span>
+                  <span><strong>Free Edition:</strong> the project documentation covers installation, theming and activation. If a guide does not solve it, send the form with your blog URL.</span>
                 </li>
               </ul>
             </div>
 
             {/* Support Info & SLA */}
             <div className="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 border border-slate-800 space-y-4">
-              <h4 className="text-sm font-bold uppercase tracking-wider text-slate-400">Response Times & Hours</h4>
+              <h4 className="text-sm font-bold uppercase tracking-wider text-slate-400">Support Hours & Contact</h4>
               <div className="space-y-3 text-xs">
                 <div className="flex items-center gap-3">
                   <Clock className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -253,8 +263,8 @@ export const ContactPage: FC<ContactPageProps> = ({ navigate }) => {
                 <div className="flex items-center gap-3">
                   <Globe className="w-4 h-4 text-cyan-400 shrink-0" />
                   <div>
-                    <span className="text-slate-400 block">Typical Response SLA:</span>
-                    <span className="font-bold text-white">Within 12 to 24 Hours</span>
+                    <span className="text-slate-400 block">Response:</span>
+                    <span className="font-bold text-white">By email — no guaranteed SLA</span>
                   </div>
                 </div>
 
@@ -271,7 +281,7 @@ export const ContactPage: FC<ContactPageProps> = ({ navigate }) => {
             {/* Quick Unlicensed reminder */}
             <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs">
               <span className="font-bold block mb-1">Redirected from a template?</span>
-              Visit our <button onClick={() => navigate('/unlicensed')} className="font-bold underline text-amber-800">Unlicensed Notice Page</button> to understand how to resolve footer credit verification.
+              Visit our <button onClick={() => navigate('/unlicensed')} className="font-bold underline text-amber-800">Unlicensed Notice Page</button> to understand the free-edition notice and how activation resolves it.
             </div>
 
           </div>

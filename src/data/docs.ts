@@ -13,7 +13,7 @@ export const DOCS_ARTICLES: DocArticle[] = [
       {
         stepNumber: 1,
         title: 'Extract the Downloaded ZIP File',
-        content: 'After downloading the template package (7-Day Trial or Premium), extract the `.zip` archive on your computer. Inside you will find the main template file ending in `.xml` (e.g. `spotlight-template.xml`), alongside the documentation folder and demo content.',
+        content: 'After downloading the free edition or activated copy, you receive a Blogger theme file ending in `.xml`. In Blogger, open Theme, use the three-dot menu, and choose Restore to upload the file. The project repository carries the installation and theming guides.',
         tip: 'Ensure you extract the ZIP first; do not upload the .zip file directly to Blogger.'
       },
       {
@@ -75,7 +75,7 @@ export const DOCS_ARTICLES: DocArticle[] = [
       {
         stepNumber: 5,
         title: 'Remove or customise the footer credits',
-        content: 'Once the licence is active, the trial restrictions and the footer credit check are both disabled. You can edit the copyright line and links freely without triggering a redirect.',
+        content: 'Once the licence is active, the free-edition footer credit and activation notice are both removed. You can edit the copyright line and links freely without triggering a notice or redirect.',
         warning: 'A licence is bound to ONE blog. Activating on a second blog needs its own serial — the same one will not unlock it, because each serial is generated for a single blog ID.'
       }
     ]
@@ -153,7 +153,7 @@ Mega Menu by Label: Mega -> mega:Technology`
       {
         stepNumber: 2,
         title: 'Why is my blog redirecting to the Unlicensed page?',
-        content: 'If you are using a Free Trial version and altered or deleted the footer copyright attribution links, the integrity check triggers an automatic redirect to the /unlicensed page. To resolve this, restore the original footer credit widget or activate to unlock 100% white-label freedom.',
+        content: 'If you are running the free edition and altered or deleted the footer copyright attribution links, the attribution check triggers a notice. To resolve this, restore the original footer credit widget or activate so the footer carries your own copyright.',
         tip: 'Premium licenses provide full copyright freedom and zero redirects.'
       },
       {

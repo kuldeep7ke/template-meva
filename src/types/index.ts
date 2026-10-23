@@ -24,7 +24,7 @@ export interface FeatureItem {
 
 export interface ComparisonItem {
   feature: string;
-  trial: boolean | string; // 7-Day Free Trial Edition
+  trial: boolean | string; // Downloadable edition (time-limited trial or free edition)
   active: boolean | string; // Activated Full Lifetime Edition
   note?: string;
 }
@@ -69,10 +69,12 @@ export interface Template {
   projectId?: string; // Absent on invented placeholders
   price: number; // Full activation price
   originalPrice: number;
-  hasTrial: boolean; // Has 7-day free trial
-  trialDuration: string; // "7 Days Free Trial"
-  trialDownloadUrl: string; // Download link for trial .xml
-  buyUrl: string; // Link to purchase permanent activation license
+  hasTrial: boolean; // Has a downloadable edition (time-limited trial or permanent free edition)
+  trialDuration: string; // Buyer-facing name, e.g. "7 Days Free Trial" or "Free Edition"
+  /** Optional, specific explanation of what the downloadable edition includes and limits. */
+  trialNote?: string;
+  trialDownloadUrl: string; // Same-origin file (downloaded) or absolute download-page URL (new tab)
+  buyUrl: string; // Link to purchase permanent activation license (may be an internal contact page)
   rating: number;
   reviewCount: number;
   salesCount: number;

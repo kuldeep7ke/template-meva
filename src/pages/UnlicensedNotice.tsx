@@ -12,8 +12,8 @@ type NoticeReason = 'trial_expired' | 'attribution_removed' | 'invalid_key' | 'u
 
 const REASON_COPY: Record<Exclude<NoticeReason, 'unknown'>, { title: string; body: string }> = {
   trial_expired: {
-    title: 'Trial Period Expired or Licence Not Active',
-    body: "The 7-day free trial for this template has expired, or your serial has not been pasted yet. Visitors can still read your blog's content — but this notice is displayed until the template is activated."
+    title: 'Licence Not Active Yet',
+    body: "This blog is running the free edition of a TemplateMeva template, or a time-limited trial has ended, and no serial has been pasted yet. Visitors can still read your blog's content — the notice stays until the template is activated."
   },
   attribution_removed: {
     title: 'Template Attribution Code Removed',
@@ -107,7 +107,7 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
               <p className="font-bold text-amber-900">What caused this notice?</p>
               {hasContext ? (
                 <ul className="mt-1 text-amber-800 space-y-1 list-inside list-disc text-xs">
-                  <li>The 7-day trial period has ended and no serial was pasted</li>
+                  <li>The install has not been activated, so the free-edition credit or notice is showing</li>
                   <li>The template attribution code was removed before purchasing</li>
                   <li>The serial pasted was generated for a different blog</li>
                 </ul>
@@ -119,12 +119,12 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
                    activation, and that is the actionable fact. */
                 <p className="mt-1 text-amber-800 text-xs leading-relaxed">
                   This page is not told which blog or which template sent you here, so
-                  it cannot say what went wrong. The usual causes are an expired
-                  7-day trial, a serial that was generated for a different blog,
-                  or the trial's attribution code being removed before a licence was
-                  bought. All three are fixed the same way — activate the licence
-                  below. If you have already done that, contact support and quote
-                  your blog address.
+                  it cannot say what went wrong. The usual causes are an install that
+                  has not been activated yet, a serial that was generated for a
+                  different blog, or the free-edition attribution code being removed
+                  before a licence was bought. All three are fixed the same way —
+                  activate the licence below. If you have already done that, contact
+                  support and quote your blog address.
                 </p>
               )}
               {(flaggedDomain || templateSlug) && (
@@ -163,21 +163,19 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
                 Purchase a lifetime activation and activate this template in under 30 seconds by pasting your serial into the Licence Activation gadget in Blogger &gt; Layout. No re-upload required.
               </p>
               <ul className="text-xs text-emerald-700 space-y-1.5">
-                <li className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" />Notice disappears immediately</li>
-                <li className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" />All features unlocked permanently</li>
-                <li className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" />Lifetime updates &amp; support</li>
-                <li className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" />30-day money back guarantee</li>
+                <li className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" />Footer credit and notice disappear immediately</li>
+                <li className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" />Your own copyright replaces the credit</li>
+                <li className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" />No re-upload required</li>
+                <li className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" />Serial is bound to one blog</li>
               </ul>
               <div className="space-y-2 mt-auto pt-2">
-                <a
-                  href="https://templatemeva.gumroad.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 text-center block"
+                <button
+                  onClick={() => navigate('/contact')}
+                  className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 text-center cursor-pointer"
                 >
                   <ShoppingBag className="w-4 h-4" />
-                  <span>Buy Activation License</span>
-                </a>
+                  <span>Contact to Buy a Licence</span>
+                </button>
                 <button
                   onClick={() => setShowActivateBox(!showActivateBox)}
                   className="w-full py-2.5 bg-white hover:bg-indigo-50 text-indigo-700 font-bold text-xs rounded-xl border border-indigo-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
@@ -188,18 +186,18 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
               </div>
             </div>
 
-            {/* Path B: Extend Trial or Restore */}
+            {/* Path B: Restore attribution or get help */}
             <div className="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-4 flex flex-col">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-slate-700 rounded-full flex items-center justify-center shrink-0">
                   <RefreshCcw className="w-4 h-4 text-white" />
                 </div>
                 <h3 className="font-black text-slate-900 text-sm">
-                  Need More Time to Evaluate?
+                  Restore Attribution or Get Help
                 </h3>
               </div>
               <p className="text-slate-600 text-xs leading-relaxed flex-1">
-                If you're still evaluating the template and your 7-day trial has expired, contact us to request a one-time trial extension. This is available once per blog for verified cases only.
+                If the footer credit was removed before activation, restore it from your theme backup or re-upload the free-edition XML. If you have a serial but the notice persists, contact support with your blog URL.
               </p>
               <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-800">
                 <p className="font-bold mb-1">
@@ -207,7 +205,7 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
                   Important:
                 </p>
                 <p>
-                  If you removed the template attribution code ("Powered by TemplateMeva") before purchasing, this is a violation of our trial usage terms. Please restore attribution or purchase a licence to continue using the template.
+                  Removing the attribution code ("Powered by TemplateMeva") before a licence is bought is what triggers this notice. Restore it, or activate to replace it with your own copyright.
                 </p>
               </div>
               <div className="space-y-2 mt-auto pt-2">
@@ -216,7 +214,7 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
                   className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Mail className="w-4 h-4" />
-                  <span>Request Trial Extension</span>
+                  <span>Contact Support</span>
                 </button>
                 <button
                   onClick={() => navigate('/')}
@@ -315,7 +313,7 @@ export const UnlicensedNotice: FC<UnlicensedNoticeProps> = ({ navigate }) => {
 
       {/* Footer Note */}
       <p className="mt-8 text-center text-[11px] text-slate-600 max-w-sm">
-        This notice is shown to all visitors of blogs running an expired or unactivated TemplateMeva template trial. After activation, it disappears immediately and permanently for all visitors.
+        This notice is shown to visitors of blogs running an unactivated or unlicensed TemplateMeva template. Activation removes it immediately for all visitors.
       </p>
     </div>
   );

@@ -45,11 +45,11 @@ export const Footer: FC<FooterProps> = ({ navigate }) => {
 
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
-              <span className="text-base font-black">99+</span>
+              <span className="text-[11px] font-black">FREE</span>
             </div>
             <div>
-              <h4 className="text-white font-bold text-sm">Google PageSpeed</h4>
-              <p className="text-xs text-slate-400">Optimized for Core Web Vitals pass rate</p>
+              <h4 className="text-white font-bold text-sm">Free Edition</h4>
+              <p className="text-xs text-slate-400">Install the full template before you buy</p>
             </div>
           </div>
 
@@ -59,7 +59,7 @@ export const Footer: FC<FooterProps> = ({ navigate }) => {
             </div>
             <div>
               <h4 className="text-white font-bold text-sm">Lifetime Licence</h4>
-              <p className="text-xs text-slate-400">One-time payment with unlimited updates</p>
+              <p className="text-xs text-slate-400">One-time payment; the serial does not expire</p>
             </div>
           </div>
 
@@ -68,8 +68,8 @@ export const Footer: FC<FooterProps> = ({ navigate }) => {
               <HelpCircle className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-white font-bold text-sm">24/7 Dedicated Support</h4>
-              <p className="text-xs text-slate-400">Expert assistance from theme creators</p>
+              <h4 className="text-white font-bold text-sm">Server-Side Serials</h4>
+              <p className="text-xs text-slate-400">Validated against your blog's own domain</p>
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@ export const Footer: FC<FooterProps> = ({ navigate }) => {
             <h4 className="text-white text-sm font-bold uppercase tracking-wider">Why TemplateMeva</h4>
           </div>
           <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
-            TemplateMeva is the premier destination for high-speed, SEO-optimized, and AdSense-ready Google Blogger (Blogspot) themes. Built for ambitious publishers, editors, and bloggers worldwide.
+            TemplateMeva publishes clean, human-readable Google Blogger (Blogspot) XML for publishers, with free editions and one-time serial activation.
           </p>
 
           {/* Newsletter Box */}
@@ -113,7 +113,7 @@ export const Footer: FC<FooterProps> = ({ navigate }) => {
             {subscribed && (
               <div className="text-emerald-400 text-xs mt-2 flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Thank you! Check your inbox for your 15% discount coupon.</span>
+                <span>Newsletter signup is not connected yet — no email was sent.</span>
               </div>
             )}
           </div>
@@ -219,7 +219,7 @@ export const Footer: FC<FooterProps> = ({ navigate }) => {
             </li>
             <li>
               <button onClick={() => navigate('/contact')} className="hover:text-indigo-400 transition-colors text-left">
-                Request Trial Extension
+                Licence Questions
               </button>
             </li>
             <li>
@@ -255,14 +255,10 @@ export const Footer: FC<FooterProps> = ({ navigate }) => {
           </span>
         </div>
 
-        <div className="hidden sm:flex items-center gap-3 text-slate-400">
-          <span>Accepted Payments:</span>
-          <div className="flex items-center gap-2 font-mono text-[11px] font-bold text-slate-300">
-            <span className="px-2 py-0.5 bg-slate-800 rounded border border-slate-700">PayPal</span>
-            <span className="px-2 py-0.5 bg-slate-800 rounded border border-slate-700">Stripe</span>
-            <span className="px-2 py-0.5 bg-slate-800 rounded border border-slate-700">Visa / MC</span>
-            <span className="px-2 py-0.5 bg-slate-800 rounded border border-slate-700">Apple Pay</span>
-          </div>
+        <div className="hidden sm:flex items-center gap-2 text-slate-400">
+          <span>Checkout:</span>
+          <span className="px-2 py-0.5 bg-slate-800 rounded border border-slate-700 font-semibold text-slate-300">By contact</span>
+          <span className="hidden md:inline">No card details are collected on this site.</span>
         </div>
       </div>
     </footer>

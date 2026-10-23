@@ -30,21 +30,25 @@
 
 ## The three facts most likely to be forgotten
 
-1. **All 9 catalog products are invented.** `spotlight`, `smartmag`, `techpulse`,
-   `foodiebite`, `minimalgrid`, `chrononews`, `novastore`, `lumenlife`,
-   `traveltrove` exist nowhere in the workspace. They are `status: 'placeholder'`
-   and are excluded from the sitemap. Do not let one ship.
-2. **The real product cannot be listed yet.** `BLG-GEL-001` is a real, finished
-   template, but its README says it was built for one specific blog and is not
-   for resale. `resale` is recorded per product in `docs/REGISTRY.md` and the
-   gate refuses to `publish` anything that is not `allowed`.
+1. **Nine of the ten catalog products are invented.** `spotlight`, `smartmag`,
+   `techpulse`, `foodiebite`, `minimalgrid`, `chrononews`, `novastore`,
+   `lumenlife`, `traveltrove` exist nowhere in the workspace. They are
+   `status: 'placeholder'` and are excluded from the sitemap. Do not let one ship.
+2. **The first real product is published.** `BLG-GEL-001` (slug `llianmeva`) went
+   live in C023 at $12.95 with `buyUrl: /contact` and the real v1.2.0 XML as its
+   free edition. Its owner cleared resale; the entry is `resale: allowed` in
+   `docs/REGISTRY.md`. The gate still refuses any other product that is not
+   `allowed`. No PageSpeed score, reviews or sales exist, so the UI hides those
+   figures rather than printing zeroes.
 3. **Licensing is singular and server-side.** The client-side `MEVA-` validator
    was deleted in C002 -- it was inverted, accepting invented keys and rejecting
    real serials. `blogger-license-system` owns the model: a serial is five groups
    of five hex characters, an HMAC of `SECRET_KEY` over `blogId:templateId`,
    recomputed server-side from the blog's own domain. The buyer pastes the
-   serial alone, never their email (C010). The storefront's copy describes this
-   model and calls nothing. See `docs/TASKS.md` -> Licensing.
+   serial alone, never their email (C010). The published free edition is a
+   permanent unlicensed state -- footer credit plus a possible notice -- not a
+   7-day clock. The storefront's copy describes this model and calls nothing.
+   See `docs/TASKS.md` -> Licensing.
 
 ## Read order
 
@@ -446,3 +450,65 @@ title in `src/data/templates.ts`. The product's own bytes are untouched -- the
 template XML filenames keep their original spelling, and this repo does not own
 those. The same correction lands in the-machine's registry row, which had recorded
 the misspelling as the name of record.
+
+## 2026-10-23 - WEBSTR001-C023 - BLG-GEL-001 is published as LlianMeva
+
+The first real product is on sale. `BLG-GEL-001` moved from draft/not-for-resale
+to published/allowed and its slug changed from `bloggermeva-city-politics` to
+`llianmeva`. The owner chose $12.95 (list $29.00), chose `/contact` as the
+purchase path while the licence Worker does not process payments, and chose the
+real v1.2.0 product XML (694,475 bytes) as the free edition rather than a
+time-limited archive. `docs/products.json` and the catalog row agree on those
+values; `public/download/llianmeva-v1.2.0.xml` is the shipped file, and the
+sitemap carries one product URL.
+
+The page work was mostly refusing to render absence as data. There is no
+measured performance score, no review, no sale and no rating, so the detail page
+hides the PageSpeed chip and the five-star/0.00/0-active-users row instead of
+printing them, shows a "New release -- no reviews yet" zero-state, hides the
+related section, and stops printing `vv1.2.0`. The hardcoded "7-Day Free Trial"
+copy in the buy box and comparison table now follows `trialDuration`/`trialNote`;
+LlianMeva's note says the free edition is the full template with a footer credit
+and a possible notice, and does not expire.
+
+Because `/contact` became the buy path, the contact form could no longer claim
+"Message Received!" while sending nothing. It now composes a `mailto:` message to
+`SITE_CONFIG.supportEmail`, says the form does not submit to a server, and lists
+only listed products. Store-wide claims were swept in the same pass: the navbar's
+"99+ Core Web Vitals", the footer's "99+ PageSpeed", "24/7 support", "unlimited
+updates" and PayPal/Stripe/Visa/Apple Pay badges, the newsletter's "15% discount"
+success message, the `/unlicensed` page's 30-day guarantee and Gumroad link, and
+the docs' 7-day trial language are gone or replaced with what actually happens.
+Checkout is now labelled "By contact", and support hours say "Email support -- no
+fixed hours" rather than an invented schedule.
+
+Verified: `npm test` (six gates) and `npm run build`, plus a browser pass of
+`/templates/llianmeva`, `/template/llianmeva`, `/preview/llianmeva`, `/`,
+`/contact` and `/unlicensed` with no console errors and no false-claim strings.
+Still operator-owned: replace `/contact` with a real checkout, validate
+BLG-GEL-001 against the licence Worker's registry, and decide whether to keep the
+one-product store copy or add real products.
+
+## 2026-10-23 - WEBSTR001-C024 - Real screenshot replaces the LlianMeva mockup previews
+
+The catalog card and the detail-page preview for `llianmeva` no longer show the
+generated SVG mockups. The operator supplied a real 1072x955 screenshot of the
+template homepage; it lives at `public/images/llianmeva-preview.png` and is now
+the row's `thumbnail` and sole `galleryImages` entry. (Only `thumbnail` is
+rendered anywhere today -- `TemplateCard` and `TemplateDetail` -- but the gallery
+field carries the honest value for when a gallery UI exists.) The social share
+tags moved to the PNG as well, because an SVG `og:image` renders as nothing on
+social crawlers. The retired SVGs were left on disk; `generate-assets.js` only
+writes SVGs, so it cannot clobber the PNG on a re-run.
+
+## 2026-10-23 - WEBSTR001-C025 - Download buttons route via the blog download page
+
+At the operator's direction, `trialDownloadUrl` for `llianmeva` is now
+`https://llianmeva.blogspot.com/p/download.html` instead of the local
+`/download/llianmeva-v1.2.0.xml`; the registry `trialArtifact` follows it and the
+local XML stays as the release artifact. Download controls branch on URL shape:
+same-origin keeps `<a download>`, absolute URLs open in a new tab, because the
+attribute is ignored cross-origin and same-tab navigation would walk the buyer
+out of the store. Known state: the page 404s until the operator publishes it;
+that was an explicit decision, not an oversight. No blog-URL change was needed --
+every demo/blog link already pointed at `https://llianmeva.blogspot.com/`.

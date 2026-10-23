@@ -59,18 +59,21 @@ export const TemplateCard: FC<TemplateCardProps> = ({ template, navigate }) => {
           {/* The trial badge and the trial download belong together. The card
               advertised a 7-day trial with no way to get it, which sent the buyer
               to the detail page for something the card had already promised.
-              An `<a download>` is deliberate, not a navigate(): the trial archive
-              is a file, and routing it through the SPA would render a template
-              detail page for a .zip. */}
+              An `<a download>` is deliberate, not a navigate(): a same-origin
+              trial archive is a file, and routing it through the SPA would render
+              a template detail page for a .zip. An absolute URL is a download
+              page on another site, so it opens in a new tab instead. */}
           <a
             href={template.trialDownloadUrl}
-            download
+            {...(template.trialDownloadUrl.startsWith('http')
+              ? { target: '_blank' as const, rel: 'noopener noreferrer' }
+              : { download: true })}
             onClick={(e) => e.stopPropagation()}
             className="flex items-center gap-1 px-2 py-1 rounded-md bg-amber-400/95 hover:bg-amber-300 text-slate-950 text-[11px] font-bold shadow-sm cursor-pointer"
-            title={`Download the ${template.trialDuration || '7-day free trial'}`}
+            title={`Download the ${template.trialDuration || 'free edition'}`}
           >
             <Clock className="w-3 h-3" />
-            <span>Get Trial</span>
+            <span>Download</span>
           </a>
         </div>
       )}
@@ -93,7 +96,7 @@ export const TemplateCard: FC<TemplateCardProps> = ({ template, navigate }) => {
           {template.salesCount > 0 && (
             <span className="text-slate-400">• {template.salesCount.toLocaleString()} sales</span>
           )}
-          <span className="text-slate-400 ml-auto">v{template.version}</span>
+          <span className="text-slate-400 ml-auto">{template.version}</span>
         </div>
 
         <h3
