@@ -58,6 +58,11 @@
 
   <!-- Template Products (derived: status published only) -->
   <url>
+    <loc>https://templatemeva.pages.dev/templates/hannels-id-meva</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://templatemeva.pages.dev/templates/llianmeva</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>

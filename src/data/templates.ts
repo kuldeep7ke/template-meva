@@ -871,45 +871,122 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
     ]
   },
   {
-    // AUTO-REGISTERED from BLG-CHI-001. Do not fill these in by guessing --
-    // TODO(operator): price, originalPrice, buyUrl, trialDownloadUrl, liveDemoUrl.
+    // Real product BLG-CHI-001. Its owner cleared resale and it was published in
+    // WEBSTR001-C028. Free-edition downloads are the v1.0.0 product XML served
+    // from this store (/download/hannels-id-meva-v1.0.0.xml); trialNote records
+    // what the free edition carries.
     id: 'blg-chi-001-template',
-    slug: 'blg-chi-001-template',
-    status: 'draft',
+    slug: 'hannels-id-meva',
+    status: 'published',
     projectId: 'BLG-CHI-001',
-    title: 'hannelsidmeva',
-    tagline: 'TODO(operator): one line for the catalog card',
-    description: 'TODO(operator): one-line summary used in listings',
-    fullOverview: 'TODO(operator): long overview for the detail page.',
-    price: 0,
-    originalPrice: 0,
-    hasTrial: false,
-    trialDuration: '7 Days Free Trial',
-    trialDownloadUrl: '',
-    buyUrl: '',
+    title: 'Hannels ID Meva Blogger Template',
+    tagline: 'A two-column magazine theme with Reading Mode narration, dark mode and visible breadcrumbs.',
+    description: 'Hannels ID Meva is a production-tested Blogger theme for magazines, news blogs and long-form reading. The free edition is the complete v1.0.0 template: install it in one upload, then activate with a serial to move the footer credit to your own copyright.',
+    fullOverview: `Hannels ID Meva is the published build of a real magazine blog, not a concept mockup. It keeps a two-column magazine layout with Trending Now and popular-post blocks, label-driven card rows, built-in search and a Blogger-native contact form on the Contact page, and adds a Reading Mode that narrates in English, Hindi and Marathi.
+
+    The template ships with visible breadcrumbs on every post, BlogPosting, BreadcrumbList and WebSite JSON-LD, Blogger-resized images with lazy loading, and a dark-mode toggle that remembers the reader's choice. Pre-styled in-article and sidebar ad positions are in the theme, but no AdSense publisher ID is bundled: you add your own.
+
+    The free edition is not a time-limited trial. It is the full template with a TemplateMeva footer credit and a one-time activation notice while the install is unregistered. Pasting a licence serial in Blogger's Licence Activation gadget removes both and lets the footer carry your own copyright.`,
+    price: 12.95,
+    originalPrice: 29.00,
+    hasTrial: true,
+    trialDuration: 'Free Edition',
+    trialNote: 'The free edition is the complete template. It keeps a TemplateMeva credit in the footer and may show a one-time activation notice while the install is unregistered. Pasting a licence serial removes the credit and the notice, and the footer then carries your own copyright. It does not expire.',
+    trialDownloadUrl: '/download/hannels-id-meva-v1.0.0.xml',
+    buyUrl: '/contact',
     rating: 0,
     reviewCount: 0,
     salesCount: 0,
     version: 'v1.0.0',
     releaseDate: '2026-10-18',
-    lastUpdated: '2026-10-18',
+    lastUpdated: '2026-10-31',
     category: 'Magazine',
-    tags: [],
+    tags: ['Magazine', 'Dark Mode', 'Reading Mode', 'Free Edition', 'SEO Rich', '2 Columns'],
     columns: '2 Columns',
     layout: 'Magazine',
     pageSpeedScore: { mobile: 0, desktop: 0 },
-    features: [],
-    specifications: [],
-    demos: [],
-    comparisonTable: [],
-    reviews: [],
-    thumbnail: '',
-    galleryImages: [],
-    liveDemoUrl: '',
+    thumbnail: '/images/hannels-id-meva-thumb.svg',
+    galleryImages: ['/images/hannels-id-meva-thumb.svg'],
+    liveDemoUrl: 'https://hannelidmeva-test.blogspot.com/',
+    badge: 'NEW',
     rtlSupported: false,
-    darkModeSupported: false,
+    darkModeSupported: true,
     adsenseOptimized: false,
-    seoReady: false,
+    seoReady: true,
+    features: [
+      {
+        title: 'Reading Mode with Narration',
+        description: 'A distraction-free reader that narrates in English, Hindi and Marathi.',
+        iconName: 'Sliders',
+        isHighlight: true
+      },
+      {
+        title: 'Dark Mode',
+        description: "A theme toggle that remembers the reader's choice and respects prefers-color-scheme; light stays the default.",
+        iconName: 'Moon',
+        isHighlight: true
+      },
+      {
+        title: 'Visible Breadcrumbs & Structured Data',
+        description: 'Visible breadcrumbs on every post, matched by BreadcrumbList and BlogPosting JSON-LD.',
+        iconName: 'Search',
+        isHighlight: true
+      },
+      {
+        title: 'Magazine Homepage Blocks',
+        description: 'Trending Now, popular posts and label-driven card rows, plus built-in search.',
+        iconName: 'Layers'
+      },
+      {
+        title: 'Responsive, Lazy-Loaded Media',
+        description: 'Blogger-resized image variants and lazy loading keep the mobile layout readable without extra scripts.',
+        iconName: 'Smartphone'
+      },
+      {
+        title: 'Ad Positions, No Ad Code',
+        description: 'Pre-styled in-article and sidebar placements with lazy AdSense library loading; no publisher ID ships, so you paste your own ad code.',
+        iconName: 'DollarSign'
+      },
+      {
+        title: 'Contact Page Form',
+        description: 'The Contact page carries a Blogger-native message form; every other page stays clean.',
+        iconName: 'MessageSquare'
+      },
+      {
+        title: 'Free Edition + Serial Activation',
+        description: 'One upload installs the full template. A serial pasted into the Licence Activation gadget removes the credit and the activation notice.',
+        iconName: 'Key'
+      },
+    ],
+    specifications: [
+      { label: 'Template Platform', value: 'Google Blogger (Blogspot), single XML theme' },
+      { label: 'Version', value: 'v1.0.0' },
+      { label: 'Layout', value: '2 columns, magazine' },
+      { label: 'Reading Mode', value: 'English, Hindi and Marathi narration' },
+      { label: 'Dark Mode', value: 'Yes — toggle, localStorage, prefers-color-scheme' },
+      { label: 'RTL (Right to Left)', value: 'Not supported in v1.0.0' },
+      { label: 'Ad Placements', value: 'In-article + sidebar positions; no AdSense code included' },
+      { label: 'SEO', value: 'Visible breadcrumbs; BlogPosting, BreadcrumbList and WebSite JSON-LD' },
+      { label: 'Images', value: 'Blogger-resized variants with lazy loading' },
+      { label: 'Free Edition', value: 'Full template with footer credit + activation notice' },
+      { label: 'Activation', value: 'Blogger Layout -> Licence Activation gadget; one serial per blog' },
+      { label: 'Download', value: 'Free edition (v1.0.0) as a direct XML download' },
+      { label: 'Documentation', value: 'Installation and activation guides on this store (/docs)' },
+      { label: 'Demo', value: 'https://hannelidmeva-test.blogspot.com/' },
+    ],
+    demos: [],
+    comparisonTable: [
+      { feature: 'Full template and layout', trial: true, active: true },
+      { feature: 'Reading Mode and dark mode', trial: true, active: true },
+      { feature: 'Breadcrumbs and JSON-LD', trial: true, active: true },
+      { feature: 'Pre-styled ad positions', trial: true, active: true },
+      { feature: 'TemplateMeva footer credit', trial: 'Included', active: 'Removed', note: 'The free edition names TemplateMeva in the footer until a serial is activated.' },
+      { feature: 'Activation notice', trial: 'May appear', active: 'Removed' },
+      { feature: 'Your own footer copyright', trial: false, active: true },
+      { feature: 'Licence activation', trial: 'Not activated', active: 'Serial-activated' },
+      { feature: 'Price', trial: 'Free', active: '$12.95 one-time' },
+    ],
+    reviews: [],
   },
   {
     // AUTO-REGISTERED from BLG-BLBL-001. Do not fill these in by guessing --
@@ -1121,9 +1198,10 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
  * in `npm run dev` and hidden in a production build, because a production build is
  * the thing that gets deployed and a fixture in it is a lie with a URL on it.
  *
- * A production build therefore lists exactly one real product, `BLG-GEL-001`
- * (slug `llianmeva`, published in WEBSTR001-C023), and hides the nine invented
- * fixtures. That is the true state of the catalog. See docs/TASKS.md ->
+ * A production build therefore lists exactly two real products, `BLG-GEL-001`
+ * (slug `llianmeva`, published in WEBSTR001-C023) and `BLG-CHI-001`
+ * (slug `hannels-id-meva`, published in WEBSTR001-C028), and hides the nine
+ * invented fixtures. That is the true state of the catalog. See docs/TASKS.md ->
  * "Catalog honesty".
  */
 const INCLUDE_PLACEHOLDERS = import.meta.env.DEV;

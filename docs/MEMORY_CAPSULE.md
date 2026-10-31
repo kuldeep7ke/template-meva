@@ -39,7 +39,7 @@
    free edition. Its owner cleared resale; the entry is `resale: allowed` in
    `docs/REGISTRY.md`. The gate still refuses any other product that is not
    `allowed`. No PageSpeed score, reviews or sales exist, so the UI hides those
-   figures rather than printing zeroes.
+   figures rather than printing zeroes. The second, `BLG-CHI-001` (slug `hannels-id-meva`), followed in C028 at the same price and buy path, with the v1.0.0 XML as a direct store download.
 3. **Licensing is singular and server-side.** The client-side `MEVA-` validator
    was deleted in C002 -- it was inverted, accepting invented keys and rejecting
    real serials. `blogger-license-system` owns the model: a serial is five groups
@@ -543,3 +543,8 @@ catalog `title` and registry `productName`, plus regenerated `REGISTRY.md` --
 and every buyer-facing surface (H1, card, navbar CTA, contact dropdown,
 comparison note) derives from the catalog row. Slug, price, URLs, tagline, and
 tags untouched.
+## 2026-10-31 - WEBSTR001-C028 - BLG-CHI-001 published as the second product
+
+Hannels ID Meva (`hannels-id-meva`, BLG-CHI-001) is on sale at $12.95 (list $29.00) with `/contact` checkout and the real v1.0.0 product XML (565,802 bytes, ships the han free serial) as a direct store download. The owner cleared resale in the publish order. Every catalog claim was measured against the product bytes before it was written: Reading Mode narration in English/Hindi/Marathi, dark-mode toggle with localStorage and prefers-color-scheme, visible breadcrumbs with BlogPosting/BreadcrumbList/WebSite JSON-LD, ad positions without a publisher ID, a Blogger-native contact form -- and explicitly no TOC and no RTL, because the bytes say so. The draft repo URL (a ProjectID-suffixed name that never existed) is corrected to the real repository.
+
+Lesson repeated from C014 and C026: measure, do not trust the task box. The stale Llianmeva mockups refreshed in this same run were stale for the same reason -- a rename nobody re-rendered -- and the catalog would have carried the same rot if the feature list had been copied from the sibling row instead of grepped from this template.

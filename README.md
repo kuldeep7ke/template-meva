@@ -36,8 +36,9 @@ owner consents to resale, so it never publishes anything, and
    builds, and the sitemap excludes them. See [`docs/REGISTRY.md`](docs/REGISTRY.md).
 2. **`BLG-GEL-001` is real and now published.** Its owner cleared resale and it
    went live in `WEBSTR001-C023` as `llianmeva` at $12.95, with checkout arranged
-   through `/contact` while the store is pre-launch. It is the only row a
-   production build lists. The gate still refuses any other product whose
+   through `/contact` while the store is pre-launch. `BLG-CHI-001` followed in
+   `WEBSTR001-C028` as `hannels-id-meva` at the same $12.95 with the same
+   `/contact` checkout. The two are the only rows a production build lists. The gate still refuses any other product whose
    `resale` is not `allowed`.
 3. **Licensing is owned by `blogger-license-system`, not by this store.** As of
    `WEBSTR001-C002` the Worker is the single source of truth. The storefront's

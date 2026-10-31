@@ -58,6 +58,7 @@
   - superseded 2026-10-23 (WEBSTR001-C023): `BLG-GEL-001` is the first real
     product and is published. A production build now lists exactly one product;
     the nine fixtures remain dev-only.
+  - 2026-10-31 (WEBSTR001-C028): `BLG-CHI-001` published as the second product; a production build now lists two.
 - [x] **DECIDED 2026-10-06 — `BLG-GEL-001` stays `not-for-resale`.** It is
   registered as a draft and the gate keeps refusing to publish it. That project
   was built for one specific blog; listing it as a product is a separate decision
