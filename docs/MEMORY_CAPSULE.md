@@ -551,3 +551,6 @@ Lesson repeated from C014 and C026: measure, do not trust the task box. The stal
 ## 2026-11-01 - WEBSTR001-C029 - Hannels card shows the real screenshot
 
 The `hannels-id-meva` store card and detail preview render the operator's 788x922 homepage PNG instead of the generated SVG mockup (catalog `thumbnail` + `galleryImages`, the C024 pattern). The file arrived as `hannels-id-meva-preview.png.png` (a hidden-extension double save) and was renamed to the referenced name before wiring; the registry image-existence gate pins the reference from here on. Unreferenced SVGs stay as orphans per convention, and the store-wide social card is untouched.
+## 2026-11-02 - WEBSTR001-C030 - Demo links follow the blog move
+
+`hannels-id-meva` pointed at `hannelidmeva-test.blogspot.com`, which now 404s: the operator moved the demo to `hannelsidmeva.blogspot.com`. Catalog and registry name the new blog; the new address was fingerprinted serving the current template before anything pointed at it. Lesson: a dead demo link is a store defect, not a docs nit -- the Demo button is the buy path, so a 404 there fails the product the same way a broken download does.

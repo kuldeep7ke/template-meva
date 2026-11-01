@@ -907,7 +907,7 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
     pageSpeedScore: { mobile: 0, desktop: 0 },
     thumbnail: '/images/hannels-id-meva-preview.png',
     galleryImages: ['/images/hannels-id-meva-preview.png'],
-    liveDemoUrl: 'https://hannelidmeva-test.blogspot.com/',
+    liveDemoUrl: 'https://hannelsidmeva.blogspot.com/',
     badge: 'NEW',
     rtlSupported: false,
     darkModeSupported: true,
@@ -972,7 +972,7 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
       { label: 'Activation', value: 'Blogger Layout -> Licence Activation gadget; one serial per blog' },
       { label: 'Download', value: 'Free edition (v1.0.0) as a direct XML download' },
       { label: 'Documentation', value: 'Installation and activation guides on this store (/docs)' },
-      { label: 'Demo', value: 'https://hannelidmeva-test.blogspot.com/' },
+      { label: 'Demo', value: 'https://hannelsidmeva.blogspot.com/' },
     ],
     demos: [],
     comparisonTable: [
