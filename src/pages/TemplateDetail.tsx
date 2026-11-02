@@ -193,7 +193,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                     </span>
                   )}
                   <span className="text-xs text-slate-500 block font-normal mt-0.5">
-                    One-Time Lifetime Activation License
+                    {template.hasActivation !== false ? 'One-Time Lifetime Activation License' : 'One-Time Lifetime License'}
                   </span>
                 </div>
                 <span className="px-2 py-1 rounded text-[11px] font-bold bg-emerald-100 text-emerald-800">
@@ -264,17 +264,20 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
                   <span>Instant digital download (.xml)</span>
                 </div>
+                {template.hasActivation !== false && (
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
                   <span>One serial activates your blog permanently</span>
                 </div>
+                )}
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
                   <span>One-time payment — no recurring fee</span>
                 </div>
               </div>
 
-              {/* Activation quick tip */}
+              {/* Activation quick tip — only for products with a serial system to explain. */}
+              {template.hasActivation !== false && (
               <div className="mt-3 pt-3 border-t border-slate-200/70">
                 <div className="flex items-start gap-2 text-[11px] text-indigo-700 bg-indigo-50 p-2.5 rounded-xl border border-indigo-100">
                   <Key className="w-3.5 h-3.5 text-indigo-500 shrink-0 mt-0.5" />
@@ -288,6 +291,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                   </span>
                 </div>
               </div>
+              )}
             </div>
 
             {/* Trial/free-edition highlight bar — snug under the buy box so the right column fills perfectly */}
@@ -326,7 +330,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
           <nav className="flex space-x-6 sm:space-x-8 text-sm font-semibold overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
             {[
               { id: 'overview', label: 'Features & Overview' },
-              { id: 'comparison', label: 'Trial vs. Activated' },
+              { id: 'comparison', label: template.hasActivation !== false ? 'Trial vs. Activated' : 'Free vs. Paid' },
               { id: 'specs', label: 'Specifications' },
               { id: 'reviews', label: `Reviews (${template.reviewCount})` }
             ].map((tab) => (
@@ -377,7 +381,8 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
               </div>
             </div>
 
-            {/* How Trial & Activation Works */}
+            {/* How Trial & Activation Works — the steps assume dark mode, Reading Mode and a serial system. */}
+            {template.hasActivation !== false && (
             <div className="bg-gradient-to-r from-amber-50 via-white to-indigo-50 rounded-2xl border border-slate-200 p-6 sm:p-8">
               <h3 className="text-xl font-black text-slate-900 mb-6">How the {template.trialDuration} & Activation Works</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -435,6 +440,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                 )}
               </div>
             </div>
+            )}
 
             {/* Demos Showcase */}
             {template.demos.length > 0 && (
@@ -490,6 +496,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
               templateTitle={template.title}
               trialDuration={template.trialDuration}
               trialNote={template.trialNote}
+              hasActivation={template.hasActivation}
               buyLabel={template.buyUrl.startsWith('/') ? 'Contact to Buy' : 'Buy Activation License'}
               onDownloadTrial={() => {
                 if (isExternalDownload) window.open(template.trialDownloadUrl, '_blank', 'noopener,noreferrer');
@@ -503,13 +510,15 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
                   <BookOpen className="w-4 h-4" />
-                  <span>Looking for setup or activation instructions?</span>
+                  <span>{template.hasActivation !== false ? 'Looking for setup or activation instructions?' : 'Looking for setup instructions?'}</span>
                 </div>
                 <h4 className="text-lg font-black text-slate-900">
-                  Common Installation & Activation Documentation
+                  Common Installation{template.hasActivation !== false ? ' & Activation' : ''} Documentation
                 </h4>
                 <p className="text-xs text-slate-600 max-w-xl">
-                  These guides apply to all TemplateMeva templates — learn how to upload the XML, activate your serial, setup your logo, and configure AdSense ad widgets.
+                  {template.hasActivation !== false
+                    ? 'These guides apply to all TemplateMeva templates — learn how to upload the XML, activate your serial, setup your logo, and configure AdSense ad widgets.'
+                    : 'These guides apply to all TemplateMeva templates — learn how to upload the XML, setup your logo, and configure AdSense ad widgets.'}
                 </p>
               </div>
               <button
@@ -531,6 +540,7 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
               templateTitle={template.title}
               trialDuration={template.trialDuration}
               trialNote={template.trialNote}
+              hasActivation={template.hasActivation}
               buyLabel={template.buyUrl.startsWith('/') ? 'Contact to Buy' : 'Buy Activation License'}
               onDownloadTrial={() => {
                 if (isExternalDownload) window.open(template.trialDownloadUrl, '_blank', 'noopener,noreferrer');
@@ -547,14 +557,18 @@ export const TemplateDetail: FC<TemplateDetailProps> = ({ slug, navigate }) => {
                   About the {template.trialDuration}
                 </h4>
                 <p>{template.trialNote}</p>
+                {template.hasActivation !== false && (
                 <p>
                   This edition does not expire. Activation is a one-time purchase and does not require re-uploading the XML.
                 </p>
+                )}
+                {template.hasActivation !== false && (
                 <div className="pt-2 flex flex-wrap gap-4">
                   <button onClick={() => navigate('/docs/activation')} className="font-bold text-indigo-700 underline hover:text-indigo-900">
                     Licence activation guide →
                   </button>
                 </div>
+                )}
               </div>
             ) : (
               <div className="bg-amber-50 rounded-2xl p-6 border border-amber-200 text-amber-900 text-xs space-y-3">

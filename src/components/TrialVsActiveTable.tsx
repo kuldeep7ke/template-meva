@@ -11,6 +11,8 @@ interface TrialVsActiveTableProps {
   trialDownloadUrl?: string;
   buyUrl?: string;
   buyLabel?: string;
+  /** False when the product ships no serial system; serial-specific copy hides. Absent means true. */
+  hasActivation?: boolean;
   onDownloadTrial?: () => void;
   onBuyActive?: () => void;
 }
@@ -22,6 +24,7 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
   trialDuration = '7 Days Free Trial',
   trialNote,
   buyLabel = 'Buy Activation License',
+  hasActivation,
   onDownloadTrial,
   onBuyActive
 }) => {
@@ -36,13 +39,13 @@ export const TrialVsActiveTable: FC<TrialVsActiveTableProps> = ({
           </div>
           <h3 className="text-xl sm:text-2xl font-black">{trialDuration} vs. Active Full Version</h3>
           <p className="text-sm text-slate-400 mt-1">
-            Start with the {trialDuration.toLowerCase()} on your blog. Activate any time by pasting your serial.
+            Start with the {trialDuration.toLowerCase()} on your blog.{hasActivation !== false && <> Activate any time by pasting your serial.</>}
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="text-right hidden sm:block">
-            <span className="text-xs text-slate-400 block">One-Time Lifetime Activation</span>
+            <span className="text-xs text-slate-400 block">{hasActivation !== false ? 'One-Time Lifetime Activation' : 'One-Time Purchase'}</span>
             <span className="text-2xl font-black text-amber-400">${templatePrice.toFixed(2)}</span>
           </div>
           <button

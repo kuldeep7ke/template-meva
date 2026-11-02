@@ -4,7 +4,7 @@ How to manage the template catalog, documentation, branding, and deployments. No
 
 ---
 
-## 0. Read this first: two real products, nine fixtures
+## 0. Read this first: three real products, nine fixtures
 
 A fresh `npm run dev` shows the catalog in `src/data/templates.ts`. Nine of those
 rows are invented fixtures: `spotlight`, `smartmag`, `techpulse`, `foodiebite`,
@@ -14,11 +14,11 @@ production build hides them. Do not publish one, and do not read a figure off on
 — their prices, ratings and sales counts are fiction.
 
 The tenth row is real: `BLG-GEL-001` (slug `llianmeva`) was published on
-2026-10-23 in `WEBSTR001-C023`, and the eleventh (`BLG-CHI-001`, slug `hannels-id-meva`) followed on 2026-10-31 in `WEBSTR001-C028` at the same $12.95 with `/contact` checkout. The two are the only rows a production build lists. LlianMeva
+2026-10-23 in `WEBSTR001-C023`, the eleventh (`BLG-CHI-001`, slug `hannels-id-meva`) followed on 2026-10-31 in `WEBSTR001-C028` at the same $12.95 with `/contact` checkout, and the twelfth (`BLG-BLBL-001`, slug `rld-newsmeva`) followed on 2026-11-02 in `WEBSTR001-C031` at the same price and buy path. The three are the only rows a production build lists. LlianMeva
 price is $12.95 (was $29.00), its buy button opens `/contact` while the store is
 pre-launch, and its download buttons route via the blog download page
 (`https://llianmeva.blogspot.com/p/download.html`), with the v1.2.0 XML retained
-as the release artifact. Hannels differs in one path: its v1.0.0 XML downloads directly from this store (`/download/hannels-id-meva-v1.0.0.xml`). It carries
+as the release artifact. Hannels differs in one path: its v1.0.0 XML downloads directly from this store (`/download/hannels-id-meva-v1.0.0.xml`). RLD NewsMeva matches Hannels (direct `/download/rld-newsmeva-v2.0.0.xml`) but ships no serial system, so its free edition carries no credit or notice and its detail page hides the activation blocks. It carries
 no PageSpeed score, reviews or sales because none of those have been measured yet;
 the detail page hides those figures rather than inventing them. Resale was
 cleared by the project owner — it is not a field to flip for any other project.

@@ -10,7 +10,7 @@
 |-----------|---------|---------|--------|--------|------|
 | `BLG-GEL-001` | LlianMeva Blogger Template | v1.2.0 | **published** | allowed | [repo](https://github.com/kuldeep7ke/blogger-llianmeva-template) |
 | `BLG-CHI-001` | Hannels ID Meva Blogger Template | v1.0.0 | **published** | allowed | [repo](https://github.com/kuldeep7ke/blogger-hannelsidmeva-template) |
-| `BLG-BLBL-001` | blogger-rldnewsmeva-template | v1.0.0 | **draft** | undecided | [repo](https://github.com/kuldeep7ke/blogger-rldnewsmeva-template) |
+| `BLG-BLBL-001` | RLD NewsMeva Blogger Template | v2.0.0 | **published** | allowed | [repo](https://github.com/kuldeep7ke/blogger-rld-newsmeva-template) |
 | `BLG-PBH-001` | Blogger PermagMeva Template | v1.0.0 | **draft** | undecided | [repo](https://github.com/kuldeep7ke/blogger-permagmeva-template) |
 
 `published` is the only status that appears in the storefront catalog and in

@@ -39,7 +39,7 @@
    free edition. Its owner cleared resale; the entry is `resale: allowed` in
    `docs/REGISTRY.md`. The gate still refuses any other product that is not
    `allowed`. No PageSpeed score, reviews or sales exist, so the UI hides those
-   figures rather than printing zeroes. The second, `BLG-CHI-001` (slug `hannels-id-meva`), followed in C028 at the same price and buy path, with the v1.0.0 XML as a direct store download.
+   figures rather than printing zeroes. The second, `BLG-CHI-001` (slug `hannels-id-meva`), followed in C028 at the same price and buy path, with the v1.0.0 XML as a direct store download. The third, `BLG-BLBL-001` (slug `rld-newsmeva`), followed in C031 at the same price and buy path, with the v2.0.0 XML as a direct store download and no serial system (its detail page hides the activation blocks).
 3. **Licensing is singular and server-side.** The client-side `MEVA-` validator
    was deleted in C002 -- it was inverted, accepting invented keys and rejecting
    real serials. `blogger-license-system` owns the model: a serial is five groups
@@ -554,3 +554,8 @@ The `hannels-id-meva` store card and detail preview render the operator's 788x92
 ## 2026-11-02 - WEBSTR001-C030 - Demo links follow the blog move
 
 `hannels-id-meva` pointed at `hannelidmeva-test.blogspot.com`, which now 404s: the operator moved the demo to `hannelsidmeva.blogspot.com`. Catalog and registry name the new blog; the new address was fingerprinted serving the current template before anything pointed at it. Lesson: a dead demo link is a store defect, not a docs nit -- the Demo button is the buy path, so a 404 there fails the product the same way a broken download does.
+## 2026-11-02 - WEBSTR001-C031 - BLG-BLBL-001 published as the third product
+
+RLD NewsMeva (`rld-newsmeva`, BLG-BLBL-001) is on sale at $12.95 (list $29.00) with `/contact` checkout and the real v2.0.0 product XML (157,200 bytes) as a direct store download. The owner cleared resale and confirmed the house price in the publish order. Every catalog claim was measured against the template bytes and the live demo before it was written: six label blocks, Trending, video marquee, share/related/comments post pages, canonical plus OG/X cards plus JSON-LD, three ad slots with no ad code -- and explicitly no dark mode, RTL, reading mode, TOC or mega menu, because the bytes say so. The card shows a real headless-Chrome homepage screenshot (1280x1707 JPEG, 283KB) instead of a generated mockup; the SVG mockups stay on disk as orphans.
+
+This is the first product with no serial system, so the trial/activation UI needed a gate, not just copy: a new optional `hasActivation` flag (absent means true, so the eleven existing rows render byte-identically) hides the serial checklist line, the activation tip, the comparison-tab serial sentences and the activation-guide button, and renames the tab to Free vs. Paid. The alternative -- shipping paste-your-serial instructions for a template with no Licence Activation gadget -- would have been a lie with a button on it. Lesson repeated from C014/C026/C028: measure, do not trust the task box; the free edition here genuinely carries no credit, notice, expiry or tracking, and the listing says exactly that.

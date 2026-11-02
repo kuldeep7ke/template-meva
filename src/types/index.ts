@@ -75,6 +75,13 @@ export interface Template {
   trialNote?: string;
   trialDownloadUrl: string; // Same-origin file (downloaded) or absolute download-page URL (new tab)
   buyUrl: string; // Link to purchase permanent activation license (may be an internal contact page)
+  /**
+   * False when the product ships no serial/licence system. Serial-specific UI
+   * (activation tips, paste-your-serial instructions) hides; license naming
+   * ("one-time", "lifetime") stays. Absent means true: every product that
+   * predates this flag activates by serial.
+   */
+  hasActivation?: boolean;
   rating: number;
   reviewCount: number;
   salesCount: number;

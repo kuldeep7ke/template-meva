@@ -989,45 +989,117 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
     reviews: [],
   },
   {
-    // AUTO-REGISTERED from BLG-BLBL-001. Do not fill these in by guessing --
-    // TODO(operator): price, originalPrice, buyUrl, trialDownloadUrl, liveDemoUrl.
+    // Real product BLG-BLBL-001, published in WEBSTR001-C031. Free-edition
+    // downloads are the v2.0.0 product XML served from this store
+    // (/download/rld-newsmeva-v2.0.0.xml); trialNote records what the free
+    // edition carries. v2.0.0 ships no serial system, so hasActivation is
+    // false and purchase is arranged through /contact.
     id: 'blg-blbl-001-template',
-    slug: 'blg-blbl-001-template',
-    status: 'draft',
+    slug: 'rld-newsmeva',
+    status: 'published',
     projectId: 'BLG-BLBL-001',
-    title: 'blogger-rldnewsmeva-template',
-    tagline: 'TODO(operator): one line for the catalog card',
-    description: 'TODO(operator): one-line summary used in listings',
-    fullOverview: 'TODO(operator): long overview for the detail page.',
-    price: 0,
-    originalPrice: 0,
-    hasTrial: false,
-    trialDuration: '7 Days Free Trial',
-    trialDownloadUrl: '',
-    buyUrl: '',
+    title: 'RLD NewsMeva Blogger Template',
+    tagline: 'A classic black-bar news theme with six label-driven homepage blocks and fast post pages.',
+    description: 'RLD NewsMeva is a production-tested Blogger news theme: six label-driven homepage blocks, Trending, a video marquee, post pages with share, related posts and comments, and SEO meta throughout. The free edition is the complete v2.0.0 template as one XML upload.',
+    fullOverview: `RLD NewsMeva is the published build of a real news demo, not a concept mockup. Its homepage is six label-driven blocks -- Headline, store picks, how-tos, festival reads, videos and tech -- plus Trending, follow links, recent posts and house-ad slots that pitch the theme itself. Publish under a label and the matching block fills itself; rename a block by renaming its label.
+
+Post pages carry a share row, Recommended-for-you related posts from the same labels, native Blogger comments and a newer/older pager. A fixed black bar holds the logo, a desktop menu with dropdowns, a slide-in mobile panel and a search box on every page. The theme emits canonical, Open Graph and card tags, meta descriptions, and WebSite, BlogPosting and BreadcrumbList JSON-LD.
+
+The free edition is the complete v2.0.0 template as one XML file: it carries no footer credit, no notice, no expiry and no tracking, and installing it never phones home. There is no serial to paste -- buying through the contact page supports development. The 21-post guide set on the demo blog teaches every block, menu and page.`,
+    price: 12.95,
+    originalPrice: 29.00,
+    hasTrial: true,
+    hasActivation: false,
+    trialDuration: 'Free Edition',
+    trialNote: 'The free edition is the complete v2.0.0 template: no footer credit, no notice, no expiry, no tracking. Download it, install it with one Theme Restore, keep it. There is no serial to paste -- buying through the contact page supports development.',
+    trialDownloadUrl: '/download/rld-newsmeva-v2.0.0.xml',
+    buyUrl: '/contact',
     rating: 0,
     reviewCount: 0,
     salesCount: 0,
-    version: 'v1.0.0',
-    releaseDate: '2026-10-19',
-    lastUpdated: '2026-10-19',
+    version: 'v2.0.0',
+    releaseDate: '2026-11-02',
+    lastUpdated: '2026-11-02',
     category: 'Magazine',
-    tags: [],
+    tags: ['Magazine', 'News', 'Free Edition', 'SEO Rich', 'Videos', '2 Columns'],
     columns: '2 Columns',
     layout: 'Magazine',
     pageSpeedScore: { mobile: 0, desktop: 0 },
-    features: [],
-    specifications: [],
-    demos: [],
-    comparisonTable: [],
-    reviews: [],
-    thumbnail: '',
-    galleryImages: [],
-    liveDemoUrl: '',
+    thumbnail: '/images/rld-newsmeva-preview.jpg',
+    galleryImages: ['/images/rld-newsmeva-preview.jpg'],
+    liveDemoUrl: 'https://rldnewsmeva-test.blogspot.com/',
+    badge: 'NEW',
     rtlSupported: false,
     darkModeSupported: false,
     adsenseOptimized: false,
-    seoReady: false,
+    seoReady: true,
+    features: [
+      {
+        title: 'Six Label-Driven Homepage Blocks',
+        description: 'Headline, store picks, how-tos, festival reads, videos and tech read your own feeds, plus Trending, recent posts and house-ad slots. Publish and the page builds itself.',
+        iconName: 'Layers',
+        isHighlight: true
+      },
+      {
+        title: 'SEO Meta Built In',
+        description: 'Canonical, Open Graph and card tags, meta descriptions and WebSite, BlogPosting and BreadcrumbList JSON-LD on every page.',
+        iconName: 'Search',
+        isHighlight: true
+      },
+      {
+        title: 'Post Pages That Keep Readers',
+        description: 'Share row, Recommended-for-you related posts, native Blogger comments and a newer/older pager on every article.',
+        iconName: 'Share',
+        isHighlight: true
+      },
+      {
+        title: 'One Fast File, Zero Plugins',
+        description: 'A single 157KB XML theme with one script library, lazy images and same-origin feeds. No plugins, no encrypted scripts.',
+        iconName: 'Zap'
+      },
+      {
+        title: 'Desktop Bar Plus Mobile Panel',
+        description: 'A fixed black header with dropdown menus on desktop and a slide-in panel with search on phones and tablets.',
+        iconName: 'Smartphone'
+      },
+      {
+        title: 'Three Ad Slots, No Ad Code',
+        description: 'Pre-styled leaderboard, mid-page and sidebar positions ship pitching the theme; paste any network snippet over them.',
+        iconName: 'DollarSign'
+      },
+      {
+        title: 'Free Edition Download',
+        description: 'The complete v2.0.0 XML downloads free with no credit, notice or expiry. Pay once through the contact page to support development.',
+        iconName: 'Key'
+      },
+    ],
+    specifications: [
+      { label: 'Template Platform', value: 'Google Blogger (Blogspot), single XML theme' },
+      { label: 'Version', value: 'v2.0.0' },
+      { label: 'Layout', value: '2 columns, magazine' },
+      { label: 'Homepage Blocks', value: '6 label blocks + Trending + recent posts + 3 house-ad slots' },
+      { label: 'Post Pages', value: 'Share row, related posts, native comments, newer/older pager' },
+      { label: 'Menus', value: 'Desktop bar with dropdowns + slide-in mobile panel + search' },
+      { label: 'Not in v2.0.0', value: 'Dark mode, RTL, reading mode, table of contents, mega menu' },
+      { label: 'Ad Placements', value: '3 pre-styled slots; no ad code included' },
+      { label: 'SEO', value: 'Visible breadcrumbs; BlogPosting, BreadcrumbList and WebSite JSON-LD; canonical + OG/X cards + meta descriptions' },
+      { label: 'Images', value: 'First-image thumbnails; YouTube-aware video thumbs; lazy loading' },
+      { label: 'Social', value: 'Facebook, X, Instagram, YouTube, Threads, Pinterest + share row (profile URLs are owner-filled)' },
+      { label: 'Free Edition', value: 'Full v2.0.0 XML; no credit, notice, expiry or tracking' },
+      { label: 'Purchase', value: 'Contact page; no serial in v2.0.0' },
+      { label: 'Download', value: 'Free edition (v2.0.0) as a direct XML download' },
+      { label: 'Documentation', value: '21-post guide set on the demo blog plus repo guides' },
+      { label: 'Demo', value: 'https://rldnewsmeva-test.blogspot.com/' },
+    ],
+    demos: [],
+    comparisonTable: [
+      { feature: 'Full template XML (v2.0.0)', trial: true, active: true },
+      { feature: 'Homepage blocks, menus, post pages', trial: true, active: true },
+      { feature: 'Breadcrumbs and JSON-LD', trial: true, active: true },
+      { feature: 'Pre-styled ad positions', trial: true, active: true },
+      { feature: 'Price', trial: 'Free', active: '$12.95 one-time' },
+    ],
+    reviews: [],
   },
   {
     // AUTO-REGISTERED from BLG-PBH-001. Do not fill these in by guessing --
@@ -1198,9 +1270,10 @@ Install the 7 Days Free Trial to experience all 6 concept demos. Activating with
  * in `npm run dev` and hidden in a production build, because a production build is
  * the thing that gets deployed and a fixture in it is a lie with a URL on it.
  *
- * A production build therefore lists exactly two real products, `BLG-GEL-001`
- * (slug `llianmeva`, published in WEBSTR001-C023) and `BLG-CHI-001`
- * (slug `hannels-id-meva`, published in WEBSTR001-C028), and hides the nine
+ * A production build therefore lists exactly three real products, `BLG-GEL-001`
+ * (slug `llianmeva`, published in WEBSTR001-C023), `BLG-CHI-001`
+ * (slug `hannels-id-meva`, published in WEBSTR001-C028) and `BLG-BLBL-001`
+ * (slug `rld-newsmeva`, published in WEBSTR001-C031), and hides the nine
  * invented fixtures. That is the true state of the catalog. See docs/TASKS.md ->
  * "Catalog honesty".
  */
