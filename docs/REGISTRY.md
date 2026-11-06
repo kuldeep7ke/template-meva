@@ -12,6 +12,7 @@
 | `BLG-CHI-001` | Hannels ID Meva Blogger Template | v1.0.0 | **published** | allowed | [repo](https://github.com/kuldeep7ke/blogger-hannelsidmeva-template) |
 | `BLG-BLBL-001` | RLD NewsMeva Blogger Template | v2.0.0 | **published** | allowed | [repo](https://github.com/kuldeep7ke/blogger-rld-newsmeva-template) |
 | `BLG-PBH-001` | Blogger PermagMeva Template | v1.0.0 | **draft** | undecided | [repo](https://github.com/kuldeep7ke/blogger-permagmeva-template) |
+| `BLG-IGX-001` | novmeva | v1.0.0 | **draft** | undecided | [repo](https://github.com/kuldeep7ke/blogger-novmeva-template) |
 
 `published` is the only status that appears in the storefront catalog and in
 `public/sitemap.xml`. The gate refuses to publish an entry whose `resale` is

@@ -89,6 +89,24 @@
       "trialArtifact": null,
       "registeredAt": "2026-10-19",
       "notes": "Registered 2026-10-19 via tools/register-product.cjs (WEBSTR001-C021). Needs: price, buyUrl, trial artifact, demo URL, and a resale decision."
+    },
+    {
+      "projectId": "BLG-IGX-001",
+      "slug": "blg-igx-001-template",
+      "productName": "novmeva",
+      "repo": "https://github.com/kuldeep7ke/blogger-novmeva-template",
+      "version": "v1.0.0",
+      "status": "draft",
+      "resale": "undecided",
+      "category": "Magazine",
+      "columns": null,
+      "darkModeSupported": null,
+      "rtlSupported": null,
+      "adsenseOptimized": null,
+      "liveUrl": null,
+      "trialArtifact": null,
+      "registeredAt": "2026-11-04",
+      "notes": "Auto-registered by new-project.ps1 on 2026-11-04. Repo URL corrected 2026-11-06 (WEBSTR001-C033): the generator derives --repo from the folder it scaffolds (novmeva-blg-igx-001) and the operator renamed the repository to blogger-novmeva-template, so the generated URL 404s -- verified against the account's repository list. Needs: price, buyUrl, trial artifact, demo URL, and a resale decision."
     }
   ],
   "fixtures": [
